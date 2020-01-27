@@ -31,12 +31,37 @@ class _ScanStorePageState extends State<ScanStorePage> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
+          //crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-
-            Text('RESULT  $barcode'),
-            RaisedButton(onPressed: _scan, child: Text("Scan")),
+            Container(
+              alignment: Alignment.topCenter,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    appBars(
+                      h: MediaQuery
+                          .of(context)
+                          .size
+                          .height / 7,
+                      c: context,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                  'RESULT  $barcode'
+              ),
+            ),
+            RaisedButton(
+                onPressed: _scan,
+                child: Text(
+                    "Scan"
+                ),
+            ),
 
           ],
         ),

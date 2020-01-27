@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:point_plus_v2/user/transfer_point.dart';
-
 import '../user/qr_code.dart';
 import '../user/main_page.dart';
 import '../user/my_point.dart';

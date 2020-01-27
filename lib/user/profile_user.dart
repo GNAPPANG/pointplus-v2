@@ -75,17 +75,7 @@ class _ProfileUserState extends State<ProfileUser> {
         });
   }
 
-  Widget _decideImageView() {
-    if (imageFile == null) {
-      return Icon(Icons.person);
-    } else {
-      return Image.file(
-        imageFile,
-        width: 400,
-        height: 400,
-      );
-    }
-  }
+
 
   _selectImageProfile() {
     debugPrint('profile image');
@@ -124,7 +114,6 @@ class _ProfileUserState extends State<ProfileUser> {
               shape: BoxShape.circle,
             ),
             child: Image.file(
-              
               imageFile,
               width: 150,
               height: 150,
@@ -168,6 +157,9 @@ class _ProfileUserState extends State<ProfileUser> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: 24.0,
+            ),
             Stack(
               children: <Widget>[
               
@@ -704,7 +696,6 @@ class _ProfileUserState extends State<ProfileUser> {
                       SizedBox(
                         height: 20.0,
                       ),
-                      _decideImageView(),
                     ],
                   ),
                 ),

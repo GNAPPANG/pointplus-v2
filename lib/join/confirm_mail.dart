@@ -1,15 +1,11 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/join/re_password.dart';
-
 
 import 'choice_page.dart';
 import 'forgot_password.dart';
 
 final kalam = 'Kalam';
 final mali = 'Mali';
-
 
 class ConfirmMailPage extends StatefulWidget {
   @override
@@ -23,16 +19,20 @@ class _ConfirmMailPageState extends State<ConfirmMailPage> {
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,  color: Colors.black54),
+          icon: Icon(Icons.arrow_back, color: Colors.black54),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => ForgotPasswordPage(),
-            ),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ForgotPasswordPage(),
+              ),
+            );
           },
         ),
-        title: Text('รีเซ็ตรหัสผ่าน',
+        title: Text(
+          'รีเซ็ตรหัสผ่าน',
           style: TextStyle(
-            fontFamily: 'mali' ,
+            fontFamily: 'mali',
             color: Colors.black54,
           ),
         ),
@@ -46,7 +46,7 @@ class _ConfirmMailPageState extends State<ConfirmMailPage> {
             Text(
               'ใส่รหัสยืนยัน 4 ตัวที่ส่งไปยังอีเมลของคุณ ',
               style: TextStyle(
-                fontFamily: 'mali' ,
+                fontFamily: 'mali',
                 fontSize: 16,
                 color: Colors.black54,
               ),
@@ -87,11 +87,9 @@ class _ConfirmMailPageState extends State<ConfirmMailPage> {
                                     fontFamily: mali,
                                     color: Colors.redAccent[100],
                                   ),
-
                                 ),
                               ),
                             ),
-
                             SizedBox(
                               height: 32.0,
                             ),
@@ -102,7 +100,6 @@ class _ConfirmMailPageState extends State<ConfirmMailPage> {
                     SizedBox(
                       height: 18.0,
                     ),
-
                     Padding(
                       padding: EdgeInsets.only(
                         left: 40.0,
@@ -113,9 +110,12 @@ class _ConfirmMailPageState extends State<ConfirmMailPage> {
                           Expanded(
                             child: RaisedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => RePasswordPage(),
-                                ),);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RePasswordPage(),
+                                  ),
+                                );
                               },
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
@@ -167,16 +167,13 @@ class _ConfirmMailPageState extends State<ConfirmMailPage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                        height: 16
-                    ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
             ),
           ],
         ),
-
       ),
     );
   }

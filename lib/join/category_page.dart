@@ -4,7 +4,6 @@ import 'package:point_plus_v2/user/reuser.dart';
 
 import 'login_page.dart';
 
-
 final mali = 'Mali';
 
 class CategoryPage extends StatefulWidget {
@@ -19,23 +18,26 @@ class _CategoryPageState extends State<CategoryPage> {
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,  color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+            );
           },
         ),
-        title: Text('ประเภทผู้ใช้งาน',
+        title: Text(
+          'ประเภทผู้ใช้งาน',
           style: TextStyle(
-            fontFamily: 'mali' ,
+            fontFamily: 'mali',
             color: Colors.white,
           ),
         ),
       ),
       body: Stack(
         children: <Widget>[
-
           Container(
             alignment: Alignment.center,
             child: SingleChildScrollView(
@@ -53,25 +55,28 @@ class _CategoryPageState extends State<CategoryPage> {
                     height: 32.0,
                   ),
                   Padding(
-                    padding:  EdgeInsets.symmetric(
-                        horizontal: 30.0,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30.0,
                     ),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 52.0,
                       child: RaisedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => RestorePage(),
-                        ),);
-                        } ,
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RestorePage(),
+                            ),
+                          );
+                        },
                         color: Colors.redAccent[200],
                         elevation: 10.0,
                         child: Text(
                           'ผู้ประกอบการร้านค้า',
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'mali' ,
+                            fontFamily: 'mali',
                             fontSize: 20.0,
                           ),
                         ),
@@ -82,7 +87,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     height: 32.0,
                   ),
                   Padding(
-                    padding:  EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 30.0,
                     ),
                     child: Container(
@@ -90,17 +95,20 @@ class _CategoryPageState extends State<CategoryPage> {
                       height: 52.0,
                       child: RaisedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => ReuserPage(),
-                          ),);
-                        } ,
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReuserPage(),
+                            ),
+                          );
+                        },
                         color: Colors.redAccent[200],
                         elevation: 10.0,
                         child: Text(
                           'ผู้ใช้ทั่วไป',
                           style: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'mali' ,
+                            fontFamily: 'mali',
                             fontSize: 20.0,
                           ),
                         ),
@@ -110,7 +118,6 @@ class _CategoryPageState extends State<CategoryPage> {
                   SizedBox(
                     height: 24.0,
                   ),
-
                 ],
               ),
             ),
@@ -120,4 +127,3 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 }
-

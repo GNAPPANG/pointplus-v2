@@ -1,15 +1,10 @@
-
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:point_plus_v2/user/point.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
 import 'package:point_plus_v2/user/search_page.dart';
 
-
 final mali = 'Mali';
-
 
 class MyPoint extends StatefulWidget {
   @override
@@ -22,8 +17,6 @@ class _MyPointState extends State<MyPoint> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-
-
           Container(
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
@@ -37,7 +30,6 @@ class _MyPointState extends State<MyPoint> {
                     height: 20.0,
                   ),
                   Row(
-
                     children: <Widget>[
                       SizedBox(
                         width: 20.0,
@@ -52,9 +44,12 @@ class _MyPointState extends State<MyPoint> {
                       Expanded(
                         child: RaisedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => Point(),
-                            ),);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Point(),
+                              ),
+                            );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -81,7 +76,6 @@ class _MyPointState extends State<MyPoint> {
                       ),
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -91,7 +85,6 @@ class _MyPointState extends State<MyPoint> {
     );
   }
 }
-
 
 Widget appBars({h, c}) {
   return Container(
@@ -139,7 +132,8 @@ Widget appBars({h, c}) {
             iconSize: 50.0,
             color: Colors.white,
             onPressed: () {
-              Navigator.push(c, MaterialPageRoute(builder: (c) => ProfileUser()));
+              Navigator.push(
+                  c, MaterialPageRoute(builder: (c) => ProfileUser()));
             },
           ),
         ],

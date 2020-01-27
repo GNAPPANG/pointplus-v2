@@ -31,8 +31,10 @@ class _MainPageState extends State<MainPage> {
                     c: context,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -54,45 +56,20 @@ class _MainPageState extends State<MainPage> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/12.jpg'),
-                              height: 100.0,
-                              width: 400.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                       promotion(
+                         img: 'assets/images/12.jpg',
+                       ),
+                        promotion(
+                          img: 'assets/images/11.jpg',
                         ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/11.jpg'),
-                              height: 100.0,
-                              width: 400.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/13.jpg'),
-                              height: 100.0,
-                              width: 400.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        promotion(
+                          img: 'assets/images/13.jpg',
                         ),
                       ],
                     ),
                   ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -108,68 +85,32 @@ class _MainPageState extends State<MainPage> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 16.0,
+                      horizontal: 10.0,
                     ),
                     height: MediaQuery.of(context).size.height * 0.38,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/01.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        add(
+                          img: 'assets/images/05.jpg',
                         ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/02.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        add(
+                          img: 'assets/images/02.jpg',
                         ),
-                        SizedBox(
-                          width: 8,
+                        add(
+                          img: 'assets/images/03.jpg',
                         ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/03.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        add(
+                          img: 'assets/images/04.jpg',
                         ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/04.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image(
-                              image: AssetImage('assets/images/05.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        add(
+                          img: 'assets/images/01.jpg',
                         ),
                       ],
                     ),
                   ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -191,70 +132,26 @@ class _MainPageState extends State<MainPage> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        Container(
-                            width: 120.0,
-                            height: 120.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image:
-                                      AssetImage('assets/images/logocof.jpg'),
-                                ))),
-                        SizedBox(
-                          width: 16,
+                        shop(
+                          img: 'assets/images/33.png',
                         ),
-                        Container(
-                            width: 120.0,
-                            height: 120.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/images/31.jpg'),
-                                ))),
-                        SizedBox(
-                          width: 16,
+                        shop(
+                          img: 'assets/images/32.jpg',
                         ),
-                        Container(
-                            width: 120.0,
-                            height: 120.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/images/32.jpg'),
-                                ))),
-                        SizedBox(
-                          width: 16,
+                        shop(
+                          img: 'assets/images/34.jpg',
                         ),
-                        Container(
-                            width: 120.0,
-                            height: 120.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/images/34.jpg'),
-                                ))),
-                        SizedBox(
-                          width: 16,
+                        shop(
+                          img: 'assets/images/logocof.jpg',
                         ),
-                        Container(
-                            width: 120.0,
-                            height: 120.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/images/33.png'),
-                                ))),
-                        SizedBox(
-                          width: 16,
+                        shop(
+                          img: 'assets/images/31.jpg',
                         ),
                       ],
                     ),
                   ),
+
+
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -298,6 +195,7 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
+
                   SizedBox(
                     height: 50.0,
                   ),
@@ -367,6 +265,7 @@ Widget appBars({h, c}) {
   );
 }
 
+
 Widget store({
   String img,
   String nameStore,
@@ -379,7 +278,6 @@ Widget store({
           height: 150,
           width: 200,
           decoration: BoxDecoration(
-
             image: DecorationImage(
               image: AssetImage(img),
               fit: BoxFit.cover,
@@ -391,3 +289,60 @@ Widget store({
     ),
   );
 }
+
+
+Widget promotion({
+  String img,
+}) {
+  return Card(
+    elevation: 5,
+    child: Container(
+      height: 100,
+      width: 400,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(img),
+          fit: BoxFit.cover,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget add({
+  String img,
+}) {
+  return Card(
+    elevation: 5,
+    child: Container(
+      height: 60,
+      width: 180,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(img),
+          fit: BoxFit.cover,
+        ),
+      ),
+    ),
+  );
+}
+
+
+Widget shop({
+  String img,
+}) {
+  return  Container(
+    width: 120.0,
+    height: 120.0,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      image: DecorationImage(
+        fit: BoxFit.fill,
+        image: AssetImage(img),
+      ),
+    ),
+  );
+}
+
+
+

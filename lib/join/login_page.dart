@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/store/homestore.dart';
-
-
-
-
 import 'category_page.dart';
-import 'choice_page.dart';
 import 'forgot_password.dart';
 import 'home.dart';
 
@@ -46,19 +41,20 @@ class _LoginPageState extends State<LoginPage> {
     if (username == 'user' && password == '1234') {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomePage()));
-    }else if(username == 'store' && password == '1234'){
+    } else if (username == 'store' && password == '1234') {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomestorePage()));
-    }else{
+    } else {
       return AlertDialog(
         title: Text('warning'),
         content: Text('username or password invalid'),
-        actions: <Widget>[FlatButton(
-          child: Text('OK'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ],
       );
     }
@@ -70,9 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-
             Container(
-
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
@@ -84,7 +78,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
             Column(
               children: <Widget>[
                 SizedBox(

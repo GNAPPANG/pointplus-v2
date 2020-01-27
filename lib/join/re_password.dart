@@ -1,13 +1,8 @@
-
-
 import 'package:flutter/material.dart';
-
 import 'confirm_mail.dart';
-
 
 final kalam = 'Kalam';
 final mali = 'Mali';
-
 
 class RePasswordPage extends StatefulWidget {
   @override

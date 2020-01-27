@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 import '../profile_store.dart';
 
 final mali = 'Mali';
@@ -12,8 +11,10 @@ class AddressReproPage extends StatefulWidget {
 }
 
 class _AddressReproPageState extends State<AddressReproPage> {
-  void _onDropItemSelected(String newValueSelected) {
-  }
+
+
+
+  void _onDropItemSelected(String newValueSelected) {}
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +49,9 @@ class _AddressReproPageState extends State<AddressReproPage> {
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
                   children: <Widget>[
-
                     Container(
                       width: MediaQuery.of(context).size.width,
                       child: TextField(
-
                         //maxLength: 20,
                         obscureText: false,
                         decoration: InputDecoration(
@@ -64,10 +63,7 @@ class _AddressReproPageState extends State<AddressReproPage> {
                       ),
                     ),
 
-                    SizedBox(
-                      height: 16.0,
-                    ),
-
+                    SizedBox(height: 16.0),
 
                     Padding(
                       padding: EdgeInsets.only(
@@ -78,7 +74,8 @@ class _AddressReproPageState extends State<AddressReproPage> {
                         children: <Widget>[
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 70),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 70),
                               child: RaisedButton(
                                 onPressed: () {
                                   print('ggggg');
@@ -103,11 +100,9 @@ class _AddressReproPageState extends State<AddressReproPage> {
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -118,5 +113,3 @@ class _AddressReproPageState extends State<AddressReproPage> {
     );
   }
 }
-
-

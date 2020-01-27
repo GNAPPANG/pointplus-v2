@@ -1,15 +1,10 @@
-
-
 import 'package:flutter/material.dart';
-
-
 import 'choice_page.dart';
 import 'confirm_mail.dart';
 import 'login_page.dart';
 
 final kalam = 'Kalam';
 final mali = 'Mali';
-
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -23,16 +18,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,  color: Colors.black54),
+          icon: Icon(Icons.arrow_back, color: Colors.black54),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginPage(),
+              ),
+            );
           },
         ),
-        title: Text('ลืมรหัสผ่าน',
+        title: Text(
+          'ลืมรหัสผ่าน',
           style: TextStyle(
-            fontFamily: 'mali' ,
+            fontFamily: 'mali',
             color: Colors.black54,
           ),
         ),
@@ -43,7 +42,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             SizedBox(
               height: 20.0,
             ),
-
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -91,7 +89,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                               ),
                             ),
-
                             SizedBox(
                               height: 32.0,
                             ),
@@ -103,18 +100,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       height: 18.0,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 70
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 70),
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             child: RaisedButton(
                               onPressed: () {
                                 print("gggg");
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => ConfirmMailPage(),
-                                ),);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ConfirmMailPage(),
+                                  ),
+                                );
                               },
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
@@ -136,20 +134,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                           ),
                           SizedBox(width: 16.0),
-
                         ],
                       ),
                     ),
-                    SizedBox(
-                        height: 16
-                    ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
             ),
           ],
         ),
-
       ),
     );
   }

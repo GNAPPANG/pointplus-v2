@@ -1,12 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
 
-import 'choice_page.dart';
-
 final kalam = 'Kalam';
 final mali = 'Mali';
-
 
 class PlanPage extends StatefulWidget {
   @override
@@ -20,22 +16,24 @@ class _PlanPageState extends State<PlanPage> {
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,  color: Colors.black54),
+          icon: Icon(Icons.arrow_back, color: Colors.black54),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => ProfileUser(),
-            ),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfileUser(),
+              ),
+            );
           },
         ),
         title: Text(
           'นโยบายทางธุรกิจ',
           style: TextStyle(
-            fontFamily: 'mali' ,
+            fontFamily: 'mali',
             color: Colors.black54,
           ),
         ),
       ),
-
     );
   }
 }
