@@ -15,7 +15,6 @@ class ScanStorePage extends StatefulWidget {
 }
 
 class _ScanStorePageState extends State<ScanStorePage> {
-
   String barcode = '';
   Uint8List bytes = Uint8List(200);
 
@@ -24,50 +23,44 @@ class _ScanStorePageState extends State<ScanStorePage> {
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('สแกนคิวอาร์โค้ด',
+        style: TextStyle(
+          fontFamily: mali,
+        ),
+        ),
+        backgroundColor: Colors.redAccent,
+        leading: Container(),
+        centerTitle: true,
+      ),
       body: Center(
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          //crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              alignment: Alignment.topCenter,
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    appBars(
-                      h: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 7,
-                      c: context,
-                    ),
+
                   ],
                 ),
               ),
             ),
             Align(
               alignment: Alignment.center,
-              child: Text(
-                  'RESULT  $barcode'
-              ),
+              child: Text('RESULT  $barcode'),
             ),
             RaisedButton(
-                onPressed: _scan,
-                child: Text(
-                    "Scan"
-                ),
+              onPressed: _scan,
+              child: Text("สแกน"),
             ),
-
           ],
         ),
       ),
     );
-
   }
 
   Future _scan() async {
@@ -81,16 +74,13 @@ class _ScanStorePageState extends State<ScanStorePage> {
 //  }
 
   Future _generateBarCode() async {
-    Uint8List result = await scanner.generateBarCode('https://github.com/leyan95/qrcode_scanner');
+    Uint8List result = await scanner
+        .generateBarCode('https://github.com/leyan95/qrcode_scanner');
     this.setState(() => this.bytes = result);
   }
 }
 
-
-
-
 //----------------------------------
-
 
 Widget appBars({h, c}) {
   return Container(
@@ -110,9 +100,7 @@ Widget appBars({h, c}) {
               fontFamily: 'mali',
             ),
           ),
-          SizedBox(
-              width: 20
-          ),
+          SizedBox(width: 20),
         ],
       ),
     ),

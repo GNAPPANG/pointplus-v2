@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 import 'main_store.dart';
-
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -12,7 +13,138 @@ class ManageStorePage extends StatefulWidget {
 }
 
 class _ManageStorePageState extends State<ManageStorePage> {
+  File imageFile;
 
+  _openGallary(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  _openCamera(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Make a Choice!'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text('Gallary'),
+                    onTap: () {
+                      _openGallary(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text('Camera'),
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _selectImageProfile() {
+    debugPrint('profile image');
+//    _showChoiceDialog(context);
+    //_openCamera(context);
+    _openGallary(context);
+  }
+
+  int _gValue;
+
+  _imageProfile() {
+    if (imageFile == null) {
+      return Container(
+        height: 160,
+        width: 160,
+        decoration: BoxDecoration(
+//          border: Border.all(),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage('assets/images/upload.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100, top: 110),
+            child: IconButton(
+              icon: Container(
+                height: 200.0,
+                width: 200.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.camera_alt,
+                  size: 20,
+                ),
+              ),
+              onPressed: () {
+                _showChoiceDialog(context);
+              },
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Stack(
+        children: <Widget>[
+          Container(
+            width: 160.0,
+            height: 160.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: ExactAssetImage(imageFile.path),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 100, top: 120),
+              child: IconButton(
+                icon: Container(
+                  height: 200.0,
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                  ),
+                ),
+                onPressed: () {
+                  _showChoiceDialog(context);
+                },
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +170,8 @@ class _ManageStorePageState extends State<ManageStorePage> {
           ),
         ),
       ),
-
       body: Stack(
         children: <Widget>[
-
-
           Container(
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
@@ -55,9 +184,15 @@ class _ManageStorePageState extends State<ManageStorePage> {
                     SizedBox(
                       height: 36.0,
                     ),
-                    Image.asset(
-                      'assets/images/iconim.png',
-                      width: 120.0,
+                    GestureDetector(
+                      onTap: () {
+                        debugPrint('aaa');
+                        _showChoiceDialog(context);
+                      },
+                      child: Image.asset(
+                        'assets/images/iconim.png',
+                        width: 120.0,
+                      ),
                     ),
                     SizedBox(
                       height: 36.0,
@@ -83,7 +218,6 @@ class _ManageStorePageState extends State<ManageStorePage> {
                     SizedBox(
                       height: 8.0,
                     ),
-
                     TextFormField(
                       style: TextStyle(fontFamily: mali, fontSize: 12.0),
                       decoration: InputDecoration(
@@ -114,7 +248,8 @@ class _ManageStorePageState extends State<ManageStorePage> {
                         children: <Widget>[
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 50),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 50),
                               child: RaisedButton(
                                 onPressed: () {},
                                 shape: RoundedRectangleBorder(
@@ -137,7 +272,6 @@ class _ManageStorePageState extends State<ManageStorePage> {
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -149,11 +283,8 @@ class _ManageStorePageState extends State<ManageStorePage> {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
-
-
 }

@@ -247,11 +247,9 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.redAccent,
-        leading: IconButton(
-          icon: Icon(Icons.person, color: Colors.white),
-          onPressed: () {},
-        ),
+        leading: Container(),
         title: Text(
           'โปรไฟล์ร้าน',
           style: TextStyle(
@@ -272,7 +270,6 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                   SizedBox(
                     height: 16.0,
                   ),
-
                   Container(
                     child: Container(
                       child: _imageProfile(),

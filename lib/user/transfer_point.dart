@@ -100,6 +100,7 @@ class _TransferPointState extends State<TransferPoint> {
                                   color: Colors.grey[200],
                                   onPressed: () {},
                                   child: TextField(
+                                      keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.only(left: 20.0),
                                       border: InputBorder.none,
