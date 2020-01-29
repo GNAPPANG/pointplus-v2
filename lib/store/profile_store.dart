@@ -1,12 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'dart:math' as math;
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/store/prostore/address_repro.dart';
 import 'package:point_plus_v2/store/prostore/mail_repro.dart';
 import 'package:point_plus_v2/store/prostore/name_repro.dart';
 import 'package:point_plus_v2/store/prostore/password_repro.dart';
 import 'package:point_plus_v2/store/prostore/phone_repro.dart';
-
+import 'package:point_plus_v2/user/main_page.dart';
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -17,12 +24,13 @@ class ProfileStorePage extends StatefulWidget {
 }
 
 class _ProfileStorePageState extends State<ProfileStorePage> {
+  File imageFile;
+
   DateTime _dateTime = DateTime.now();
 
   DateTime _setDate = DateTime.now();
   Duration initialtimer = new Duration();
   int selectitem = 1;
-
 
   Widget time() {
     return CupertinoTimerPicker(
@@ -75,13 +83,11 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                   ),
                   Expanded(
                     child: CupertinoPicker(
-
                       backgroundColor: Colors.white,
                       onSelectedItemChanged: (val) {
                         //Navigator.of(context).pop();
                       },
                       itemExtent: 35,
-
                       children: <Widget>[
                         Text("กรุงเทพ"),
                         Text("กาญจนบุรี"),
@@ -106,11 +112,154 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
         });
   }
 
+  _openGallary(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
 
+  _openCamera(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Make a Choice!'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text('Gallary'),
+                    onTap: () {
+                      _openGallary(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text('Camera'),
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _selectImageProfile() {
+    debugPrint('profile image');
+//    _showChoiceDialog(context);
+    //_openCamera(context);
+    _openGallary(context);
+  }
+
+  int _gValue;
+
+  _imageProfile() {
+    if (imageFile == null) {
+      return Container(
+        height: 160,
+        width: 160,
+        decoration: BoxDecoration(
+//          border: Border.all(),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage('assets/images/upload.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100, top: 110),
+            child: IconButton(
+              icon: Container(
+                height: 200.0,
+                width: 200.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.camera_alt,
+                  size: 20,
+                ),
+              ),
+              onPressed: () {
+                _showChoiceDialog(context);
+              },
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Stack(
+        children: <Widget>[
+          Container(
+            width: 160.0,
+            height: 160.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: ExactAssetImage(imageFile.path),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 100, top: 120),
+              child: IconButton(
+                icon: Container(
+                  height: 200.0,
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                  ),
+                ),
+                onPressed: () {
+                  _showChoiceDialog(context);
+                },
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        leading: IconButton(
+          icon: Icon(Icons.person, color: Colors.white),
+          onPressed: () {},
+        ),
+        title: Text(
+          'โปรไฟล์ร้าน',
+          style: TextStyle(
+            fontFamily: 'mali',
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: Stack(
         children: <Widget>[
           SingleChildScrollView(
@@ -121,29 +270,28 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 60.0,
+                    height: 16.0,
                   ),
-                  Text(
-                    'แบรนเนอร์ร้าน',
-                    style: TextStyle(
-                      color: Colors.black45,
-                      fontSize: 24.0,
-                      fontFamily: 'mali',
+
+                  Container(
+                    child: Container(
+                      child: _imageProfile(),
                     ),
                   ),
                   SizedBox(
                     height: 16.0,
                   ),
-                  Container(
-                      width: 180.0,
-                      height: 180.0,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage('assets/images/logocof.jpg'),
-                          )
-                      )),
+
+//                  Container(
+//                      width: 180.0,
+//                      height: 180.0,
+//                      decoration: BoxDecoration(
+//                          shape: BoxShape.circle,
+//                          image: DecorationImage(
+//                            fit: BoxFit.fill,
+//                            image: AssetImage('assets/images/logocof.jpg'),
+//                          )
+//                      )),
                   SizedBox(
                     height: 8.0,
                   ),
@@ -252,7 +400,6 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                               Icons.arrow_forward_ios,
                               color: Colors.black54,
                               size: 12,
-
                             ),
                           ],
                         ),
@@ -475,13 +622,16 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                               builder: (BuildContext builder) {
                                 return Container(
                                     color: CupertinoColors.white,
-                                    height:
-                                    MediaQuery.of(context).copyWith().size.height /
+                                    height: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .height /
                                         3,
                                     child: Column(
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -489,7 +639,7 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                                 top: 20,
                                               ),
                                               child: InkWell(
-                                                onTap: (){
+                                                onTap: () {
                                                   print('done');
                                                   // ดึงวันที่ใส่ใน textformfield
 
@@ -559,13 +709,16 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                               builder: (BuildContext builder) {
                                 return Container(
                                     color: CupertinoColors.white,
-                                    height:
-                                    MediaQuery.of(context).copyWith().size.height /
+                                    height: MediaQuery.of(context)
+                                            .copyWith()
+                                            .size
+                                            .height /
                                         3,
                                     child: Column(
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -573,7 +726,7 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                                 top: 20,
                                               ),
                                               child: InkWell(
-                                                onTap: (){
+                                                onTap: () {
                                                   print('done');
                                                   // ดึงวันที่ใส่ใน textformfield
 
@@ -637,7 +790,6 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                     height: 16.0,
                   ),
 
-
                   Padding(
                     padding: EdgeInsets.only(
                       left: 20.0,
@@ -696,15 +848,9 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                   SizedBox(
                     height: 20.0,
                   ),
-
                 ],
               ),
             ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 24,
-            color: Colors.redAccent,
           ),
         ],
       ),

@@ -75,8 +75,6 @@ class _ProfileUserState extends State<ProfileUser> {
         });
   }
 
-
-
   _selectImageProfile() {
     debugPrint('profile image');
 //    _showChoiceDialog(context);
@@ -89,41 +87,72 @@ class _ProfileUserState extends State<ProfileUser> {
   _imageProfile() {
     if (imageFile == null) {
       return Container(
-        height: 150,
-        width: 150,
+        height: 160,
+        width: 160,
         decoration: BoxDecoration(
-          border: Border.all(),
+//          border: Border.all(),
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: AssetImage('assets/images/tay.jpg'),
+            image: AssetImage('assets/images/upload.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: IconButton(
-          icon: Icon(Icons.camera_alt),
-          onPressed: () {
-            _showChoiceDialog(context);
-          },
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100, top: 110),
+            child: IconButton(
+              icon: Container(
+                height: 200.0,
+                width: 200.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.camera_alt,
+                  size: 20,
+                ),
+              ),
+              onPressed: () {
+                _showChoiceDialog(context);
+              },
+            ),
+          ),
         ),
       );
     } else {
       return Stack(
         children: <Widget>[
           Container(
+            width: 160.0,
+            height: 160.0,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
+              image: DecorationImage(
+                image: ExactAssetImage(imageFile.path),
+                fit: BoxFit.cover,
+              ),
             ),
-            child: Image.file(
-              imageFile,
-              width: 150,
-              height: 150,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 100, top: 120),
+              child: IconButton(
+                icon: Container(
+                  height: 200.0,
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                  ),
+                ),
+                onPressed: () {
+                  _showChoiceDialog(context);
+                },
+              ),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.camera_alt),
-            onPressed: () {
-              _showChoiceDialog(context);
-            },
           ),
         ],
       );
@@ -162,7 +191,6 @@ class _ProfileUserState extends State<ProfileUser> {
             ),
             Stack(
               children: <Widget>[
-              
                 Container(
                   child: Container(
                     child: _imageProfile(),
@@ -182,21 +210,6 @@ class _ProfileUserState extends State<ProfileUser> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     _selectImageProfile();
-                      //   },
-                      //   child: Container(
-                      //       width: 180.0,
-                      //       height: 180.0,
-                      //       decoration: BoxDecoration(
-                      //           shape: BoxShape.circle,
-                      //           image: DecorationImage(
-                      //             fit: BoxFit.fill,
-                      //             image: AssetImage('assets/images/tay.jpg'),
-                      //           ))),
-                      // ),
                       SizedBox(
                         height: 8.0,
                       ),

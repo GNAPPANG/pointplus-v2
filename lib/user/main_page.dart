@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
 import 'package:point_plus_v2/user/search_page.dart';
 
-
 final mali = 'Mali';
 
 class MainPage extends StatefulWidget {
@@ -33,8 +32,6 @@ class _MainPageState extends State<MainPage> {
                   SizedBox(
                     height: 10,
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -56,9 +53,9 @@ class _MainPageState extends State<MainPage> {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                       promotion(
-                         img: 'assets/images/12.jpg',
-                       ),
+                        promotion(
+                          img: 'assets/images/12.jpg',
+                        ),
                         promotion(
                           img: 'assets/images/11.jpg',
                         ),
@@ -68,8 +65,6 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -109,8 +104,6 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -150,8 +143,6 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, bottom: 10, top: 12),
@@ -171,23 +162,20 @@ class _MainPageState extends State<MainPage> {
                     ),
                     height: MediaQuery.of(context).size.height * 0.28,
                     child: ListView(
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: Axis.vertical,
                       children: <Widget>[
                         store(
                           img: 'assets/images/41.jpg',
                           nameStore: 'Fire tiger',
                         ),
-
                         store(
                           img: 'assets/images/42.jpg',
                           nameStore: 'ชานม',
                         ),
-
                         store(
                           img: 'assets/images/43.jpg',
                           nameStore: 'ซูชิ',
                         ),
-
                         store(
                           img: 'assets/images/44.jpg',
                           nameStore: 'Odtomato',
@@ -195,7 +183,6 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-
                   SizedBox(
                     height: 50.0,
                   ),
@@ -265,7 +252,6 @@ Widget appBars({h, c}) {
   );
 }
 
-
 Widget store({
   String img,
   String nameStore,
@@ -273,10 +259,10 @@ Widget store({
   return Card(
     elevation: 5,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
           height: 150,
-          width: 200,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(img),
@@ -284,12 +270,28 @@ Widget store({
             ),
           ),
         ),
-        Text(nameStore),
+        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.only(left: 20, bottom: 10),
+          child: Row(
+            children: <Widget>[
+              Text(
+                nameStore,
+                style: TextStyle(
+                  fontFamily: mali,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+
       ],
     ),
   );
 }
-
 
 Widget promotion({
   String img,
@@ -327,11 +329,10 @@ Widget add({
   );
 }
 
-
 Widget shop({
   String img,
 }) {
-  return  Container(
+  return Container(
     width: 120.0,
     height: 120.0,
     decoration: BoxDecoration(
@@ -343,6 +344,3 @@ Widget shop({
     ),
   );
 }
-
-
-
