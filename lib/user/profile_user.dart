@@ -28,6 +28,8 @@ class ProfileUser extends StatefulWidget {
 class _ProfileUserState extends State<ProfileUser> {
   File imageFile;
 
+  String xxx="วว/ดด/ปปปป";
+
   _openGallary(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
@@ -158,6 +160,28 @@ class _ProfileUserState extends State<ProfileUser> {
       );
     }
   }
+
+  DateTime _dateTime = DateTime.now();
+
+
+  datetime() {
+  return CupertinoDatePicker(
+    initialDateTime: _dateTime,
+    onDateTimeChanged: (DateTime newdate) {
+      print(newdate);
+      setState(() {
+        _dateTime = newdate;
+
+      });
+    },
+    use24hFormat: true,
+    maximumDate: new DateTime(2020, 12, 30),
+    minimumYear: 1900,
+    maximumYear: 2020,
+    minuteInterval: 1,
+    mode: CupertinoDatePickerMode.date,
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -403,13 +427,46 @@ class _ProfileUserState extends State<ProfileUser> {
                               showModalBottomSheet(
                                   context: context,
                                   builder: (BuildContext builder) {
-                                    return Container(
-                                        height: MediaQuery.of(context)
-                                                .copyWith()
-                                                .size
-                                                .height /
-                                            3,
-                                        child: datetime());
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            right: 20,
+                                            top: 20,
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {
+                                              print('donexxx');
+                                              // ดึงวันที่ใส่ใน textformfield
+                                                print('${_dateTime.day}');
+                                                setState(() {
+                                                  xxx = _dateTime.day.toString()+'/'+ _dateTime.month.toString() + '/' + _dateTime.year.toString() ;
+                                                });
+
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                              'เสร็จสิ้น',
+                                              style: TextStyle(
+                                                fontFamily: mali,
+                                                color: Colors.blue,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: MediaQuery.of(context)
+                                                      .copyWith()
+                                                      .size
+                                                      .height /
+                                                  3,
+                                              child: datetime(),
+                                          ),
+                                        ),
+                                      ],
+                                    );
                                   });
                             },
                             color: Colors.white,
@@ -429,7 +486,7 @@ class _ProfileUserState extends State<ProfileUser> {
                                       ),
                                     ),
                                     Text(
-                                      '12/12/1996',
+                                      xxx,
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'mali',
@@ -721,17 +778,17 @@ class _ProfileUserState extends State<ProfileUser> {
   }
 }
 
-Widget datetime() {
-  return CupertinoDatePicker(
-    initialDateTime: DateTime.now(),
-    onDateTimeChanged: (DateTime newdate) {
-      print(newdate);
-    },
-    use24hFormat: true,
-    maximumDate: new DateTime(2020, 12, 30),
-    minimumYear: 1900,
-    maximumYear: 2020,
-    minuteInterval: 1,
-    mode: CupertinoDatePickerMode.date,
-  );
-}
+//Widget datetime() {
+//  return CupertinoDatePicker(
+//    initialDateTime: DateTime.now(),
+//    onDateTimeChanged: (DateTime newdate) {
+//      print(newdate);
+//    },
+//    use24hFormat: true,
+//    maximumDate: new DateTime(2020, 12, 30),
+//    minimumYear: 1900,
+//    maximumYear: 2020,
+//    minuteInterval: 1,
+//    mode: CupertinoDatePickerMode.date,
+//  );
+//}

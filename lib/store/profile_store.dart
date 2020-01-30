@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,10 @@ class ProfileStorePage extends StatefulWidget {
 
 class _ProfileStorePageState extends State<ProfileStorePage> {
   File imageFile;
+
+  String open ="00:00 น.";
+  String close ="00:00 น.";
+
 
   DateTime _dateTime = DateTime.now();
 
@@ -639,7 +644,10 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                                 onTap: () {
                                                   print('done');
                                                   // ดึงวันที่ใส่ใน textformfield
-
+                                                  print('${open}');
+                                                  setState(() {
+                                                    open = (initialtimer.inHours).toString() + ':' +initialtimer.inMinutes.remainder(60).toString() + ' น.';
+                                                  });
                                                   Navigator.pop(context);
                                                 },
                                                 child: Text(
@@ -675,7 +683,7 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                   ),
                                 ),
                                 Text(
-                                  '10.00 น.',
+                                  open,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'mali',
@@ -726,6 +734,10 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                                 onTap: () {
                                                   print('done');
                                                   // ดึงวันที่ใส่ใน textformfield
+                                                  print('${close}');
+                                                  setState(() {
+                                                    close = (initialtimer.inHours).toString() + ':' +initialtimer.inMinutes.remainder(60).toString() + ' น.';
+                                                  });
 
                                                   Navigator.pop(context);
                                                 },
@@ -762,7 +774,7 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                   ),
                                 ),
                                 Text(
-                                  '20.00 น.',
+                                  close,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'mali',

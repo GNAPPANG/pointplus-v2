@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/category_page.dart';
 
 final mali = 'Mali';
@@ -12,6 +14,8 @@ class RestorePage extends StatefulWidget {
 }
 
 class _RestorePageState extends State<RestorePage> {
+  File imageFile;
+
   DateTime _dateTime = DateTime.now();
 
   GlobalKey<ScaffoldState> key = GlobalKey(debugLabel: "scaffoldKey");
@@ -118,6 +122,138 @@ class _RestorePageState extends State<RestorePage> {
     if (_formKey.currentState.validate()) {}
   }
 
+  _openGallary(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  _openCamera(BuildContext context) async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Make a Choice!'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text('Gallary'),
+                    onTap: () {
+                      _openGallary(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text('Camera'),
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _selectImageProfile() {
+    debugPrint('profile image');
+//    _showChoiceDialog(context);
+    //_openCamera(context);
+    _openGallary(context);
+  }
+
+  int _gValue;
+
+  _imageProfile() {
+    if (imageFile == null) {
+      return Container(
+        height: 160,
+        width: 160,
+        decoration: BoxDecoration(
+//          border: Border.all(),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage('assets/images/upload.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 100, top: 110),
+            child: IconButton(
+              icon: Container(
+                height: 200.0,
+                width: 200.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.camera_alt,
+                  size: 20,
+                ),
+              ),
+              onPressed: () {
+                _showChoiceDialog(context);
+              },
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Stack(
+        children: <Widget>[
+          Container(
+            width: 160.0,
+            height: 160.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: ExactAssetImage(imageFile.path),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 100, top: 120),
+              child: IconButton(
+                icon: Container(
+                  height: 200.0,
+                  width: 200.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                  ),
+                ),
+                onPressed: () {
+                  _showChoiceDialog(context);
+                },
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,14 +295,10 @@ class _RestorePageState extends State<RestorePage> {
                         height: 20.0,
                       ),
                       Container(
-                          width: 180.0,
-                          height: 180.0,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage('assets/images/upload.png'),
-                              ))),
+                        child: Container(
+                          child: _imageProfile(),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(

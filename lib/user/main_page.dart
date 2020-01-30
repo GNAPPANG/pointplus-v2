@@ -160,7 +160,7 @@ class _MainPageState extends State<MainPage> {
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.0,
                     ),
-                    height: MediaQuery.of(context).size.height * 0.28,
+                    height: MediaQuery.of(context).size.height ,
                     child: ListView(
                       scrollDirection: Axis.vertical,
                       children: <Widget>[
