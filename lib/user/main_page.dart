@@ -184,7 +184,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 50.0,
+                    height: 100.0,
                   ),
                 ],
               ),
@@ -262,7 +262,7 @@ Widget store({
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          height: 150,
+          height: 220,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage(img),
@@ -286,8 +286,6 @@ Widget store({
             ],
           ),
         ),
-
-
       ],
     ),
   );

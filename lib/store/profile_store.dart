@@ -14,7 +14,7 @@ import 'package:point_plus_v2/store/prostore/mail_repro.dart';
 import 'package:point_plus_v2/store/prostore/name_repro.dart';
 import 'package:point_plus_v2/store/prostore/password_repro.dart';
 import 'package:point_plus_v2/store/prostore/phone_repro.dart';
-import 'package:point_plus_v2/user/main_page.dart';
+
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -625,15 +625,15 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                 return Container(
                                     color: CupertinoColors.white,
                                     height: MediaQuery.of(context)
-                                            .copyWith()
-                                            .size
-                                            .height /
+                                        .copyWith()
+                                        .size
+                                        .height /
                                         3,
                                     child: Column(
                                       children: <Widget>[
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          MainAxisAlignment.end,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
@@ -715,15 +715,15 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                                 return Container(
                                     color: CupertinoColors.white,
                                     height: MediaQuery.of(context)
-                                            .copyWith()
-                                            .size
-                                            .height /
+                                        .copyWith()
+                                        .size
+                                        .height /
                                         3,
                                     child: Column(
                                       children: <Widget>[
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          MainAxisAlignment.end,
                                           children: <Widget>[
                                             Padding(
                                               padding: const EdgeInsets.only(
