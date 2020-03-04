@@ -25,7 +25,58 @@ class ProfileStorePage extends StatefulWidget {
 }
 
 class _ProfileStorePageState extends State<ProfileStorePage> {
-  File imageFile;
+  File _image;
+
+
+  Future<void> captureImage(ImageSource imageSource) async {
+    try {
+      final imageFile = await ImagePicker.pickImage(source: imageSource);
+      setState(() {
+        _image = imageFile;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget _buildImage() {
+    if (_image != null) {
+      return Image.file(_image);
+    } else {
+      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
+    }
+  }
+
+
+  void _showActionSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text("Camera"),
+                  onTap: () async {
+                    captureImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.photo_library),
+                  title: new Text("Gallery"),
+                  onTap: () async {
+                    captureImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
 
   String open ="00:00 น.";
   String close ="00:00 น.";
@@ -117,136 +168,6 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
         });
   }
 
-  _openGallary(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
-  }
-
-  _openCamera(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
-  }
-
-  Future<void> _showChoiceDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Make a Choice!'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Text('Gallary'),
-                    onTap: () {
-                      _openGallary(context);
-                    },
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                  ),
-                  GestureDetector(
-                    child: Text('Camera'),
-                    onTap: () {
-                      _openCamera(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  _selectImageProfile() {
-    debugPrint('profile image');
-//    _showChoiceDialog(context);
-    //_openCamera(context);
-    _openGallary(context);
-  }
-
-  int _gValue;
-
-  _imageProfile() {
-    if (imageFile == null) {
-      return Container(
-        height: 160,
-        width: 160,
-        decoration: BoxDecoration(
-//          border: Border.all(),
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage('assets/images/upload.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 100, top: 110),
-            child: IconButton(
-              icon: Container(
-                height: 200.0,
-                width: 200.0,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 20,
-                ),
-              ),
-              onPressed: () {
-                _showChoiceDialog(context);
-              },
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Stack(
-        children: <Widget>[
-          Container(
-            width: 160.0,
-            height: 160.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: ExactAssetImage(imageFile.path),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 100, top: 120),
-              child: IconButton(
-                icon: Container(
-                  height: 200.0,
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.camera_alt,
-                    size: 20,
-                  ),
-                ),
-                onPressed: () {
-                  _showChoiceDialog(context);
-                },
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,10 +196,50 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                   SizedBox(
                     height: 16.0,
                   ),
-                  Container(
-                    child: Container(
-                      child: _imageProfile(),
-                    ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.center,
+                        child: CircleAvatar(
+                          radius: 100,
+                          backgroundColor: Colors.transparent,
+                          child: ClipOval(
+                            child: new SizedBox(
+                              width: 180.0,
+                              height: 180.0,
+                              child: (_image != null)
+                                  ? Image.file(
+                                _image,
+                                fit: BoxFit.fill,
+                              )
+                                  : Image.asset('assets/images/upload.png'),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 130, top: 90),
+                        child: Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey,
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.camera_alt,
+                              color: Colors.black,
+                              size: 25.0,
+                            ),
+                            onPressed: () {
+                              _showActionSheet();
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 16.0,

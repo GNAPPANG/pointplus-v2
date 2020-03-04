@@ -146,7 +146,6 @@ class _ProfileUserState extends State<ProfileUser> {
                       Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
-
                           Align(
                             alignment: Alignment.center,
                             child: CircleAvatar(
@@ -177,7 +176,7 @@ class _ProfileUserState extends State<ProfileUser> {
                               ),
                               child: IconButton(
                                 icon: Icon(
-                                  FontAwesomeIcons.camera,
+                                  Icons.camera_alt,
                                   color: Colors.black,
                                   size: 25.0,
                                 ),
