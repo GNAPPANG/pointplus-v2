@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:point_plus_v2/store/homestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:point_plus_v2/user/main_page.dart';
 import 'category_page.dart';
 import 'forgot_password.dart';
 import 'home.dart';
@@ -17,48 +18,50 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _usernameCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
 
-  userLogin() {
-    String user = 'user';
-    String userpass = '1234';
+  _login() {
+    print(_usernameCtrl.text + _passwordCtrl.text);
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+        email: _usernameCtrl.text,
+        password: _passwordCtrl.text)
+        .then((currentUser) => Firestore.instance
+        .collection("users")
+        .document(currentUser.user.uid)
+        .get()
+        .then((DocumentSnapshot result) =>
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MainPage(
+                ))))
+        .catchError((err) => print(err)))
+        .catchError((err) => print(err));
+  }
 
-    String store = 'store';
-    String storepass = '1234';
-
-    String status_user; // status_user == 1 => user
-
-    String username = _usernameCtrl.text;
-    String password = _passwordCtrl.text;
-
-    print(username + password);
-
-    if (username == 'user') {
-      status_user = '1';
-    } else {
-      status_user = '2';
-    }
-
-    print(status_user);
-
-    if (username == 'user' && password == '1234') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    } else if (username == 'store' && password == '1234') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomestorePage()));
-    } else {
-      return AlertDialog(
-        title: Text('warning'),
-        content: Text('username or password invalid'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    }
+  @override
+  initState() {
+    FirebaseAuth.instance
+        .currentUser()
+        .then((currentUser) => {
+      if (currentUser == null)
+        {}
+      else
+        {
+          Firestore.instance
+              .collection("users")
+              .document(currentUser.uid)
+              .get()
+              .then((DocumentSnapshot result) =>
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                      ))))
+              .catchError((err) => print(err))
+        }
+    })
+        .catchError((err) => print(err));
+    super.initState();
   }
 
   @override
@@ -137,6 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                     horizontal: 18.0,
                                   ),
                                   child: TextField(
+                                    obscureText: true,
                                     controller: _passwordCtrl,
                                     decoration: InputDecoration(
                                       labelText: 'รหัสผ่าน',
@@ -197,9 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                             children: <Widget>[
                               Expanded(
                                 child: RaisedButton(
-                                  onPressed: () {
-                                    userLogin();
-                                  },
+                                  onPressed: _login,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),

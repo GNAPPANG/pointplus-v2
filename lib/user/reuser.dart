@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/category_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:point_plus_v2/user/main_page.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 final mali = 'Mali';
 
@@ -15,7 +18,59 @@ class ReuserPage extends StatefulWidget {
 
 class _ReuserPageState extends State<ReuserPage> {
   final _formKey = GlobalKey<FormState>();
-  File imageFile;
+  File _image;
+
+  Future<void> captureImage(ImageSource imageSource) async {
+    try {
+      final imageFile = await ImagePicker.pickImage(source: imageSource);
+      setState(() {
+        _image = imageFile;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Widget _buildImage() {
+    if (_image != null) {
+      return Image.file(_image);
+    } else {
+      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
+    }
+  }
+
+
+  void _showActionSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text("Camera"),
+                  onTap: () async {
+                    captureImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(Icons.photo_library),
+                  title: new Text("Gallery"),
+                  onTap: () async {
+                    captureImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+
 
   TextEditingController _firstnameCtrl = new TextEditingController();
   TextEditingController _lastnameCtrl = new TextEditingController();
@@ -43,7 +98,7 @@ class _ReuserPageState extends State<ReuserPage> {
                           top: 20,
                         ),
                         child: InkWell(
-                          onTap: (){
+                          onTap: () {
                             print('done');
                             // ดึงวันที่ใส่ใน textformfield
 
@@ -66,9 +121,70 @@ class _ReuserPageState extends State<ReuserPage> {
         });
   }
 
-  Future _register() {
-    print('register');
-    if (_formKey.currentState.validate()) {}
+  Future _register() async {
+    if (_formKey.currentState.validate()) {
+      String pwd;
+
+      if (_passwordCtrl.text == _conpasswordCtrl.text) {
+        pwd = _passwordCtrl.text.toString();
+      }else{
+        Alert(
+          context: context,
+
+          type: AlertType.warning,
+          title: "คำเตือน",
+          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Color.fromRGBO(0, 179, 134, 1.0),
+              radius: BorderRadius.circular(0.0),
+            ),
+          ],
+        ).show();
+      }
+      print('firstname:' + _firstnameCtrl.text);
+      print('lastname:' + _lastnameCtrl.text);
+      print('username:' + _usernameCtrl.text);
+      print('phone:' + _phoneCtrl.text);
+      print('email:' + _emailCtrl.text);
+      print(pwd);
+
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
+          .then((currentUser) => Firestore.instance
+              .collection("users")
+              .document(currentUser.user.uid)
+              .setData({
+                "uid": currentUser.user.uid,
+                "firstname": _firstnameCtrl.text,
+                "lastname": _lastnameCtrl.text,
+                "phone": _phoneCtrl.text,
+                "email": _emailCtrl.text,
+                "password": pwd,
+                "status": "user"
+              })
+              .then((result) => {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MainPage(
+
+                                )),
+                        (_) => false),
+                    _firstnameCtrl.clear(),
+                    _lastnameCtrl.clear(),
+                    _emailCtrl.clear(),
+                    _passwordCtrl.clear(),
+                    _conpasswordCtrl.clear()
+                  })
+              .catchError((err) => print(err)))
+          .catchError((err) => print(err));
+    }
   }
 
   Widget datetime() {
@@ -86,136 +202,7 @@ class _ReuserPageState extends State<ReuserPage> {
     );
   }
 
-  _openGallary(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
-  }
 
-  _openCamera(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
-  }
-
-  Future<void> _showChoiceDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Make a Choice!'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Text('Gallary'),
-                    onTap: () {
-                      _openGallary(context);
-                    },
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                  ),
-                  GestureDetector(
-                    child: Text('Camera'),
-                    onTap: () {
-                      _openCamera(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  _selectImageProfile() {
-    debugPrint('profile image');
-//    _showChoiceDialog(context);
-    //_openCamera(context);
-    _openGallary(context);
-  }
-
-  int _gValue;
-
-  _imageProfile() {
-    if (imageFile == null) {
-      return Container(
-        height: 160,
-        width: 160,
-        decoration: BoxDecoration(
-//          border: Border.all(),
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage('assets/images/upload.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 100, top: 110),
-            child: IconButton(
-              icon: Container(
-                height: 200.0,
-                width: 200.0,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 20,
-                ),
-              ),
-              onPressed: () {
-                _showChoiceDialog(context);
-              },
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Stack(
-        children: <Widget>[
-          Container(
-            width: 160.0,
-            height: 160.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: ExactAssetImage(imageFile.path),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 100, top: 120),
-              child: IconButton(
-                icon: Container(
-                  height: 200.0,
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.camera_alt,
-                    size: 20,
-                  ),
-                ),
-                onPressed: () {
-                  _showChoiceDialog(context);
-                },
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +229,6 @@ class _ReuserPageState extends State<ReuserPage> {
         ),
       ),
       body: Stack(
-
         children: <Widget>[
           Container(
             alignment: Alignment.topCenter,
@@ -258,10 +244,50 @@ class _ReuserPageState extends State<ReuserPage> {
                       SizedBox(
                         height: 20.0,
                       ),
-                      Container(
-                        child: Container(
-                          child: _imageProfile(),
-                        ),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.center,
+                            child: CircleAvatar(
+                              radius: 100,
+                              backgroundColor: Colors.transparent,
+                              child: ClipOval(
+                                child: new SizedBox(
+                                  width: 180.0,
+                                  height: 180.0,
+                                  child: (_image != null)
+                                      ? Image.file(
+                                    _image,
+                                    fit: BoxFit.fill,
+                                  )
+                                      : Image.asset('assets/images/upload.png'),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 130, top: 90),
+                            child: Container(
+                              width: 45,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey,
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.black,
+                                  size: 25.0,
+                                ),
+                                onPressed: () {
+                                  _showActionSheet();
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -319,33 +345,33 @@ class _ReuserPageState extends State<ReuserPage> {
                         ),
                       ),
                       SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextFormField(
-                          controller: _usernameCtrl,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'ชื่อผู้ใช้ห้ามว่าง';
-                            } else {
-                              return null;
-                            }
-                          },
-                          style: TextStyle(
-                            fontFamily: mali,
-                          ),
-                          decoration: const InputDecoration(
-                            icon: Icon(
-                              Icons.person_outline,
-                              color: Colors.redAccent,
-                            ),
-                            hintText: 'ชื่อผู้ใช้',
-                            hintStyle: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
-                      ),
+//                      Padding(
+//                        padding: const EdgeInsets.symmetric(horizontal: 20),
+//                        child: TextFormField(
+//                          controller: _usernameCtrl,
+//                          validator: (value) {
+//                            if (value.isEmpty) {
+//                              return 'ชื่อผู้ใช้ห้ามว่าง';
+//                            } else {
+//                              return null;
+//                            }
+//                          },
+//                          style: TextStyle(
+//                            fontFamily: mali,
+//                          ),
+//                          decoration: const InputDecoration(
+//                            icon: Icon(
+//                              Icons.person_outline,
+//                              color: Colors.redAccent,
+//                            ),
+//                            hintText: 'ชื่อผู้ใช้',
+//                            hintStyle: TextStyle(
+//                              fontSize: 16.0,
+//                              color: Colors.black54,
+//                            ),
+//                          ),
+//                        ),
+//                      ),
                       SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -503,9 +529,7 @@ class _ReuserPageState extends State<ReuserPage> {
                           children: <Widget>[
                             Expanded(
                               child: RaisedButton(
-                                onPressed: () {
-                                  _register();
-                                },
+                                onPressed: _register,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
