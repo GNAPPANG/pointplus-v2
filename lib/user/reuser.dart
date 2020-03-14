@@ -8,15 +8,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/user/main_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
 
 final mali = 'Mali';
-
 class ReuserPage extends StatefulWidget {
   @override
   _ReuserPageState createState() => _ReuserPageState();
 }
 
 class _ReuserPageState extends State<ReuserPage> {
+  String _age = 'Birth Day';
   final _formKey = GlobalKey<FormState>();
   File _image;
 
@@ -80,46 +82,46 @@ class _ReuserPageState extends State<ReuserPage> {
   TextEditingController _passwordCtrl = new TextEditingController();
   TextEditingController _conpasswordCtrl = new TextEditingController();
 
-  _birth() {
-    print('date picker');
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext builder) {
-          return Container(
-              height: MediaQuery.of(context).copyWith().size.height / 3,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 20,
-                          top: 20,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            print('done');
-                            // ดึงวันที่ใส่ใน textformfield
-
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'เสร็จสิ้น',
-                            style: TextStyle(
-                              fontFamily: mali,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(child: datetime()),
-                ],
-              ));
-        });
-  }
+//  _birth() {
+//    print('date picker');
+//    showModalBottomSheet(
+//        context: context,
+//        builder: (BuildContext builder) {
+//          return Container(
+//              height: MediaQuery.of(context).copyWith().size.height / 3,
+//              child: Column(
+//                children: <Widget>[
+//                  Row(
+//                    mainAxisAlignment: MainAxisAlignment.end,
+//                    children: <Widget>[
+//                      Padding(
+//                        padding: const EdgeInsets.only(
+//                          right: 20,
+//                          top: 20,
+//                        ),
+//                        child: InkWell(
+//                          onTap: () {
+//                            print('done');
+//                            // ดึงวันที่ใส่ใน textformfield
+//
+//                            Navigator.pop(context);
+//                          },
+//                          child: Text(
+//                            'เสร็จสิ้น',
+//                            style: TextStyle(
+//                              fontFamily: mali,
+//                              color: Colors.blue,
+//                            ),
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                  Expanded(child: datetime()),
+//                ],
+//              ));
+//        });
+//  }
 
   Future _register() async {
     if (_formKey.currentState.validate()) {
@@ -403,32 +405,84 @@ class _ReuserPageState extends State<ReuserPage> {
                         ),
                       ),
                       SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.cake,
-                                    color: Colors.redAccent,
-                                  ),
-                                  hintText: 'วันเกิด',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black54,
-                                  ),
+//                      Padding(
+//                        padding: const EdgeInsets.symmetric(horizontal: 20),
+//                        child: Row(
+//                          children: <Widget>[
+//                            Expanded(
+//                              child: TextFormField(
+//                                decoration: const InputDecoration(
+//                                  icon: Icon(
+//                                    Icons.cake,
+//                                    color: Colors.redAccent,
+//                                  ),
+//                                  hintText: 'วันเกิด',
+//                                  hintStyle: TextStyle(
+//                                    fontSize: 16.0,
+//                                    color: Colors.black54,
+//                                  ),
+//                                ),
+//                              ),
+//                            ),
+//                            IconButton(
+//                              icon: Icon(Icons.calendar_today),
+//                              onPressed: () {
+//                                _birth();
+//                              },
+//                            ),
+//                          ],
+//                        ),
+//
+                      RaisedButton(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              theme: DatePickerTheme(
+                                containerHeight: 200.0,
+                              ),
+                              showTitleActions: true,
+                              minTime: DateTime(1950, 1, 1),
+                              maxTime: DateTime(2021, 12, 31),
+                              onConfirm: (date) {
+                                print('Confirm $date');
+                                _age =
+                                '${date.year} - ${date.month} - ${date.day}';
+                                setState(() {});
+                              },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 50.0,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.date_range,
+                                      size: 18.0,
+                                      color: Colors.blueGrey[200],
+                                    ),
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        '$_age',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.calendar_today),
-                              onPressed: () {
-                                _birth();
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 12),
