@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   GlobalKey _bottomNavigationKey = GlobalKey();
 
   int _selectedItem = 0;
+
   final _pageOption = [
     MainPage(),
     MyPoint(),

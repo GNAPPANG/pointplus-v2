@@ -4,6 +4,12 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/category_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:point_plus_v2/store/homestore.dart';
+import 'package:point_plus_v2/store/main_store.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -15,6 +21,8 @@ class RestorePage extends StatefulWidget {
 
 class _RestorePageState extends State<RestorePage> {
   File _image;
+
+
 
   Future<void> captureImage(ImageSource imageSource) async {
     try {
@@ -84,6 +92,77 @@ class _RestorePageState extends State<RestorePage> {
   TextEditingController _namestoreCtrl = new TextEditingController();
   TextEditingController _phoneCtrl = new TextEditingController();
   TextEditingController _addressCtrl = new TextEditingController();
+
+  Future _register() async {
+    if (_formKey.currentState.validate()) {
+      String pwd;
+
+      if (_passwordCtrl.text == _conpasswordCtrl.text) {
+        pwd = _passwordCtrl.text.toString();
+      }else{
+        Alert(
+            context: context,
+          type: AlertType.warning,
+          title: "คำเตือน",
+          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Color.fromRGBO(0, 179, 134, 1.0),
+              radius: BorderRadius.circular(0.0),
+            ),
+          ],
+        ).show();
+      }
+      print('email:' + _emailCtrl.text);
+      print('namestore:' + _namestoreCtrl.text);
+      print('phone:' + _phoneCtrl.text);
+      print('address:' + _addressCtrl.text);
+
+      print(pwd);
+
+
+
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
+          .then((currentStore) => Firestore.instance
+          .collection("store")
+          .document(currentStore.user.uid)
+          .setData({
+        "uid": currentStore.user.uid,
+        "email": _emailCtrl.text,
+        "namestore": _namestoreCtrl.text,
+        "phone": _phoneCtrl.text,
+        "address": _addressCtrl.text,
+
+
+        "password": pwd,
+        "status": "store"
+      })
+          .then((result) => {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomestorePage(
+
+                )),
+                (_) => false),
+        _emailCtrl.clear(),
+        _passwordCtrl.clear(),
+        _conpasswordCtrl.clear(),
+        _namestoreCtrl.clear(),
+        _phoneCtrl.clear(),
+        _addressCtrl.clear(),
+
+      })
+          .catchError((err) => print(err)))
+          .catchError((err) => print(err));
+    }
+  }
 
   Widget time() {
     return CupertinoTimerPicker(
@@ -167,10 +246,10 @@ class _RestorePageState extends State<RestorePage> {
         });
   }
 
-  Future _register() {
-    print('register');
-    if (_formKey.currentState.validate()) {}
-  }
+//  Future _register() {
+//    print('register');
+//    if (_formKey.currentState.validate()) {}
+//  }
 
 
   @override
@@ -680,3 +759,4 @@ class _RestorePageState extends State<RestorePage> {
     });
   }
 }
+

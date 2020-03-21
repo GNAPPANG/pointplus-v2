@@ -433,55 +433,58 @@ class _ReuserPageState extends State<ReuserPage> {
 //                          ],
 //                        ),
 //
-                      RaisedButton(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              theme: DatePickerTheme(
-                                containerHeight: 200.0,
-                              ),
-                              showTitleActions: true,
-                              minTime: DateTime(1950, 1, 1),
-                              maxTime: DateTime(2021, 12, 31),
-                              onConfirm: (date) {
-                                print('Confirm $date');
-                                _age =
-                                '${date.year} - ${date.month} - ${date.day}';
-                                setState(() {});
-                              },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 50.0,
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.date_range,
-                                      size: 18.0,
-                                      color: Colors.blueGrey[200],
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(left: 10.0),
-                                      child: Text(
-                                        '$_age',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18.0),
-                                      ),
-                                    ),
-                                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: RaisedButton(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          onPressed: () {
+                            DatePicker.showDatePicker(context,
+                                theme: DatePickerTheme(
+                                  containerHeight: 200.0,
                                 ),
-                              ),
-                            ],
+                                showTitleActions: true,
+                                minTime: DateTime(1950, 1, 1),
+                                maxTime: DateTime(2021, 12, 31),
+                                onConfirm: (date) {
+                                  print('Confirm $date');
+                                  _age =
+                                  '${date.year} - ${date.month} - ${date.day}';
+                                  setState(() {});
+                                },
+                                currentTime: DateTime.now(),
+                                locale: LocaleType.en);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50.0,
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.date_range,
+                                        size: 18.0,
+                                        color: Colors.blueGrey[200],
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 10.0),
+                                        child: Text(
+                                          '$_age',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18.0),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'choice_page.dart';
 import 'confirm_mail.dart';
 import 'login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final kalam = 'Kalam';
 final mali = 'Mali';
@@ -9,12 +10,16 @@ final mali = 'Mali';
 class ForgotPasswordPage extends StatefulWidget {
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
+
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
         leading: IconButton(
@@ -146,5 +151,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       ),
     );
+
+
   }
 }

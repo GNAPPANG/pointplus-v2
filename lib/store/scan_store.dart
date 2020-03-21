@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -64,7 +64,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
   }
 
   Future _scan() async {
-    String barcode = await scanner.scan();
+
     setState(() => this.barcode = barcode);
   }
 
@@ -73,11 +73,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
 //    setState(() => this.barcode = barcode);
 //  }
 
-  Future _generateBarCode() async {
-    Uint8List result = await scanner
-        .generateBarCode('https://github.com/leyan95/qrcode_scanner');
-    this.setState(() => this.bytes = result);
-  }
+
 }
 
 //----------------------------------

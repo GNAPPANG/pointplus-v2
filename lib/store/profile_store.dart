@@ -4,11 +4,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'dart:math' as math;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:point_plus_v2/join/login_page.dart';
 import 'package:point_plus_v2/store/prostore/address_repro.dart';
 import 'package:point_plus_v2/store/prostore/mail_repro.dart';
 import 'package:point_plus_v2/store/prostore/name_repro.dart';
@@ -792,7 +794,13 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                         SizedBox(width: 16.0),
                         Expanded(
                           child: RaisedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              FirebaseAuth.instance
+                                  .signOut()
+                                  .then((result) =>
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage())))
+                                  .catchError((err) => print(err));
+                            },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),

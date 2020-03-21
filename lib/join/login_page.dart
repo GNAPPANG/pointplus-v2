@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:point_plus_v2/user/main_page.dart';
+import 'package:point_plus_v2/join/home.dart';
+
 import 'category_page.dart';
 import 'forgot_password.dart';
-import 'home.dart';
+
 
 final kalam = 'Kalam';
 final mali = 'Mali';
@@ -18,23 +19,27 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _usernameCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
 
-  _login() {
+
+
+  Future<DocumentSnapshot> _login() {
     print(_usernameCtrl.text + _passwordCtrl.text);
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
-        email: _usernameCtrl.text,
-        password: _passwordCtrl.text)
+            email: _usernameCtrl.text, password: _passwordCtrl.text)
         .then((currentUser) => Firestore.instance
-        .collection("users")
-        .document(currentUser.user.uid)
-        .get()
-        .then((DocumentSnapshot result) =>
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MainPage(
-                ))))
-        .catchError((err) => print(err)))
+                .collection("users")
+                .document(currentUser.user.uid)
+                .get()
+                .then(
+              (DocumentSnapshot result) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  );
+              },
+            ).catchError((err) => print(err)))
         .catchError((err) => print(err));
   }
 
@@ -43,23 +48,22 @@ class _LoginPageState extends State<LoginPage> {
     FirebaseAuth.instance
         .currentUser()
         .then((currentUser) => {
-      if (currentUser == null)
-        {}
-      else
-        {
-          Firestore.instance
-              .collection("users")
-              .document(currentUser.uid)
-              .get()
-              .then((DocumentSnapshot result) =>
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MainPage(
-                      ))))
-              .catchError((err) => print(err))
-        }
-    })
+              if (currentUser == null)
+                {}
+              else
+                {
+                  Firestore.instance
+                      .collection("users")
+                      .document(currentUser.uid)
+                      .get()
+                      .then((DocumentSnapshot result) =>
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage())))
+                      .catchError((err) => print(err))
+                }
+            })
         .catchError((err) => print(err));
     super.initState();
   }
