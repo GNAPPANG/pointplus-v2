@@ -85,74 +85,7 @@ class _RestorePageState extends State<RestorePage> {
     String phone = _phoneCtrl.text.trim().toString();
     String address = _addressCtrl.text.trim().toString();
     print('${email}, ${password}, ${conpassword}, ${namestore}, ${phone}, ${address}');
-//    if (_formKey.currentState.validate()) {
-//      String pwd;
-//
-//      if (_passwordCtrl.text == _conpasswordCtrl.text) {
-//        pwd = _passwordCtrl.text.toString();
-//      }else{
-//        Alert(
-//            context: context,
-//          type: AlertType.warning,
-//          title: "คำเตือน",
-//          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
-//          buttons: [
-//            DialogButton(
-//              child: Text(
-//                "ตกลง",
-//                style: TextStyle(color: Colors.white, fontSize: 20),
-//              ),
-//              onPressed: () => Navigator.pop(context),
-//              color: Color.fromRGBO(0, 179, 134, 1.0),
-//              radius: BorderRadius.circular(0.0),
-//            ),
-//          ],
-//        ).show();
-//      }
-//      print('email:' + _emailCtrl.text);
-//      print('namestore:' + _namestoreCtrl.text);
-//      print('phone:' + _phoneCtrl.text);
-//      print('address:' + _addressCtrl.text);
-//
-//      print(pwd);
-//
-//
-//
-//      FirebaseAuth.instance
-//          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
-//          .then((currentStore) => Firestore.instance
-//          .collection("store")
-//          .document(currentStore.user.uid)
-//          .setData({
-//        "uid": currentStore.user.uid,
-//        "email": _emailCtrl.text,
-//        "namestore": _namestoreCtrl.text,
-//        "phone": _phoneCtrl.text,
-//        "address": _addressCtrl.text,
-//
-//
-//        "password": pwd,
-//        "status": "store"
-//      })
-//          .then((result) => {
-//        Navigator.pushAndRemoveUntil(
-//            context,
-//            MaterialPageRoute(
-//                builder: (context) => HomestorePage(
-//
-//                )),
-//                (_) => false),
-//        _emailCtrl.clear(),
-//        _passwordCtrl.clear(),
-//        _conpasswordCtrl.clear(),
-//        _namestoreCtrl.clear(),
-//        _phoneCtrl.clear(),
-//        _addressCtrl.clear(),
-//
-//      })
-//          .catchError((err) => print(err)))
-//          .catchError((err) => print(err));
-//    }
+
   }
 
   Future uploadImage(BuildContext context) async {

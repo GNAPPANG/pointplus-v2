@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/join/home.dart';
 import 'package:point_plus_v2/services/login.dart';
-
+import 'package:point_plus_v2/store/homestore.dart';
 import 'category_page.dart';
 import 'forgot_password.dart';
 
@@ -21,14 +21,22 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordCtrl = new TextEditingController();
   Login login = new Login();
   FirebaseAuth _auth = FirebaseAuth.instance;
+  bool load = false;
   signIn(){
+    setState(() {
+      load = true;
+    });
     _auth.signInWithEmailAndPassword(
       email: _usernameCtrl.text.trim().toString(),
       password: _passwordCtrl.text.toString(),
     ).then((user){
+
       login.singInAuth(context);
       print('ok');
     }).catchError((e){
+      setState(() {
+        load = false;
+      });
       print('fuck');
       print(e);
     });
@@ -36,50 +44,48 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-//  Future<DocumentSnapshot> _login() {
-//    print(_usernameCtrl.text + _passwordCtrl.text);
-//    FirebaseAuth.instance
-//        .signInWithEmailAndPassword(
-//            email: _usernameCtrl.text, password: _passwordCtrl.text)
-//        .then((currentUser) => Firestore.instance
-//                .collection("users")
-//                .document(currentUser.user.uid)
-//                .get()
-//                .then(
-//              (DocumentSnapshot result) {
-//                  Navigator.pushReplacement(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) => HomePage(),
-//                    ),
-//                  );
-//              },
-//            ).catchError((err) => print(err)))
-//        .catchError((err) => print(err));
-//  }
 
   @override
   initState() {
-    FirebaseAuth.instance
-        .currentUser()
-        .then((currentUser) => {
-              if (currentUser == null)
-                {}
-              else
-                {
-                  Firestore.instance
-                      .collection("users")
-                      .document(currentUser.uid)
-                      .get()
-                      .then((DocumentSnapshot result) =>
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage())))
-                      .catchError((err) => print(err))
-                }
-            })
-        .catchError((err) => print(err));
+//    FirebaseAuth.instance
+//        .currentUser()
+//        .then((currentUser) => {
+//              if (currentUser == null)
+//                {}
+//              else
+//                {
+//                  Firestore.instance
+//                      .collection("users")
+//                      .document(currentUser.uid)
+//                      .get()
+//                      .then((DocumentSnapshot result) =>
+//                          Navigator.pushReplacement(
+//                              context,
+//                              MaterialPageRoute(
+//                                  builder: (context) => HomePage())))
+//                      .catchError((err) => print(err))
+//                }
+//            })
+//        .catchError((err) => print(err));
+
+    _auth.currentUser().then((user) {
+      Firestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: user.uid)
+          .getDocuments()
+          .then((doc) {
+        if (doc.documents[0].exists) {
+          if (doc.documents[0].data['role'] == 'user') {
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+          } else {
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (context) => HomestorePage()));
+          }
+        }
+      });
+    });
+
     super.initState();
   }
 
@@ -88,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
+alignment: Alignment.center,
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,
@@ -279,6 +286,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ],
+            ),
+            Center(
+              child: Visibility(
+                  visible: load,
+                  child: Container(
+                      margin: EdgeInsets.only(bottom: 30),
+                      child: CircularProgressIndicator())),
             ),
           ],
         ),
