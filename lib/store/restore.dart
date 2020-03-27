@@ -159,12 +159,12 @@ class _RestorePageState extends State<RestorePage> {
     String fileName = basename(_image.path);
     final StorageReference firebaseStorageRef = FirebaseStorage.instance
         .ref()
-        .child('storeprofile/${fileName.toString()}');
+        .child('CustomerProfile/${fileName.toString()}');
     StorageUploadTask task = firebaseStorageRef.putFile(_image);
     StorageTaskSnapshot snapshotTask = await task.onComplete;
     String downloadUrl = await snapshotTask.ref.getDownloadURL();
     if (downloadUrl != null) {
-      updateInfo.shopUpdatePic(downloadUrl.toString(), context).then((val) {
+      updateInfo.updateProfilePic(downloadUrl.toString(), context).then((val) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomestorePage()),
