@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/join/home.dart';
+import 'package:point_plus_v2/services/login.dart';
 
 import 'category_page.dart';
 import 'forgot_password.dart';
@@ -18,30 +19,44 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _usernameCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
-
-
-
-  Future<DocumentSnapshot> _login() {
-    print(_usernameCtrl.text + _passwordCtrl.text);
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-            email: _usernameCtrl.text, password: _passwordCtrl.text)
-        .then((currentUser) => Firestore.instance
-                .collection("users")
-                .document(currentUser.user.uid)
-                .get()
-                .then(
-              (DocumentSnapshot result) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
-              },
-            ).catchError((err) => print(err)))
-        .catchError((err) => print(err));
+  Login login = new Login();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  signIn(){
+    _auth.signInWithEmailAndPassword(
+      email: _usernameCtrl.text.trim().toString(),
+      password: _passwordCtrl.text.toString(),
+    ).then((user){
+      login.singInAuth(context);
+      print('ok');
+    }).catchError((e){
+      print('fuck');
+      print(e);
+    });
   }
+
+
+
+//  Future<DocumentSnapshot> _login() {
+//    print(_usernameCtrl.text + _passwordCtrl.text);
+//    FirebaseAuth.instance
+//        .signInWithEmailAndPassword(
+//            email: _usernameCtrl.text, password: _passwordCtrl.text)
+//        .then((currentUser) => Firestore.instance
+//                .collection("users")
+//                .document(currentUser.user.uid)
+//                .get()
+//                .then(
+//              (DocumentSnapshot result) {
+//                  Navigator.pushReplacement(
+//                    context,
+//                    MaterialPageRoute(
+//                      builder: (context) => HomePage(),
+//                    ),
+//                  );
+//              },
+//            ).catchError((err) => print(err)))
+//        .catchError((err) => print(err));
+//  }
 
   @override
   initState() {
@@ -205,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                             children: <Widget>[
                               Expanded(
                                 child: RaisedButton(
-                                  onPressed: _login,
+                                  onPressed: signIn,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),

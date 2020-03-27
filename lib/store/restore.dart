@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/services/new_update_info.dart';
 import 'package:point_plus_v2/store/homestore.dart';
 import 'package:point_plus_v2/store/main_store.dart';
+import 'package:point_plus_v2/user/main_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -189,13 +190,15 @@ class _RestorePageState extends State<RestorePage> {
             email: email,
             password: password)
             .then((currentUser) =>
-            Firestore.instance.collection('stores')
+            Firestore.instance.collection('users')
                 .document(currentUser.user.uid)
                 .setData({
               'email': email,
               'namestore': namestore ,
               'phone': phone,
               'address': address ,
+              'open': storeOpen,
+              'close': storeClose,
               'role': 'store',
               'uid': currentUser.user.uid,
             }).then((user) {
