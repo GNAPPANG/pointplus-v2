@@ -6,12 +6,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/category_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:point_plus_v2/services/new_update_info.dart';
 import 'package:point_plus_v2/user/main_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:async';
 
 final mali = 'Mali';
+
 class ReuserPage extends StatefulWidget {
   @override
   _ReuserPageState createState() => _ReuserPageState();
@@ -21,6 +25,7 @@ class _ReuserPageState extends State<ReuserPage> {
   String _age = 'Birth Day';
   final _formKey = GlobalKey<FormState>();
   File _image;
+  NewUpdateInfo updateInfo = new NewUpdateInfo();
 
   Future<void> captureImage(ImageSource imageSource) async {
     try {
@@ -33,46 +38,35 @@ class _ReuserPageState extends State<ReuserPage> {
     }
   }
 
-  Widget _buildImage() {
-    if (_image != null) {
-      return Image.file(_image);
-    } else {
-      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
-    }
-  }
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
-
-  void _showActionSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text("Camera"),
-                  onTap: () async {
-                    captureImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(Icons.photo_library),
-                  title: new Text("Gallery"),
-                  onTap: () async {
-                    captureImage(ImageSource.gallery);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
-
+//  void _showActionSheet() {
+//    showModalBottomSheet(builder: (BuildContext context) {
+//      return SafeArea(
+//        child: Column(
+//          mainAxisSize: MainAxisSize.min,
+//          children: <Widget>[
+//            new ListTile(
+//              leading: new Icon(Icons.photo_camera),
+//              title: new Text("Camera"),
+//              onTap: () async {
+//                captureImage(ImageSource.camera);
+//                Navigator.of(context).pop();
+//              },
+//            ),
+//            new ListTile(
+//              leading: new Icon(Icons.photo_library),
+//              title: new Text("Gallery"),
+//              onTap: () async {
+//                captureImage(ImageSource.gallery);
+//                Navigator.of(context).pop();
+//              },
+//            ),
+//          ],
+//        ),
+//      );
+//    });
+//  }
 
   TextEditingController _firstnameCtrl = new TextEditingController();
   TextEditingController _lastnameCtrl = new TextEditingController();
@@ -82,110 +76,145 @@ class _ReuserPageState extends State<ReuserPage> {
   TextEditingController _passwordCtrl = new TextEditingController();
   TextEditingController _conpasswordCtrl = new TextEditingController();
 
-//  _birth() {
-//    print('date picker');
-//    showModalBottomSheet(
-//        context: context,
-//        builder: (BuildContext builder) {
-//          return Container(
-//              height: MediaQuery.of(context).copyWith().size.height / 3,
-//              child: Column(
-//                children: <Widget>[
-//                  Row(
-//                    mainAxisAlignment: MainAxisAlignment.end,
-//                    children: <Widget>[
-//                      Padding(
-//                        padding: const EdgeInsets.only(
-//                          right: 20,
-//                          top: 20,
-//                        ),
-//                        child: InkWell(
-//                          onTap: () {
-//                            print('done');
-//                            // ดึงวันที่ใส่ใน textformfield
-//
-//                            Navigator.pop(context);
-//                          },
-//                          child: Text(
-//                            'เสร็จสิ้น',
-//                            style: TextStyle(
-//                              fontFamily: mali,
-//                              color: Colors.blue,
-//                            ),
-//                          ),
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                  Expanded(child: datetime()),
-//                ],
-//              ));
-//        });
-//  }
-
   Future _register() async {
+    String birth = '';
+    String fname = _firstnameCtrl.text.trim();
+    String lname = _lastnameCtrl.text.trim();
+    String contact = _phoneCtrl.text.trim();
+    String email = _emailCtrl.text.trim();
+    String pwd = _passwordCtrl.text;
+    String conpwd = _conpasswordCtrl.text;
+    setState(() {
+      birth = _age.toString();
+    });
+    print(
+        'data: ${birth}, ${fname}, ${lname}, ${contact}, ${email}, ${pwd}, ${conpwd} ');
+
+//    if (_formKey.currentState.validate()) {
+//      String pwd;
+//
+//      if (_passwordCtrl.text == _conpasswordCtrl.text) {
+//        pwd = _passwordCtrl.text.toString();
+//      }else{
+//        Alert(
+//          context: context,
+//
+//          type: AlertType.warning,
+//          title: "คำเตือน",
+//          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
+//          buttons: [
+//            DialogButton(
+//              child: Text(
+//                "ตกลง",
+//                style: TextStyle(color: Colors.white, fontSize: 20),
+//              ),
+//              onPressed: () => Navigator.pop(context),
+//              color: Color.fromRGBO(0, 179, 134, 1.0),
+//              radius: BorderRadius.circular(0.0),
+//            ),
+//          ],
+//        ).show();
+//      }
+//      print('firstname:' + _firstnameCtrl.text);
+//      print('lastname:' + _lastnameCtrl.text);
+//      print('username:' + _usernameCtrl.text);
+//      print('phone:' + _phoneCtrl.text);
+//      print('email:' + _emailCtrl.text);
+//      print(pwd);
+//
+//      FirebaseAuth.instance
+//          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
+//          .then((currentUser) => Firestore.instance
+//              .collection("users")
+//              .document(currentUser.user.uid)
+//              .setData({
+//                "uid": currentUser.user.uid,
+//                "firstname": _firstnameCtrl.text,
+//                "lastname": _lastnameCtrl.text,
+//                "phone": _phoneCtrl.text,
+//                "email": _emailCtrl.text,
+//                "password": pwd,
+//                "status": "user"
+//              })
+//              .then((result) => {
+//                    Navigator.pushAndRemoveUntil(
+//                        context,
+//                        MaterialPageRoute(
+//                            builder: (context) => MainPage(
+//
+//                                )),
+//                        (_) => false),
+//                    _firstnameCtrl.clear(),
+//                    _lastnameCtrl.clear(),
+//                    _emailCtrl.clear(),
+//                    _passwordCtrl.clear(),
+//                    _conpasswordCtrl.clear()
+//                  })
+//              .catchError((err) => print(err)))
+//          .catchError((err) => print(err));
+//    }
+  }
+
+  Future uploadImage(BuildContext context) async {
+    String fileName = basename(_image.path);
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('CustomerProfile/${fileName.toString()}');
+    StorageUploadTask task = firebaseStorageRef.putFile(_image);
+    StorageTaskSnapshot snapshotTask = await task.onComplete;
+    String downloadUrl = await snapshotTask.ref.getDownloadURL();
+    if (downloadUrl != null) {
+      updateInfo.updateProfilePic(downloadUrl.toString(), context).then((val) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MainPage()),
+            ModalRoute.withName('/'));
+      }).catchError((e) {
+        print('upload error ${e}');
+      });
+    }
+  }
+
+  signUp(BuildContext context) async {
+    String birth = '';
+    String fname = _firstnameCtrl.text.trim().toString();
+    String lname = _lastnameCtrl.text.trim().toString();
+    String contact = _phoneCtrl.text.trim().toString();
+    String email = _emailCtrl.text.trim().toString();
+    String pwd = _passwordCtrl.text.toString();
+    String conpwd = _conpasswordCtrl.text.toString();
+    setState(() {
+      birth = _age.toString();
+    });
+
     if (_formKey.currentState.validate()) {
-      String pwd;
-
-      if (_passwordCtrl.text == _conpasswordCtrl.text) {
-        pwd = _passwordCtrl.text.toString();
-      }else{
-        Alert(
-          context: context,
-
-          type: AlertType.warning,
-          title: "คำเตือน",
-          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "ตกลง",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Color.fromRGBO(0, 179, 134, 1.0),
-              radius: BorderRadius.circular(0.0),
-            ),
-          ],
-        ).show();
+      if (pwd == conpwd) {
+        print('ok');
+        _auth.createUserWithEmailAndPassword(email: email, password: pwd).then(
+            (currentUser) => Firestore.instance
+                    .collection('users')
+                    .document(currentUser.user.uid)
+                    .setData({
+                  'firstname': fname,
+                  'lastname': lname,
+                  'birth': birth,
+                  'email': email,
+                  'contact': contact,
+                  'uid': currentUser.user.uid,
+                  'role': 'user'
+                }).then((user) {
+                  print('user ok ${currentUser}');
+                  uploadImage(context);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MainPage()),
+                      ModalRoute.withName('/'));
+                }).catchError((e) {
+                  print('profile ${e}');
+                }));
+      } else {
+        print('password not match');
       }
-      print('firstname:' + _firstnameCtrl.text);
-      print('lastname:' + _lastnameCtrl.text);
-      print('username:' + _usernameCtrl.text);
-      print('phone:' + _phoneCtrl.text);
-      print('email:' + _emailCtrl.text);
-      print(pwd);
-
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
-          .then((currentUser) => Firestore.instance
-              .collection("users")
-              .document(currentUser.user.uid)
-              .setData({
-                "uid": currentUser.user.uid,
-                "firstname": _firstnameCtrl.text,
-                "lastname": _lastnameCtrl.text,
-                "phone": _phoneCtrl.text,
-                "email": _emailCtrl.text,
-                "password": pwd,
-                "status": "user"
-              })
-              .then((result) => {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainPage(
-
-                                )),
-                        (_) => false),
-                    _firstnameCtrl.clear(),
-                    _lastnameCtrl.clear(),
-                    _emailCtrl.clear(),
-                    _passwordCtrl.clear(),
-                    _conpasswordCtrl.clear()
-                  })
-              .catchError((err) => print(err)))
-          .catchError((err) => print(err));
     }
   }
 
@@ -203,8 +232,6 @@ class _ReuserPageState extends State<ReuserPage> {
       mode: CupertinoDatePickerMode.date,
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -260,9 +287,9 @@ class _ReuserPageState extends State<ReuserPage> {
                                   height: 180.0,
                                   child: (_image != null)
                                       ? Image.file(
-                                    _image,
-                                    fit: BoxFit.fill,
-                                  )
+                                          _image,
+                                          fit: BoxFit.fill,
+                                        )
                                       : Image.asset('assets/images/upload.png'),
                                 ),
                               ),
@@ -284,7 +311,39 @@ class _ReuserPageState extends State<ReuserPage> {
                                   size: 25.0,
                                 ),
                                 onPressed: () {
-                                  _showActionSheet();
+//                                  _showActionSheet();
+
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SafeArea(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              new ListTile(
+                                                leading: new Icon(
+                                                    Icons.photo_camera),
+                                                title: new Text("Camera"),
+                                                onTap: () async {
+                                                  captureImage(
+                                                      ImageSource.camera);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              new ListTile(
+                                                leading: new Icon(
+                                                    Icons.photo_library),
+                                                title: new Text("Gallery"),
+                                                onTap: () async {
+                                                  captureImage(
+                                                      ImageSource.gallery);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      });
                                 },
                               ),
                             ),
@@ -449,11 +508,10 @@ class _ReuserPageState extends State<ReuserPage> {
                                 minTime: DateTime(1950, 1, 1),
                                 maxTime: DateTime(2021, 12, 31),
                                 onConfirm: (date) {
-                                  print('Confirm $date');
-                                  _age =
-                                  '${date.year} - ${date.month} - ${date.day}';
-                                  setState(() {});
-                                },
+                              print('Confirm $date');
+                              _age = '${date.year}/${date.month}/${date.day}';
+                              setState(() {});
+                            },
                                 currentTime: DateTime.now(),
                                 locale: LocaleType.en);
                           },
@@ -472,7 +530,7 @@ class _ReuserPageState extends State<ReuserPage> {
                                       ),
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(left: 10.0),
+                                            const EdgeInsets.only(left: 10.0),
                                         child: Text(
                                           '$_age',
                                           style: TextStyle(
@@ -586,7 +644,7 @@ class _ReuserPageState extends State<ReuserPage> {
                           children: <Widget>[
                             Expanded(
                               child: RaisedButton(
-                                onPressed: _register,
+                                onPressed: () => signUp(context),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),

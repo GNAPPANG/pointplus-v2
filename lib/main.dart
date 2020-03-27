@@ -9,6 +9,7 @@ void main() => runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'point plus',
-        home: LoginPage(),
+        home: HomestorePage(),
+        color: Colors.redAccent,
       ),
     );

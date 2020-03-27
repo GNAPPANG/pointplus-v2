@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/category_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:point_plus_v2/services/new_update_info.dart';
 import 'package:point_plus_v2/store/homestore.dart';
 import 'package:point_plus_v2/store/main_store.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path/path.dart';
 
 
 final mali = 'Mali';
@@ -21,6 +25,9 @@ class RestorePage extends StatefulWidget {
 
 class _RestorePageState extends State<RestorePage> {
   File _image;
+  String storeOpen = '00.00';
+  String storeClose = '00.00';
+  NewUpdateInfo updateInfo = new NewUpdateInfo();
 
 
 
@@ -45,33 +52,7 @@ class _RestorePageState extends State<RestorePage> {
 
 
   void _showActionSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text("Camera"),
-                  onTap: () async {
-                    captureImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(Icons.photo_library),
-                  title: new Text("Gallery"),
-                  onTap: () async {
-                    captureImage(ImageSource.gallery);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+
   }
 
   DateTime _dateTime = DateTime.now();
@@ -86,6 +67,8 @@ class _RestorePageState extends State<RestorePage> {
   Duration initialtimer = new Duration();
   int selectitem = 1;
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
   TextEditingController _emailCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
   TextEditingController _conpasswordCtrl = new TextEditingController();
@@ -93,74 +76,142 @@ class _RestorePageState extends State<RestorePage> {
   TextEditingController _phoneCtrl = new TextEditingController();
   TextEditingController _addressCtrl = new TextEditingController();
 
-  Future _register() async {
-    if (_formKey.currentState.validate()) {
-      String pwd;
+  _register() async {
+    String email = _emailCtrl.text.trim().toString();
+    String password = _passwordCtrl.text.toString();
+    String conpassword = _conpasswordCtrl.text.toString();
+    String namestore = _namestoreCtrl.text.toString();
+    String phone = _phoneCtrl.text.trim().toString();
+    String address = _addressCtrl.text.trim().toString();
+    print('${email}, ${password}, ${conpassword}, ${namestore}, ${phone}, ${address}');
+//    if (_formKey.currentState.validate()) {
+//      String pwd;
+//
+//      if (_passwordCtrl.text == _conpasswordCtrl.text) {
+//        pwd = _passwordCtrl.text.toString();
+//      }else{
+//        Alert(
+//            context: context,
+//          type: AlertType.warning,
+//          title: "คำเตือน",
+//          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
+//          buttons: [
+//            DialogButton(
+//              child: Text(
+//                "ตกลง",
+//                style: TextStyle(color: Colors.white, fontSize: 20),
+//              ),
+//              onPressed: () => Navigator.pop(context),
+//              color: Color.fromRGBO(0, 179, 134, 1.0),
+//              radius: BorderRadius.circular(0.0),
+//            ),
+//          ],
+//        ).show();
+//      }
+//      print('email:' + _emailCtrl.text);
+//      print('namestore:' + _namestoreCtrl.text);
+//      print('phone:' + _phoneCtrl.text);
+//      print('address:' + _addressCtrl.text);
+//
+//      print(pwd);
+//
+//
+//
+//      FirebaseAuth.instance
+//          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
+//          .then((currentStore) => Firestore.instance
+//          .collection("store")
+//          .document(currentStore.user.uid)
+//          .setData({
+//        "uid": currentStore.user.uid,
+//        "email": _emailCtrl.text,
+//        "namestore": _namestoreCtrl.text,
+//        "phone": _phoneCtrl.text,
+//        "address": _addressCtrl.text,
+//
+//
+//        "password": pwd,
+//        "status": "store"
+//      })
+//          .then((result) => {
+//        Navigator.pushAndRemoveUntil(
+//            context,
+//            MaterialPageRoute(
+//                builder: (context) => HomestorePage(
+//
+//                )),
+//                (_) => false),
+//        _emailCtrl.clear(),
+//        _passwordCtrl.clear(),
+//        _conpasswordCtrl.clear(),
+//        _namestoreCtrl.clear(),
+//        _phoneCtrl.clear(),
+//        _addressCtrl.clear(),
+//
+//      })
+//          .catchError((err) => print(err)))
+//          .catchError((err) => print(err));
+//    }
+  }
 
-      if (_passwordCtrl.text == _conpasswordCtrl.text) {
-        pwd = _passwordCtrl.text.toString();
-      }else{
-        Alert(
-            context: context,
-          type: AlertType.warning,
-          title: "คำเตือน",
-          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "ตกลง",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              color: Color.fromRGBO(0, 179, 134, 1.0),
-              radius: BorderRadius.circular(0.0),
-            ),
-          ],
-        ).show();
-      }
-      print('email:' + _emailCtrl.text);
-      print('namestore:' + _namestoreCtrl.text);
-      print('phone:' + _phoneCtrl.text);
-      print('address:' + _addressCtrl.text);
-
-      print(pwd);
-
-
-
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
-          .then((currentStore) => Firestore.instance
-          .collection("store")
-          .document(currentStore.user.uid)
-          .setData({
-        "uid": currentStore.user.uid,
-        "email": _emailCtrl.text,
-        "namestore": _namestoreCtrl.text,
-        "phone": _phoneCtrl.text,
-        "address": _addressCtrl.text,
-
-
-        "password": pwd,
-        "status": "store"
-      })
-          .then((result) => {
+  Future uploadImage(BuildContext context) async {
+    String fileName = basename(_image.path);
+    final StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('storeprofile/${fileName.toString()}');
+    StorageUploadTask task = firebaseStorageRef.putFile(_image);
+    StorageTaskSnapshot snapshotTask = await task.onComplete;
+    String downloadUrl = await snapshotTask.ref.getDownloadURL();
+    if (downloadUrl != null) {
+      updateInfo.shopUpdatePic(downloadUrl.toString(), context).then((val) {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-                builder: (context) => HomestorePage(
+            MaterialPageRoute(builder: (context) => HomestorePage()),
+            ModalRoute.withName('/'));
+      }).catchError((e) {
+        print('upload error ${e}');
+      });
+    }
+  }
 
-                )),
-                (_) => false),
-        _emailCtrl.clear(),
-        _passwordCtrl.clear(),
-        _conpasswordCtrl.clear(),
-        _namestoreCtrl.clear(),
-        _phoneCtrl.clear(),
-        _addressCtrl.clear(),
+  signIn(BuildContext context) async {
+    String email = _emailCtrl.text.trim().toString();
+    String password = _passwordCtrl.text.toString();
+    String conpassword = _conpasswordCtrl.text.toString();
+    String namestore = _namestoreCtrl.text.toString();
+    String phone = _phoneCtrl.text.trim().toString();
+    String address = _addressCtrl.text.trim().toString();
 
-      })
-          .catchError((err) => print(err)))
-          .catchError((err) => print(err));
+    if (_formKey.currentState.validate()) {
+      if(password==conpassword){
+        print('ok');
+        _auth.createUserWithEmailAndPassword(
+            email: email,
+            password: password)
+            .then((currentUser) =>
+            Firestore.instance.collection('stores')
+                .document(currentUser.user.uid)
+                .setData({
+              'email': email,
+              'namestore': namestore ,
+              'phone': phone,
+              'address': address ,
+              'role': 'store',
+              'uid': currentUser.user.uid,
+            }).then((user) {
+              print('user ok ${currentUser}');
+              uploadImage(context);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomestorePage()),
+                  ModalRoute.withName('/'));
+            }).catchError((e) {
+              print('profile ${e}');
+            })
+        );
+      }else{
+        print('password not match');
+      }
     }
   }
 
@@ -178,73 +229,73 @@ class _RestorePageState extends State<RestorePage> {
     );
   }
 
-  _province() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext builder) {
-          return Container(
-            color: Colors.white,
-              height: MediaQuery.of(context).copyWith().size.height / 3,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          right: 20,
-                          top: 20,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            print('done');
-                            // ดึงวันที่ใส่ใน textformfield
-
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            'เสร็จสิ้น',
-                            style: TextStyle(
-                              fontFamily: mali,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: CupertinoPicker(
-
-                      backgroundColor: Colors.white,
-                      onSelectedItemChanged: (val) {
-                        //Navigator.of(context).pop();
-                      },
-                      itemExtent: 35,
-
-                      children: <Widget>[
-                        Text("กรุงเทพ"),
-                        Text("กาญจนบุรี"),
-                        Text("สมุทรสาคร"),
-                        Text("กรุงเทพ"),
-                        Text("กาญจนบุรี"),
-                        Text("กรุงเทพ"),
-                        Text("กาญจนบุรี"),
-                        Text("สมุทรสาคร"),
-                        Text("กรุงเทพ"),
-                        Text("กาญจนบุรี"),
-                        Text("กรุงเทพ"),
-                        Text("กาญจนบุรี"),
-                        Text("สมุทรสาคร"),
-                        Text("กรุงเทพ"),
-                        Text("กาญจนบุรี"),
-                      ],
-                    ),
-                  ),
-                ],
-              ));
-        });
-  }
+//  _province() {
+//    showModalBottomSheet(
+//        context: context,
+//        builder: (BuildContext builder) {
+//          return Container(
+//            color: Colors.white,
+//              height: MediaQuery.of(context).copyWith().size.height / 3,
+//              child: Column(
+//                children: <Widget>[
+//                  Row(
+//                    mainAxisAlignment: MainAxisAlignment.end,
+//                    children: <Widget>[
+//                      Padding(
+//                        padding: const EdgeInsets.only(
+//                          right: 20,
+//                          top: 20,
+//                        ),
+//                        child: InkWell(
+//                          onTap: () {
+//                            print('done');
+//                            // ดึงวันที่ใส่ใน textformfield
+//
+//                            Navigator.pop(context);
+//                          },
+//                          child: Text(
+//                            'เสร็จสิ้น',
+//                            style: TextStyle(
+//                              fontFamily: mali,
+//                              color: Colors.blue,
+//                            ),
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                  Expanded(
+//                    child: CupertinoPicker(
+//
+//                      backgroundColor: Colors.white,
+//                      onSelectedItemChanged: (val) {
+//                        //Navigator.of(context).pop();
+//                      },
+//                      itemExtent: 35,
+//
+//                      children: <Widget>[
+//                        Text("กรุงเทพ"),
+//                        Text("กาญจนบุรี"),
+//                        Text("สมุทรสาคร"),
+//                        Text("กรุงเทพ"),
+//                        Text("กาญจนบุรี"),
+//                        Text("กรุงเทพ"),
+//                        Text("กาญจนบุรี"),
+//                        Text("สมุทรสาคร"),
+//                        Text("กรุงเทพ"),
+//                        Text("กาญจนบุรี"),
+//                        Text("กรุงเทพ"),
+//                        Text("กาญจนบุรี"),
+//                        Text("สมุทรสาคร"),
+//                        Text("กรุงเทพ"),
+//                        Text("กาญจนบุรี"),
+//                      ],
+//                    ),
+//                  ),
+//                ],
+//              ));
+//        });
+//  }
 
 //  Future _register() {
 //    print('register');
@@ -330,7 +381,37 @@ class _RestorePageState extends State<RestorePage> {
                                   size: 25.0,
                                 ),
                                 onPressed: () {
-                                  _showActionSheet();
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SafeArea(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              new ListTile(
+                                                leading: new Icon(
+                                                    Icons.photo_camera),
+                                                title: new Text("Camera"),
+                                                onTap: () async {
+                                                  captureImage(
+                                                      ImageSource.camera);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                              new ListTile(
+                                                leading: new Icon(
+                                                    Icons.photo_library),
+                                                title: new Text("Gallery"),
+                                                onTap: () async {
+                                                  captureImage(
+                                                      ImageSource.gallery);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      });
                                 },
                               ),
                             ),
@@ -487,21 +568,24 @@ class _RestorePageState extends State<RestorePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.check_circle,
-                                    color: Colors.redAccent,
-                                  ),
-                                  hintText: 'เวลาเปิด',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ),
-                            ),
+//                            Expanded(
+//                              child: TextFormField(
+//                                decoration: const InputDecoration(
+//                                  icon: Icon(
+//                                    Icons.check_circle,
+//                                    color: Colors.redAccent,
+//                                  ),
+//                                  hintText: 'เวลาเปิด',
+//                                  hintStyle: TextStyle(
+//                                    fontSize: 16.0,
+//                                    color: Colors.black54,
+//                                  ),
+//                                ),
+//                              ),
+//                            ),
+                          Expanded(
+                            child: Text('${storeOpen} น.'),
+                          ),
                             IconButton(
                               icon: Icon(
                                 Icons.access_time,
@@ -531,6 +615,9 @@ class _RestorePageState extends State<RestorePage> {
                                                     ),
                                                     child: InkWell(
                                                       onTap: () {
+                                                        setState(() {
+                                                          storeOpen = (initialtimer.inHours).toString() + ':' +initialtimer.inMinutes.remainder(60).toString();
+                                                        });
                                                         print('done');
                                                         // ดึงวันที่ใส่ใน textformfield
 
@@ -553,21 +640,24 @@ class _RestorePageState extends State<RestorePage> {
                                     });
                               },
                             ),
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    color: Colors.redAccent,
-                                  ),
-                                  hintText: 'เวลาปิด',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ),
-                            ),
+//                            Expanded(
+//                              child: TextFormField(
+//                                decoration: const InputDecoration(
+//                                  icon: Icon(
+//                                    Icons.cancel,
+//                                    color: Colors.redAccent,
+//                                  ),
+//                                  hintText: 'เวลาปิด',
+//                                  hintStyle: TextStyle(
+//                                    fontSize: 16.0,
+//                                    color: Colors.black54,
+//                                  ),
+//                                ),
+//                              ),
+//                            ),
+                          Expanded(
+                            child: Text('${storeClose} น.'),
+                          ),
                             IconButton(
                               icon: Icon(
                                 Icons.access_time,
@@ -598,6 +688,10 @@ class _RestorePageState extends State<RestorePage> {
                                                     child: InkWell(
                                                       onTap: () {
                                                         print('done');
+
+                                                        setState(() {
+                                                          storeClose = (initialtimer.inHours).toString() + ':' +initialtimer.inMinutes.remainder(60).toString();
+                                                        });
                                                         // ดึงวันที่ใส่ใน textformfield
 
                                                         Navigator.pop(context);
@@ -673,7 +767,7 @@ class _RestorePageState extends State<RestorePage> {
                             IconButton(
                               icon: Icon(Icons.add_box),
                               onPressed: () {
-                                _province();
+//                                _province();
                               },
                             ),
                           ],
@@ -691,9 +785,7 @@ class _RestorePageState extends State<RestorePage> {
                           children: <Widget>[
                             Expanded(
                               child: RaisedButton(
-                                onPressed: () {
-                                  _register();
-                                },
+                                onPressed: () => signIn(context),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
