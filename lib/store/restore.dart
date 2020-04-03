@@ -15,7 +15,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path/path.dart';
 
-
 final mali = 'Mali';
 final kalam = 'Kalam';
 
@@ -29,8 +28,6 @@ class _RestorePageState extends State<RestorePage> {
   String storeOpen = '00.00';
   String storeClose = '00.00';
   NewUpdateInfo updateInfo = new NewUpdateInfo();
-
-
 
   Future<void> captureImage(ImageSource imageSource) async {
     try {
@@ -51,18 +48,13 @@ class _RestorePageState extends State<RestorePage> {
     }
   }
 
-
-  void _showActionSheet() {
-
-  }
+  void _showActionSheet() {}
 
   DateTime _dateTime = DateTime.now();
 
   GlobalKey<ScaffoldState> key = GlobalKey(debugLabel: "scaffoldKey");
 
   final _formKey = GlobalKey<FormState>();
-  var _provice = ['กาญจนบุรี', 'กรุงเทพมหานคร', 'นครปฐม'];
-  var _proviceItemSelected = 'กรุงเทพมหานคร';
 
   DateTime _setDate = DateTime.now();
   Duration initialtimer = new Duration();
@@ -84,8 +76,8 @@ class _RestorePageState extends State<RestorePage> {
     String namestore = _namestoreCtrl.text.toString();
     String phone = _phoneCtrl.text.trim().toString();
     String address = _addressCtrl.text.trim().toString();
-    print('${email}, ${password}, ${conpassword}, ${namestore}, ${phone}, ${address}');
-
+    print(
+        '${email}, ${password}, ${conpassword}, ${namestore}, ${phone}, ${address}');
   }
 
   Future uploadImage(BuildContext context) async {
@@ -117,35 +109,33 @@ class _RestorePageState extends State<RestorePage> {
     String address = _addressCtrl.text.trim().toString();
 
     if (_formKey.currentState.validate()) {
-      if(password==conpassword){
+      if (password == conpassword) {
         print('ok');
-        _auth.createUserWithEmailAndPassword(
-            email: email,
-            password: password)
-            .then((currentUser) =>
-            Firestore.instance.collection('users')
-                .document(currentUser.user.uid)
-                .setData({
-              'email': email,
-              'namestore': namestore ,
-              'phone': phone,
-              'address': address ,
-              'open': storeOpen,
-              'close': storeClose,
-              'role': 'store',
-              'uid': currentUser.user.uid,
-            }).then((user) {
-              print('user ok ${currentUser}');
-              uploadImage(context);
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomestorePage()),
-                  ModalRoute.withName('/'));
-            }).catchError((e) {
-              print('profile ${e}');
-            })
-        );
-      }else{
+        _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((currentUser) => Firestore.instance
+                    .collection('users')
+                    .document(currentUser.user.uid)
+                    .setData({
+                  'email': email,
+                  'namestore': namestore,
+                  'phone': phone,
+                  'address': address,
+                  'open': storeOpen,
+                  'close': storeClose,
+                  'role': 'store',
+                  'uid': currentUser.user.uid,
+                }).then((user) {
+                  print('user ok ${currentUser}');
+                  uploadImage(context);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomestorePage()),
+                      ModalRoute.withName('/'));
+                }).catchError((e) {
+                  print('profile ${e}');
+                }));
+      } else {
         print('password not match');
       }
     }
@@ -238,7 +228,6 @@ class _RestorePageState extends State<RestorePage> {
 //    if (_formKey.currentState.validate()) {}
 //  }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -293,9 +282,9 @@ class _RestorePageState extends State<RestorePage> {
                                   height: 180.0,
                                   child: (_image != null)
                                       ? Image.file(
-                                    _image,
-                                    fit: BoxFit.fill,
-                                  )
+                                          _image,
+                                          fit: BoxFit.fill,
+                                        )
                                       : Image.asset('assets/images/upload.png'),
                                 ),
                               ),
@@ -501,7 +490,7 @@ class _RestorePageState extends State<RestorePage> {
                       ),
                       SizedBox(height: 12),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 60),
                         child: Row(
                           children: <Widget>[
 //                            Expanded(
@@ -519,13 +508,13 @@ class _RestorePageState extends State<RestorePage> {
 //                                ),
 //                              ),
 //                            ),
-                          Expanded(
-                            child: Text('${storeOpen} น.'),
-                          ),
+                            Expanded(
+                              child: Text('${storeOpen} น.'),
+                            ),
                             IconButton(
                               icon: Icon(
                                 Icons.access_time,
-                                size: 20,
+                                size: 30,
                               ),
                               onPressed: () {
                                 showModalBottomSheet(
@@ -552,7 +541,14 @@ class _RestorePageState extends State<RestorePage> {
                                                     child: InkWell(
                                                       onTap: () {
                                                         setState(() {
-                                                          storeOpen = (initialtimer.inHours).toString() + ':' +initialtimer.inMinutes.remainder(60).toString();
+                                                          storeOpen = (initialtimer
+                                                                      .inHours)
+                                                                  .toString() +
+                                                              ':' +
+                                                              initialtimer
+                                                                  .inMinutes
+                                                                  .remainder(60)
+                                                                  .toString();
                                                         });
                                                         print('done');
                                                         // ดึงวันที่ใส่ใน textformfield
@@ -591,13 +587,13 @@ class _RestorePageState extends State<RestorePage> {
 //                                ),
 //                              ),
 //                            ),
-                          Expanded(
-                            child: Text('${storeClose} น.'),
-                          ),
+                            Expanded(
+                              child: Text('${storeClose} น.'),
+                            ),
                             IconButton(
                               icon: Icon(
                                 Icons.access_time,
-                                size: 20,
+                                size: 30,
                               ),
                               onPressed: () {
                                 showModalBottomSheet(
@@ -626,7 +622,14 @@ class _RestorePageState extends State<RestorePage> {
                                                         print('done');
 
                                                         setState(() {
-                                                          storeClose = (initialtimer.inHours).toString() + ':' +initialtimer.inMinutes.remainder(60).toString();
+                                                          storeClose = (initialtimer
+                                                                      .inHours)
+                                                                  .toString() +
+                                                              ':' +
+                                                              initialtimer
+                                                                  .inMinutes
+                                                                  .remainder(60)
+                                                                  .toString();
                                                         });
                                                         // ดึงวันที่ใส่ใน textformfield
 
@@ -681,37 +684,6 @@ class _RestorePageState extends State<RestorePage> {
                         ),
                       ),
                       SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  icon: Icon(
-                                    Icons.add_location,
-                                    color: Colors.redAccent,
-                                  ),
-                                  hintText: 'จังหวัด',
-                                  hintStyle: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.add_box),
-                              onPressed: () {
-//                                _province();
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 32.0,
-                      ),
                       Padding(
                         padding: EdgeInsets.only(
                           left: 20.0,
@@ -780,11 +752,4 @@ class _RestorePageState extends State<RestorePage> {
       ),
     );
   }
-
-  void _onDropItemSelected(String newValueSelected) {
-    setState(() {
-      this._proviceItemSelected = newValueSelected;
-    });
-  }
 }
-

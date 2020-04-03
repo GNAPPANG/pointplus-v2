@@ -1,21 +1,12 @@
-import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:math' as math;
-
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/login_page.dart';
-import 'package:point_plus_v2/join/plan.dart';
-import 'package:point_plus_v2/user/pro/mail_upro.dart';
-import 'package:point_plus_v2/user/pro/name_upro.dart';
-import 'package:point_plus_v2/user/pro/password_upro.dart';
-import 'package:point_plus_v2/user/pro/phone_upro.dart';
-import 'package:point_plus_v2/user/pro/surname_upro.dart';
-import 'package:point_plus_v2/user/pro/username_upro.dart';
 
 import 'main_page.dart';
 
@@ -28,6 +19,17 @@ class ProfileUser extends StatefulWidget {
 
 class _ProfileUserState extends State<ProfileUser> {
   File _image;
+  String userID = '';
+
+  inputData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid.toString();
+    print(uid);
+    setState(() {
+      userID = uid.toString();
+    });
+  }
 
   Future<void> captureImage(ImageSource imageSource) async {
     try {
@@ -47,6 +49,7 @@ class _ProfileUserState extends State<ProfileUser> {
       return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
     }
   }
+
 
 
   void _showActionSheet() {
@@ -103,6 +106,20 @@ class _ProfileUserState extends State<ProfileUser> {
     );
   }
 
+  _signout() {
+    FirebaseAuth.instance
+        .signOut()
+        .then((result) => Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginPage())))
+        .catchError((err) => print(err));
+  }
+
+  @override
+  void initState() {
+    inputData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,609 +144,115 @@ class _ProfileUserState extends State<ProfileUser> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: SafeArea(
+        child: Center(
+          child: StreamBuilder(
+            stream:
+                Firestore.instance.collection('users').document(userID).snapshots(),
+            builder: (context, sn){
+              var img = sn.data['proFile'].toString();
+              var fname = sn.data['firstname'].toString();
+              var lname = sn.data['lastname'].toString();
+              var email = sn.data['email'].toString();
+              return profile(
+                img: img,
+                firstname: fname,
+                lastname: lname,
+                email: email,
+              );
+            }),
+        ),
+      ),
+    );
+  }
+  Widget profile({
+    img,
+    firstname,
+    lastname,
+    email
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
-            Container(
-              alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 24.0,
+            SizedBox(height: 12),
+            Center(
+              child: Container(
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey, width: 5),
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      img,
+                    ),
+                    fit: BoxFit.cover,
                   ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.center,
-                            child: CircleAvatar(
-                              radius: 100,
-                              backgroundColor: Colors.transparent,
-                              child: ClipOval(
-                                child: new SizedBox(
-                                  width: 180.0,
-                                  height: 180.0,
-                                  child: (_image != null)
-                                      ? Image.file(
-                                          _image,
-                                          fit: BoxFit.fill,
-                                        )
-                                      : Image.asset('assets/images/upload.png'),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 130, top: 90),
-                            child: Container(
-                              width: 45,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey,
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.black,
-                                  size: 25.0,
-                                ),
-                                onPressed: () {
-                                  _showActionSheet();
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'ID : U23453',
-                        style: TextStyle(
-                          color: Colors.black45,
-                          fontSize: 18.0,
-                          fontFamily: 'mali',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              print("aaaaa");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NameUproPage(),
-                                ),
-                              );
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-//                            Icon(
-//                              Icons.supervised_user_circle,
-//                              color: Colors.black54,
-//                              size: 50,
-//                            ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'ชื่อ',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      'มาริน่า',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              print("bbbbb");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SurnameUproPage(),
-                                ),
-                              );
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-//                            Icon(
-//                              Icons.supervised_user_circle,
-//                              color: Colors.black54,
-//                              size: 50,
-//                            ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'นามสกุล',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      'เชอร์เบ',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              print("bbbbb");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UsernameUproPage(),
-                                ),
-                              );
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-//                            Icon(
-//                              Icons.supervised_user_circle,
-//                              color: Colors.black54,
-//                              size: 50,
-//                            ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'ชื่อผู้ใช้',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Mareena',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext builder) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            right: 20,
-                                            top: 20,
-                                          ),
-                                          child: InkWell(
-                                            onTap: () {
-                                              print('donexxx');
-                                              // ดึงวันที่ใส่ใน textformfield
-                                              print('${_dateTime.day}');
-                                              setState(() {
-                                                xxx = _dateTime.day.toString() +
-                                                    '/' +
-                                                    _dateTime.month.toString() +
-                                                    '/' +
-                                                    _dateTime.year.toString();
-                                              });
-
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'เสร็จสิ้น',
-                                              style: TextStyle(
-                                                fontFamily: mali,
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Container(
-                                            height: MediaQuery.of(context)
-                                                    .copyWith()
-                                                    .size
-                                                    .height /
-                                                3,
-                                            child: datetime(),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'วันเกิด',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      xxx,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              print("ccccc");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PhoneUproPage(),
-                                ),
-                              );
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'เบอร์โทรศัพท์',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      '0899376458',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              print("ccccc");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MailUproPage(),
-                                ),
-                              );
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-//
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'อีเมล',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      'mareena21@gmail.com',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 14.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              print("ccccc");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PasswordUproPage(),
-                                ),
-                              );
-                            },
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-//                            Icon(
-//                              Icons.supervised_user_circle,
-//                              color: Colors.black54,
-//                              size: 50,
-//                            ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'รหัสผ่าน',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      'เปลี่ยนรหัสผ่าน',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'mali',
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.black54,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          print("ssss");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlanPage(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.library_books,
-                                color: Colors.black54,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                'ข้อตกลงและเงื่อนไข & นโยบาย',
-                                style: TextStyle(
-                                  color: Colors.black45,
-                                  fontSize: 12.0,
-                                  fontFamily: 'mali',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: 20.0,
-                          right: 20.0,
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 16.0,
-                            ),
-                            Expanded(
-                              child: RaisedButton(
-                                onPressed: () {
-                                  print('${_gValue}');
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Text(
-                                  'บันทึก',
-                                  style: TextStyle(
-                                    fontFamily: mali,
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 10.0,
-                                ),
-                                color: Colors.redAccent,
-                                elevation: 3.0,
-                              ),
-                            ),
-                            SizedBox(width: 16.0),
-                            Expanded(
-                              child: RaisedButton(
-                                onPressed: () {
-                                  FirebaseAuth.instance
-                                      .signOut()
-                                      .then((result) =>
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginPage())))
-                                      .catchError((err) => print(err));
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Text(
-                                  'ออกจากระบบ',
-                                  style: TextStyle(
-                                    fontFamily: mali,
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 10.0,
-                                ),
-                                color: Colors.redAccent,
-                                elevation: 3.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                    ],
+                ),
+              ),
+            ),
+            SizedBox(height: 12),
+//            Row(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              children: <Widget>[
+//                Text(firstname,style: TextStyle(fontFamily: _kanit, fontSize: 22.0),),
+//                SizedBox(width: 20.0),
+//                Text(lastname,style: TextStyle(fontFamily: _kanit, fontSize: 22.0),),
+//              ],
+//            ),
+            SizedBox(height: 12),
+            _form(
+              title: 'ชื่อ',
+              content: firstname,
+            ),
+            _form(
+              title: 'นามสกุล',
+              content: lastname,
+            ),
+            _form(
+              title: 'อีเมล',
+              content: email,
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                width: double.infinity,
+                child: MaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
+                  child: Text(
+                    'ออกจากระบบ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: mali,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  onPressed: _signout,
+                ),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 20.0,
+                      // has the effect of softening the shadow
+                      spreadRadius: 4.0,
+                      // has the effect of extending the shadow
+                      offset: Offset(
+                        8.0, // horizontal, move right 10
+                        8.0, // vertical, move down 10
+                      ),
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.redAccent,
                 ),
               ),
             ),
@@ -738,4 +261,39 @@ class _ProfileUserState extends State<ProfileUser> {
       ),
     );
   }
+
+  Widget _form({
+    title,
+    content,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+              fontFamily: mali,
+              fontWeight: FontWeight.bold,
+              fontSize: 22.0,
+            ),
+          ),
+          Text(content, style: TextStyle(
+            fontFamily: mali,
+            fontSize: 18.0,
+            color: Colors.black54,
+          ),),
+          Divider(
+            thickness: 2,
+            color: Colors.black45,
+          ),
+        ],
+      ),
+    );
+  }
 }
+
+
+
