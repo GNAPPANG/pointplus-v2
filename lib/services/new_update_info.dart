@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class NewUpdateInfo {
+
   Future updateProfilePic(picUrl, context) {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
@@ -47,6 +48,39 @@ class NewUpdateInfo {
             .then((docs) {
           Firestore.instance.document('users/${docs.documents[0].documentID}')
               .updateData({'proFile': picUrl}).then((val){
+            print('ok');
+          }).then((user){
+            print('shop ok');
+          }).catchError((e){
+            print('can\'t change page shop');
+          });
+        }).catchError((e){
+          print('shop error ${e}');
+        });
+      }).catchError((e){
+        print('update shop er ${e}');
+      });
+    }).catchError((e){
+      print('first error shop $e');
+    });
+  }
+
+  Future updateProduct(picUrl, context) {
+    var userInfo = UserUpdateInfo();
+    userInfo.photoUrl = picUrl;
+    FirebaseAuth.instance.currentUser().then((user){
+
+      user.updateProfile(userInfo);
+      FirebaseAuth.instance.currentUser().then((user) {
+        print('wtf');
+        user.updateProfile(userInfo);
+        Firestore.instance.collection('users').document(user.uid).collection('products')
+            .where('uid', isEqualTo: user.uid)
+            .getDocuments()
+            .then((docs) {
+          Firestore.instance.document('users/${docs.documents[0].documentID}')
+              .updateData({'productImage': picUrl}).then((val){
+            print('pickurlsss: ${picUrl}');
             print('ok');
           }).then((user){
             print('shop ok');

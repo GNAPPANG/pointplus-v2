@@ -109,6 +109,7 @@ class _RestorePageState extends State<RestorePage> {
     String address = _addressCtrl.text.trim().toString();
 
     if (_formKey.currentState.validate()) {
+      uploadImage(context);
       if (password == conpassword) {
         print('ok');
         _auth
