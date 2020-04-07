@@ -263,7 +263,7 @@ Widget store({
           height: 220,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(img),
+              image: NetworkImage(img),
               fit: BoxFit.cover,
             ),
           ),

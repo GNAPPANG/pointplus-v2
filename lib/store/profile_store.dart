@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:point_plus_v2/join/login_page.dart';
+import 'package:point_plus_v2/user/main_page.dart';
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -81,54 +82,49 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
         child: SingleChildScrollView(
           child: StreamBuilder(
             stream: Firestore.instance
-                .collection('users')
-                .document(userID)
+                .collection('users').document(userID)
                 .snapshots(),
-            builder: (contetxt, sn) {
-              var image = sn.data['proFile'].toString();
-              var namestore = sn.data['namestore'].toString();
-              var addr = sn.data['address'];
-              var contact = sn.data['phone'];
-              var email = sn.data['email'];
-              var opentime = sn.data['open'];
-              var closetime = sn.data['close'];
-              return Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 20.0),
-                    imgPro(img: image),
-                    SizedBox(height: 20.0),
-                    _form(
-                      title: 'ชื่อร้าน',
-                      content: namestore,
-                    ),
-                    SizedBox(height: 20.0),
-                    _form(
-                      title: 'ที่อยู่',
-                      content: addr,
-                    ),
-                    SizedBox(height: 20.0),
-                    _form(
-                      title: 'ติดต่อ',
-                      content: contact,
-                    ),
-                    SizedBox(height: 20.0),
-                    _form(
-                      title: 'อีเมล',
-                      content: email,
-                    ),
-                    SizedBox(height: 20.0),
-                    _form(
-                      title: 'เวลาเปิด',
-                      content: opentime,
-                    ),
-                    SizedBox(height: 20.0),
-                    _form(
-                      title: 'เวลาปิด',
-                      content: closetime,
-                    ),
-                    SizedBox(height: 20.0),
-                    Padding(
+            builder: (context, sn) {
+              if (!sn.hasData) {
+                return Visibility(
+                  visible: true,
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return Column(
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  store(
+                    img: sn.data['proFile'],
+                  ),
+                  SizedBox(height: 20),
+                  _form(
+                    content: sn.data['namestore'],
+                    title: 'ชื่อร้าน',
+                  ),
+                  _form(
+                    content: sn.data['address'],
+                    title: 'ที่อยู่',
+                  ),
+                  _form(
+                    content: sn.data['phone'],
+                    title: 'ติดต่อ',
+                  ),
+                  _form(
+                    content: sn.data['email'],
+                    title: 'อีเมล',
+                  ),
+                  _form(
+                    content: sn.data['open'],
+                    title: 'เวลาเปิด',
+                  ),
+                  _form(
+                    content: sn.data['close'],
+                    title: 'เวลาปิด',
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
                         width: double.infinity,
@@ -165,9 +161,8 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 50),
-                  ],
-                ),
+                    SizedBox(height: 20),
+                ],
               );
             },
           ),
@@ -176,7 +171,15 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
     );
   }
 
-  Widget imgPro({img}) {
+  Widget store({img, content, title}) {
+    return Column(
+      children: <Widget>[
+        imgPro(img),
+      ],
+    );
+  }
+
+  Widget imgPro(img) {
     return Container(
       width: 180.0,
       height: 180.0,
