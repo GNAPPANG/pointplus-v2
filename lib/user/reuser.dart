@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/services/new_update_info.dart';
 import 'package:point_plus_v2/user/main_page.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -70,90 +69,12 @@ class _ReuserPageState extends State<ReuserPage> {
 
   TextEditingController _firstnameCtrl = new TextEditingController();
   TextEditingController _lastnameCtrl = new TextEditingController();
-  TextEditingController _usernameCtrl = new TextEditingController();
   TextEditingController _phoneCtrl = new TextEditingController();
   TextEditingController _emailCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
   TextEditingController _conpasswordCtrl = new TextEditingController();
 
-  Future _register() async {
-    String birth = '';
-    String fname = _firstnameCtrl.text.trim();
-    String lname = _lastnameCtrl.text.trim();
-    String contact = _phoneCtrl.text.trim();
-    String email = _emailCtrl.text.trim();
-    String pwd = _passwordCtrl.text;
-    String conpwd = _conpasswordCtrl.text;
-    setState(() {
-      birth = _age.toString();
-    });
-    print(
-        'data: ${birth}, ${fname}, ${lname}, ${contact}, ${email}, ${pwd}, ${conpwd} ');
-
-//    if (_formKey.currentState.validate()) {
-//      String pwd;
-//
-//      if (_passwordCtrl.text == _conpasswordCtrl.text) {
-//        pwd = _passwordCtrl.text.toString();
-//      }else{
-//        Alert(
-//          context: context,
-//
-//          type: AlertType.warning,
-//          title: "คำเตือน",
-//          desc: "กรุณากรอกรหัสผ่านให้ตรงกัน",
-//          buttons: [
-//            DialogButton(
-//              child: Text(
-//                "ตกลง",
-//                style: TextStyle(color: Colors.white, fontSize: 20),
-//              ),
-//              onPressed: () => Navigator.pop(context),
-//              color: Color.fromRGBO(0, 179, 134, 1.0),
-//              radius: BorderRadius.circular(0.0),
-//            ),
-//          ],
-//        ).show();
-//      }
-//      print('firstname:' + _firstnameCtrl.text);
-//      print('lastname:' + _lastnameCtrl.text);
-//      print('username:' + _usernameCtrl.text);
-//      print('phone:' + _phoneCtrl.text);
-//      print('email:' + _emailCtrl.text);
-//      print(pwd);
-//
-//      FirebaseAuth.instance
-//          .createUserWithEmailAndPassword(email: _emailCtrl.text, password: pwd)
-//          .then((currentUser) => Firestore.instance
-//              .collection("users")
-//              .document(currentUser.user.uid)
-//              .setData({
-//                "uid": currentUser.user.uid,
-//                "firstname": _firstnameCtrl.text,
-//                "lastname": _lastnameCtrl.text,
-//                "phone": _phoneCtrl.text,
-//                "email": _emailCtrl.text,
-//                "password": pwd,
-//                "status": "user"
-//              })
-//              .then((result) => {
-//                    Navigator.pushAndRemoveUntil(
-//                        context,
-//                        MaterialPageRoute(
-//                            builder: (context) => MainPage(
-//
-//                                )),
-//                        (_) => false),
-//                    _firstnameCtrl.clear(),
-//                    _lastnameCtrl.clear(),
-//                    _emailCtrl.clear(),
-//                    _passwordCtrl.clear(),
-//                    _conpasswordCtrl.clear()
-//                  })
-//              .catchError((err) => print(err)))
-//          .catchError((err) => print(err));
-//    }
-  }
+ 
 
   Future uploadImage(BuildContext context) async {
     String fileName = basename(_image.path);
@@ -170,7 +91,7 @@ class _ReuserPageState extends State<ReuserPage> {
             MaterialPageRoute(builder: (context) => MainPage()),
             ModalRoute.withName('/'));
       }).catchError((e) {
-        print('upload error ${e}');
+        print('upload error $e');
       });
     }
   }
@@ -203,14 +124,14 @@ class _ReuserPageState extends State<ReuserPage> {
                   'uid': currentUser.user.uid,
                   'role': 'user'
                 }).then((user) {
-                  print('user ok ${currentUser}');
+                  print('user ok $currentUser');
                   uploadImage(context);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => MainPage()),
                       ModalRoute.withName('/'));
                 }).catchError((e) {
-                  print('profile ${e}');
+                  print('profile $e');
                 }));
       } else {
         print('password not match');

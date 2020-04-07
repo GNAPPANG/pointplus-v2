@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-
-
 
 final mali = 'Mali';
 
@@ -24,8 +20,7 @@ class _TransferPointState extends State<TransferPoint> {
                 height: 42.0,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.grey[200]
-                ),
+                    color: Colors.grey[200]),
                 child: TextField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(left: 20.0),
@@ -36,21 +31,19 @@ class _TransferPointState extends State<TransferPoint> {
                 ),
               ),
             ),
-            SizedBox(width: 20,),
-
+            SizedBox(
+              width: 20,
+            ),
           ],
         ),
-
       ),
       body: Stack(
         children: <Widget>[
-
           Container(
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-
                   SizedBox(
                     height: 10.0,
                   ),
@@ -59,7 +52,6 @@ class _TransferPointState extends State<TransferPoint> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-
                           SizedBox(
                             height: 16.0,
                           ),
@@ -71,8 +63,7 @@ class _TransferPointState extends State<TransferPoint> {
                                   image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: AssetImage('assets/images/pup.jpg'),
-                                  )
-                              )),
+                                  ))),
                           SizedBox(
                             height: 8.0,
                           ),
@@ -100,12 +91,13 @@ class _TransferPointState extends State<TransferPoint> {
                                   color: Colors.grey[200],
                                   onPressed: () {},
                                   child: TextField(
-                                      keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(left: 20.0),
+                                      contentPadding:
+                                          EdgeInsets.only(left: 20.0),
                                       border: InputBorder.none,
                                       hintStyle: TextStyle(
-                                          color: Colors.grey,
+                                        color: Colors.grey,
                                         fontFamily: mali,
                                         fontSize: 14.0,
                                       ),
@@ -127,7 +119,6 @@ class _TransferPointState extends State<TransferPoint> {
 //                                  ),
                                 ),
                               ),
-
                               SizedBox(
                                 width: 10.0,
                               ),
@@ -189,9 +180,3 @@ class _TransferPointState extends State<TransferPoint> {
     );
   }
 }
-
-
-
-
-
-

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:point_plus_v2/store/profile_store.dart';
 import 'package:point_plus_v2/store/scan_store.dart';
-import '../user/notification_page.dart';
 import 'history_store.dart';
 import 'main_store.dart';
 import 'noti_store.dart';
@@ -17,8 +16,6 @@ class HomestorePage extends StatefulWidget {
 }
 
 class _HomestorePageState extends State<HomestorePage> {
-  int _page = 0;
-  GlobalKey _bottomNavigationKey = GlobalKey();
 
   int _selectedItem = 0;
   final _pageOption = [
@@ -120,7 +117,6 @@ class _HomestorePageState extends State<HomestorePage> {
         ],
         onTap: (int index) {
           debugPrint("CurrentIndex is $index");
-          _pageOption[_selectedItem];
           setState(() {
             _selectedItem = index;
           });
@@ -131,4 +127,3 @@ class _HomestorePageState extends State<HomestorePage> {
   }
 }
 
-//----------------------------------

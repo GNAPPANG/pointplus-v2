@@ -13,8 +13,6 @@ class NameUproPage extends StatefulWidget {
 }
 
 class _NameUproPageState extends State<NameUproPage> {
-  void _onDropItemSelected(String newValueSelected) {
-  }
 
   @override
   Widget build(BuildContext context) {

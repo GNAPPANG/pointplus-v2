@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/login_page.dart';
-
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -20,7 +16,6 @@ class ProfileStorePage extends StatefulWidget {
 }
 
 class _ProfileStorePageState extends State<ProfileStorePage> {
-  File _image;
   String userID = '';
 
   inputData() async {
@@ -33,61 +28,9 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
     });
   }
 
-  Future<void> captureImage(ImageSource imageSource) async {
-    try {
-      final imageFile = await ImagePicker.pickImage(source: imageSource);
-      setState(() {
-        _image = imageFile;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Widget _buildImage() {
-    if (_image != null) {
-      return Image.file(_image);
-    } else {
-      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
-    }
-  }
-
-  void _showActionSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text("Camera"),
-                  onTap: () async {
-                    captureImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(Icons.photo_library),
-                  title: new Text("Gallery"),
-                  onTap: () async {
-                    captureImage(ImageSource.gallery);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
   String open = "00:00 น.";
   String close = "00:00 น.";
 
-  DateTime _dateTime = DateTime.now();
-
-  DateTime _setDate = DateTime.now();
   Duration initialtimer = new Duration();
   int selectitem = 1;
 
@@ -109,7 +52,7 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
     FirebaseAuth.instance
         .signOut()
         .then((result) => Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage())))
+            context, MaterialPageRoute(builder: (context) => LoginPage())))
         .catchError((err) => print(err));
   }
 
@@ -137,8 +80,11 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: StreamBuilder(
-            stream: Firestore.instance.collection('users').document(userID).snapshots(),
-            builder: (contetxt, sn){
+            stream: Firestore.instance
+                .collection('users')
+                .document(userID)
+                .snapshots(),
+            builder: (contetxt, sn) {
               var image = sn.data['proFile'].toString();
               var namestore = sn.data['namestore'].toString();
               var addr = sn.data['address'];
@@ -183,8 +129,7 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
                     ),
                     SizedBox(height: 20.0),
                     Padding(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Container(
                         width: double.infinity,
                         child: MaterialButton(
@@ -264,11 +209,14 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
               fontSize: 22.0,
             ),
           ),
-          Text(content, style: TextStyle(
-            fontFamily: mali,
-            fontSize: 18.0,
-            color: Colors.black54,
-          ),),
+          Text(
+            content,
+            style: TextStyle(
+              fontFamily: mali,
+              fontSize: 18.0,
+              color: Colors.black54,
+            ),
+          ),
           Divider(
             thickness: 2,
             color: Colors.black45,
@@ -276,9 +224,5 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
         ],
       ),
     );
-  }
-
-  Widget showData({img}){
-    imgPro(img: img);
   }
 }

@@ -12,9 +12,7 @@ class MailReproPage extends StatefulWidget {
 }
 
 class _MailReproPageState extends State<MailReproPage> {
-  void _onDropItemSelected(String newValueSelected) {
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

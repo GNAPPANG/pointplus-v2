@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/join/re_password.dart';
-
-import 'choice_page.dart';
 import 'forgot_password.dart';
 
 final kalam = 'Kalam';

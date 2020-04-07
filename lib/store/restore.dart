@@ -7,12 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/services/new_update_info.dart';
 import 'package:point_plus_v2/store/homestore.dart';
-import 'package:point_plus_v2/store/main_store.dart';
-import 'package:point_plus_v2/user/main_page.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:path/path.dart';
 
 final mali = 'Mali';
@@ -40,23 +36,10 @@ class _RestorePageState extends State<RestorePage> {
     }
   }
 
-  Widget _buildImage() {
-    if (_image != null) {
-      return Image.file(_image);
-    } else {
-      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
-    }
-  }
-
-  void _showActionSheet() {}
-
-  DateTime _dateTime = DateTime.now();
-
   GlobalKey<ScaffoldState> key = GlobalKey(debugLabel: "scaffoldKey");
 
   final _formKey = GlobalKey<FormState>();
 
-  DateTime _setDate = DateTime.now();
   Duration initialtimer = new Duration();
   int selectitem = 1;
 
@@ -69,16 +52,7 @@ class _RestorePageState extends State<RestorePage> {
   TextEditingController _phoneCtrl = new TextEditingController();
   TextEditingController _addressCtrl = new TextEditingController();
 
-  _register() async {
-    String email = _emailCtrl.text.trim().toString();
-    String password = _passwordCtrl.text.toString();
-    String conpassword = _conpasswordCtrl.text.toString();
-    String namestore = _namestoreCtrl.text.toString();
-    String phone = _phoneCtrl.text.trim().toString();
-    String address = _addressCtrl.text.trim().toString();
-    print(
-        '${email}, ${password}, ${conpassword}, ${namestore}, ${phone}, ${address}');
-  }
+
 
   Future uploadImage(BuildContext context) async {
     String fileName = basename(_image.path);
@@ -95,7 +69,7 @@ class _RestorePageState extends State<RestorePage> {
             MaterialPageRoute(builder: (context) => HomestorePage()),
             ModalRoute.withName('/'));
       }).catchError((e) {
-        print('upload error ${e}');
+        print('upload error $e');
       });
     }
   }
@@ -127,14 +101,14 @@ class _RestorePageState extends State<RestorePage> {
                   'role': 'store',
                   'uid': currentUser.user.uid,
                 }).then((user) {
-                  print('user ok ${currentUser}');
+                  print('user ok $currentUser');
                   uploadImage(context);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => HomestorePage()),
                       ModalRoute.withName('/'));
                 }).catchError((e) {
-                  print('profile ${e}');
+                  print('profile $e');
                 }));
       } else {
         print('password not match');
@@ -510,7 +484,7 @@ class _RestorePageState extends State<RestorePage> {
 //                              ),
 //                            ),
                             Expanded(
-                              child: Text('${storeOpen} น.'),
+                              child: Text('$storeOpen น.'),
                             ),
                             IconButton(
                               icon: Icon(
@@ -589,7 +563,7 @@ class _RestorePageState extends State<RestorePage> {
 //                              ),
 //                            ),
                             Expanded(
-                              child: Text('${storeClose} น.'),
+                              child: Text('$storeClose น.'),
                             ),
                             IconButton(
                               icon: Icon(

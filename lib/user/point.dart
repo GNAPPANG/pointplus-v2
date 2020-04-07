@@ -1,11 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/join/home.dart';
 import 'package:point_plus_v2/user/transfer_point.dart';
 import 'package:point_plus_v2/user/use_point.dart';
-
-
 
 final mali = 'Mali';
 
@@ -41,7 +37,6 @@ class _PointState extends State<Point> {
       ),
       body: Stack(
         children: <Widget>[
-
           Container(
             alignment: Alignment.topCenter,
             child: SingleChildScrollView(
@@ -96,9 +91,12 @@ class _PointState extends State<Point> {
                       Expanded(
                         child: RaisedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => UsePoint(),
-                            ),);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UsePoint(),
+                              ),
+                            );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6.0),
@@ -125,9 +123,12 @@ class _PointState extends State<Point> {
                       Expanded(
                         child: RaisedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => TransferPoint(),
-                            ),);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransferPoint(),
+                              ),
+                            );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6.0),
@@ -156,8 +157,6 @@ class _PointState extends State<Point> {
                   SizedBox(
                     height: 16.0,
                   ),
-
-
                 ],
               ),
             ),
@@ -167,8 +166,3 @@ class _PointState extends State<Point> {
     );
   }
 }
-
-
-
-
-

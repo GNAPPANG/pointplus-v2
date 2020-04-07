@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:point_plus_v2/join/Uid.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 final mali = 'Mali';
 
@@ -27,7 +25,6 @@ class _QrCodeState extends State<QrCode> {
   @override
   void initState() {
     inputData();
-    // TODO: implement initState
     super.initState();
   }
 

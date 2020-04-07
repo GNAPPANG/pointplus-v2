@@ -4,8 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/join/login_page.dart';
 
 import 'main_page.dart';
@@ -18,7 +16,6 @@ class ProfileUser extends StatefulWidget {
 }
 
 class _ProfileUserState extends State<ProfileUser> {
-  File _image;
   String userID = '';
 
   inputData() async {
@@ -31,60 +28,10 @@ class _ProfileUserState extends State<ProfileUser> {
     });
   }
 
-  Future<void> captureImage(ImageSource imageSource) async {
-    try {
-      final imageFile = await ImagePicker.pickImage(source: imageSource);
-      setState(() {
-        _image = imageFile;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  
 
-  Widget _buildImage() {
-    if (_image != null) {
-      return Image.file(_image);
-    } else {
-      return Text('Take an image to start', style: TextStyle(fontSize: 18.0));
-    }
-  }
-
-
-
-  void _showActionSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text("Camera"),
-                  onTap: () async {
-                    captureImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(Icons.photo_library),
-                  title: new Text("Gallery"),
-                  onTap: () async {
-                    captureImage(ImageSource.gallery);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
 
   String xxx = "วว/ดด/ปปปป";
-
-  int _gValue;
 
   DateTime _dateTime = DateTime.now();
 

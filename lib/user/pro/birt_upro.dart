@@ -20,9 +20,7 @@ class BirtUproPage extends StatefulWidget {
 }
 
 class _BirtUproPageState extends State<BirtUproPage> {
-  void _onDropItemSelected(String newValueSelected) {
 
-  }
 
   DateTime _dateTime = DateTime.now();
 

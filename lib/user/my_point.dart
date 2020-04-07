@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:point_plus_v2/user/point.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
 import 'package:point_plus_v2/user/search_page.dart';

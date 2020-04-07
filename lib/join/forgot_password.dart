@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'confirm_mail.dart';
 import 'login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 final kalam = 'Kalam';
 final mali = 'Mali';

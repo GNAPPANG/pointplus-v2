@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/services/new_update_info.dart';
 import 'dart:io';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'main_store.dart';
 import 'package:path/path.dart';
 
@@ -37,15 +36,7 @@ class _ManageStorePageState extends State<ManageStorePage> {
     }
   }
 
-  Widget _buildImage() {
-    if (_image != null) {
-      return Image.file(_image);
-    } else {
-      return Image.asset('assets/images/iconim.png',
-      height: 120,
-      );
-    }
-  }
+ 
 
   void _showActionSheet(BuildContext context) {
     showModalBottomSheet(
@@ -83,12 +74,12 @@ class _ManageStorePageState extends State<ManageStorePage> {
         .ref()
         .child('ProductImage/${fileName.toString()}');
     StorageUploadTask task = firebaseStorageRef.putFile(_image);
-    print('task: ${task}');
+    print('task: $task');
     StorageTaskSnapshot snapshotTask = await task.onComplete;
-    print('snapshotTask: ${snapshotTask}');
+    print('snapshotTask: $snapshotTask');
     String downloadUrl = await snapshotTask.ref.getDownloadURL();
 
-    print('downloadUrl: ${downloadUrl}');
+    print('downloadUrl: $downloadUrl');
     setState(() async {
       productImageUrl = await snapshotTask.ref.getDownloadURL();
     });
@@ -96,7 +87,7 @@ class _ManageStorePageState extends State<ManageStorePage> {
       updateInfo.updateProduct(downloadUrl.toString(), context).then((val) {
         print('ok');
       }).catchError((e) {
-        print('upload error ${e}');
+        print('upload error $e');
       });
     }
   }
@@ -106,8 +97,6 @@ class _ManageStorePageState extends State<ManageStorePage> {
     String product = namemenu.text.toString();
     String price = pricectrl.text.trim().toString();
    if(_valForm.currentState.validate()){
-
-     print('product: ${product}, price: ${price}');
 
      FirebaseAuth auth = FirebaseAuth.instance;
      final FirebaseUser user = await auth.currentUser();

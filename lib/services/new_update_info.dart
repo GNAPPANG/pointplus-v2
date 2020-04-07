@@ -80,7 +80,7 @@ class NewUpdateInfo {
             .then((docs) {
           Firestore.instance.document('users/${docs.documents[0].documentID}')
               .updateData({'productImage': picUrl}).then((val){
-            print('pickurlsss: ${picUrl}');
+            print('pickurlsss: $picUrl');
             print('ok');
           }).then((user){
             print('shop ok');
@@ -88,10 +88,10 @@ class NewUpdateInfo {
             print('can\'t change page shop');
           });
         }).catchError((e){
-          print('shop error ${e}');
+          print('shop error $e');
         });
       }).catchError((e){
-        print('update shop er ${e}');
+        print('update shop er $e');
       });
     }).catchError((e){
       print('first error shop $e');

@@ -16,8 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _page = 0;
-  GlobalKey _bottomNavigationKey = GlobalKey();
 
   int _selectedItem = 0;
 
@@ -136,7 +134,6 @@ class _HomePageState extends State<HomePage> {
         ],
         onTap: (int index) {
           debugPrint("CurrentIndex is $index");
-          _pageOption[_selectedItem];
           setState(() {
             _selectedItem = index;
           });

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'dart:async';
 import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
-
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -27,10 +23,11 @@ class _ScanStorePageState extends State<ScanStorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('สแกนคิวอาร์โค้ด',
-        style: TextStyle(
-          fontFamily: mali,
-        ),
+        title: Text(
+          'สแกนคิวอาร์โค้ด',
+          style: TextStyle(
+            fontFamily: mali,
+          ),
         ),
         backgroundColor: Colors.redAccent,
         leading: Container(),
@@ -43,9 +40,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
             Container(
               child: SingleChildScrollView(
                 child: Column(
-                  children: <Widget>[
-
-                  ],
+                  children: <Widget>[],
                 ),
               ),
             ),
@@ -64,7 +59,6 @@ class _ScanStorePageState extends State<ScanStorePage> {
   }
 
   Future _scan() async {
-
     setState(() => this.barcode = barcode);
   }
 
@@ -72,7 +66,6 @@ class _ScanStorePageState extends State<ScanStorePage> {
 //    String barcode = await scanner.scanPhoto();
 //    setState(() => this.barcode = barcode);
 //  }
-
 
 }
 

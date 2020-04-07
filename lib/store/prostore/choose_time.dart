@@ -12,8 +12,7 @@ class ChooseTimePage extends StatefulWidget {
 }
 
 class _ChooseTimePageState extends State<ChooseTimePage> {
-  void _onDropItemSelected(String newValueSelected) {
-  }
+
 
   DateTime _dateTime = DateTime.now();
 

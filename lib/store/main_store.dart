@@ -154,12 +154,12 @@ class _MainStorePageState extends State<MainStorePage> {
           Column(
             children: <Widget>[
               Text(
-                'ชื่อร้านค้า: ${product} ',
+                'ชื่อร้านค้า: $product ',
                 style: TextStyle(fontFamily: mali, fontSize: 20),
               ),
               SizedBox(height: 30),
               Text(
-                'ราคา: ${price} ',
+                'ราคา: $price ',
                 style: TextStyle(fontFamily: mali, fontSize: 20),
               ),
             ],

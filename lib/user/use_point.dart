@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:point_plus_v2/user/point.dart';
 
 final mali = 'Mali';

@@ -14,8 +14,6 @@ class _AddressReproPageState extends State<AddressReproPage> {
 
 
 
-  void _onDropItemSelected(String newValueSelected) {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
