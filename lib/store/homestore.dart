@@ -4,11 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:point_plus_v2/store/profile_store.dart';
 import 'package:point_plus_v2/store/scan_store.dart';
-
-
-import '../user/qr_code.dart';
-import '../user/main_page.dart';
-import '../user/my_point.dart';
 import '../user/notification_page.dart';
 import 'history_store.dart';
 import 'main_store.dart';
@@ -65,11 +60,7 @@ class _HomestorePageState extends State<HomestorePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(
-                  Icons.access_time,
-                  size: 35,
-                  color: Colors.black54
-              ),
+              Icon(Icons.access_time, size: 35, color: Colors.black54),
               Text(
                 'ประวัติ',
                 style: TextStyle(
@@ -84,11 +75,7 @@ class _HomestorePageState extends State<HomestorePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(
-                  Icons.center_focus_weak,
-                  size: 35,
-                  color: Colors.black54
-              ),
+              Icon(Icons.center_focus_weak, size: 35, color: Colors.black54),
               Text(
                 'สแกน',
                 style: TextStyle(
@@ -103,11 +90,7 @@ class _HomestorePageState extends State<HomestorePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(
-                  Icons.textsms,
-                  size: 35,
-                  color: Colors.black54
-              ),
+              Icon(Icons.textsms, size: 35, color: Colors.black54),
               Text(
                 'แจ้งเตือน',
                 style: TextStyle(
@@ -122,11 +105,7 @@ class _HomestorePageState extends State<HomestorePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(
-                  Icons.person,
-                  size: 35,
-                  color: Colors.black54
-              ),
+              Icon(Icons.person, size: 35, color: Colors.black54),
               Text(
                 'โปรไฟล์',
                 style: TextStyle(

@@ -22,13 +22,13 @@ class NewUpdateInfo {
           }).then((user) {
             print('ok wow');
           }).catchError((e) {
-            print('can\'t change pages ${e}');
+            print('can\'t change pages $e');
           });
         }).catchError((e) {
-          print('users error ${e}');
+          print('users error $e');
         });
       }).catchError((e) {
-        print('update pic er ${e}');
+        print('update pic er $e');
       });
     }).catchError((e){
       print('first er $e');

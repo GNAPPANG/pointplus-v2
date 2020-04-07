@@ -4,18 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:point_plus_v2/join/home.dart';
 import 'package:point_plus_v2/join/login_page.dart';
 import 'package:point_plus_v2/store/homestore.dart';
-import 'package:point_plus_v2/user/main_page.dart';
 
-class Login{
+class Login {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Widget handleAuth() {}
-
-  singOut(BuildContext context){
+  singOut(BuildContext context) {
     _auth.signOut();
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context)=>LoginPage()),
+        MaterialPageRoute(builder: (context) => LoginPage()),
         ModalRoute.withName('/'));
   }
 
@@ -28,11 +25,11 @@ class Login{
           .then((doc) {
         if (doc.documents[0].exists) {
           if (doc.documents[0].data['role'] == 'user') {
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePage()));
           } else {
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (context) => HomestorePage()));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomestorePage()));
           }
         }
       });

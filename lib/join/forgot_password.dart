@@ -14,7 +14,30 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController emailCtrl = TextEditingController();
 
+
+  resetPassword(){
+    if (_formkey.currentState.validate()) {
+      String emails = emailCtrl.text.trim().toString();
+      print(emails);
+      _auth.sendPasswordResetEmail(email: emails);
+    }
+    print('success');
+  }
+
+  String emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value) && value.length < 5) {
+      return 'อีเมลล์ไม่ถูกต้อง';
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,22 +97,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               padding: EdgeInsets.symmetric(
                                 horizontal: 18.0,
                               ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintStyle: TextStyle(
-                                    color: Colors.black54,
-                                    fontFamily: mali,
-                                    fontSize: 14.0,
-                                  ),
-                                  hintText: 'กรุณากรอกอีเมล',
-                                  labelStyle: TextStyle(
-                                    fontSize: 12.0,
-                                    fontFamily: mali,
-                                    color: Colors.redAccent[100],
-                                  ),
-                                  icon: Icon(
-                                    Icons.mail,
-                                    color: Colors.redAccent,
+                              child: Form(
+                                key: _formkey,
+                                child: TextFormField(
+                                  controller: emailCtrl,
+                                  validator: emailValidator,
+                                  decoration: InputDecoration(
+                                    hintStyle: TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: mali,
+                                      fontSize: 14.0,
+                                    ),
+                                    hintText: 'กรุณากรอกอีเมล',
+                                    labelStyle: TextStyle(
+                                      fontSize: 12.0,
+                                      fontFamily: mali,
+                                      color: Colors.redAccent[100],
+                                    ),
+                                    icon: Icon(
+                                      Icons.mail,
+                                      color: Colors.redAccent,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -110,15 +138,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         children: <Widget>[
                           Expanded(
                             child: RaisedButton(
-                              onPressed: () {
-                                print("gggg");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ConfirmMailPage(),
-                                  ),
-                                );
-                              },
+                              onPressed: resetPassword,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
