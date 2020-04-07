@@ -34,63 +34,92 @@ class _MainStorePageState extends State<MainStorePage> {
   @override
   void initState() {
     inputData();
+    print(userID);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'ชื่อร้านค้า',
+          style: TextStyle(fontFamily: mali),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: StreamBuilder(
-            stream: Firestore.instance
-                .collection('users')
-                .document(userID)
-                .snapshots(),
-            builder: (context, sn) {
-              var img = sn.data['proFile'];
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 20.0),
-                    imgPro(img: img),
-                    SizedBox(height: 20),
-                    btnManageStore(),
-                    SizedBox(height: 20),
-                    Container(
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: Firestore.instance
-                            .collection("users")
-                            .document(userID)
-                            .collection('pressure')
-                            .orderBy("create_at", descending: true)
-                            .snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasError)
-                            return new Text('Error: ${snapshot.error}');
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting:
-                              return Center(child: new Text('Loading...'));
-                            default:
-                              return new ListView(
-                                children: snapshot.data.documents
-                                    .map((DocumentSnapshot document) {
-                                  return store(
-                                      img: 'assets/images/01.jpg',
-                                      product: document['product'].toString(),
-                                      price: document['price'].toString());
-                                }).toList(),
-                              );
-                          }
-                        },
-                      ),
+          child: Column(
+            children: <Widget>[
+              StreamBuilder(
+                stream: Firestore.instance
+                    .collection('users')
+                    .document(userID)
+                    .snapshots(),
+                builder: (context, sn) {
+                  var img = sn.data['proFile'];
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(height: 20.0),
+                        imgPro(img: img),
+                        SizedBox(height: 20),
+                        FlatButton(
+                          onPressed: manageStore,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.add_circle_outline),
+                              SizedBox(width: 20),
+                              Text(
+                                'จัดการเมนูร้านค้า',
+                                style:
+                                    TextStyle(fontSize: 20, fontFamily: mali),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                      ],
                     ),
-                  ],
+                  );
+                },
+              ),
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: Firestore.instance
+                      .collection("users")
+                      .document(userID)
+                      .collection('products')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return Center(child: new Text('Loading...'));
+                      default:
+                        return new ListView(
+                          shrinkWrap: true,
+                          children: snapshot.data.documents
+                              .map((DocumentSnapshot document) {
+                            return store(
+                              img: 'assets/images/01.jpg',
+                              product: document['product'].toString(),
+                              price: document['price'].toString(),
+                            );
+                          }).toList(),
+                        );
+                    }
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
       ),
@@ -112,39 +141,20 @@ class _MainStorePageState extends State<MainStorePage> {
     );
   }
 
-  Widget btnManageStore() {
-    return FlatButton(
-      onPressed: manageStore,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(Icons.add_circle_outline, color: Colors.black54),
-          SizedBox(width: 10),
-          Text(
-            'จัดการเมนูร้านค้า',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontFamily: mali,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget store({
-    img,
-    product,
-    price,
+    String img,
+    String product,
+    String price,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Row(
         children: <Widget>[
           Container(
             width: 150,
             height: 130,
             decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
               image: AssetImage(img),
               fit: BoxFit.cover,
@@ -168,33 +178,6 @@ class _MainStorePageState extends State<MainStorePage> {
       ),
     );
   }
-}
-
-//----------------------------------
-
-Widget appBars({h, c}) {
-  return Container(
-    height: h,
-    color: Colors.redAccent,
-    child: Padding(
-      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'ชื่อร้านค้า',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22.0,
-              fontFamily: 'mali',
-            ),
-          ),
-          SizedBox(width: 20),
-        ],
-      ),
-    ),
-  );
 }
 
 Route _createRoute({screen}) {

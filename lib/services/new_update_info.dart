@@ -55,10 +55,10 @@ class NewUpdateInfo {
             print('can\'t change page shop');
           });
         }).catchError((e){
-          print('shop error ${e}');
+          print('shop error $e');
         });
       }).catchError((e){
-        print('update shop er ${e}');
+        print('update shop er $e');
       });
     }).catchError((e){
       print('first error shop $e');
