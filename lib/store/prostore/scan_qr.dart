@@ -265,10 +265,7 @@ class _MyAppState extends State<MyApp> {
     this._outputController.text = barcode;
   }
 
-  Future _scanPath(String path) async {
-    String barcode = await scanner.scanPath(path);
-    this._outputController.text = barcode;
-  }
+
 
   Future _scanBytes() async {
     File file = await ImagePicker.pickImage(source: ImageSource.camera);

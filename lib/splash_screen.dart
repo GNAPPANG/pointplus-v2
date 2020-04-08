@@ -32,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 });
               })
 
-//   Navigator.pushReplacementNamed(context, '/user')
             }
         });
 

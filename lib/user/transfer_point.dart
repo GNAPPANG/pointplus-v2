@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:point_plus_v2/user/profile_user.dart';
 
 final mali = 'Mali';
 
@@ -8,34 +9,28 @@ class TransferPoint extends StatefulWidget {
 }
 
 class _TransferPointState extends State<TransferPoint> {
+  profile(){
+    Navigator.of(context).push(_createRoute(screen: ProfileUser()));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
         title: Row(
           children: <Widget>[
-            Expanded(
-              child: Container(
-                height: 42.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.grey[200]),
-                child: TextField(
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 20.0),
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(color: Colors.black54),
-                    hintText: "ค้นหา ID",
-                  ),
-                ),
+            Expanded(child: Text('โอนแต้ม', style: TextStyle(fontFamily: mali), textAlign: TextAlign.center,)),
+            GestureDetector(
+              onTap: profile,
+              child: Icon(
+                Icons.account_circle,
+                size: 45,
+                color: Colors.white,
               ),
-            ),
-            SizedBox(
-              width: 20,
             ),
           ],
         ),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
       ),
       body: Stack(
         children: <Widget>[
@@ -179,4 +174,22 @@ class _TransferPointState extends State<TransferPoint> {
       ),
     );
   }
+}
+
+Route _createRoute({screen}) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => screen,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

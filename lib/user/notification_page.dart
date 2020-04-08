@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:point_plus_v2/user/profile_user.dart';
 
 final mali = 'Mali';
 
@@ -9,34 +10,40 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  profile() {
+    Navigator.of(context).push(_createRoute(screen: ProfileUser()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topCenter,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  appBars(
-                    h: MediaQuery.of(context).size.height / 7,
-                    c: context,
-                  ),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                ],
+      appBar: AppBar(
+        title: Row(
+          children: <Widget>[
+            Expanded(
+                child: Text(
+              'หน้าแรก',
+              style: TextStyle(fontFamily: mali),
+              textAlign: TextAlign.center,
+            )),
+            GestureDetector(
+              onTap: profile,
+              child: Icon(
+                Icons.account_circle,
+                size: 45,
+                color: Colors.white,
               ),
             ),
-          ),
+          ],
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
+      ),
+      body: Stack(
+        children: <Widget>[
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                appBars(
-                  h: MediaQuery.of(context).size.height / 7,
-                  c: context,
-                ),
                 Padding(
                   padding: const EdgeInsets.all(0),
                   child: Container(
@@ -45,10 +52,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     child: RaisedButton(
                       onPressed: () {
                         print("kkkkk");
-//                  Navigator.push(context, MaterialPageRoute(
-//                    builder: (context) => RestorePage(),
-//                  ),);
-                      } ,
+                      },
                       color: Colors.grey[200],
                       child: Row(
                         children: <Widget>[
@@ -67,7 +71,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 'Coffee Time',
                                 style: TextStyle(
                                   color: Colors.black54,
-                                  fontFamily: 'mali' ,
+                                  fontFamily: 'mali',
                                   fontSize: 18.0,
                                 ),
                               ),
@@ -75,7 +79,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 'สะสมครบ 10 แต้ม แลกฟรี 1 แก้ว',
                                 style: TextStyle(
                                   color: Colors.black54,
-                                  fontFamily: 'mali' ,
+                                  fontFamily: 'mali',
                                   fontSize: 14.0,
                                 ),
                               ),
@@ -83,58 +87,40 @@ class _NotificationPageState extends State<NotificationPage> {
                                 'เมื่อวาน 09.30 น.',
                                 style: TextStyle(
                                   color: Colors.black54,
-                                  fontFamily: 'mali' ,
+                                  fontFamily: 'mali',
                                   fontSize: 14.0,
                                 ),
                               ),
                             ],
                           ),
-//                          Icon(
-//                            Icons.delete_outline,
-//                            color: Colors.black54,
-//                            size: 32,
-//                          ),
                         ],
                       ),
-
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
-
-
         ],
       ),
     );
   }
 }
 
+Route _createRoute({screen}) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => screen,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
 
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-Widget appBars({h, c}) {
-  return Container(
-    height: h,
-    color: Colors.redAccent,
-    child: Padding(
-      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'แจ้งเตือน',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22.0,
-              fontFamily: 'mali',
-            ),
-          ),
-          SizedBox(width: 20),
-        ],
-      ),
-    ),
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
   );
 }

@@ -16,8 +16,6 @@ class ScanStorePage extends StatefulWidget {
 
 class _ScanStorePageState extends State<ScanStorePage> {
   Uint8List bytes = Uint8List(0);
-  TextEditingController _inputController;
-  TextEditingController _outputController;
   TextEditingController pointCtrl = new TextEditingController();
   String userID = '';
   final _formKey = GlobalKey<FormState>();
@@ -26,7 +24,6 @@ class _ScanStorePageState extends State<ScanStorePage> {
   submitPoint()async{
     String p = pointCtrl.text.trim().toString();
     if(_formKey.currentState.validate()){
-      final FirebaseUser user = await auth.currentUser();
       Firestore.instance
             .collection("users")
             .document(userID)
@@ -70,8 +67,6 @@ class _ScanStorePageState extends State<ScanStorePage> {
   initState() {
     super.initState();
     _scan();
-    this._inputController = new TextEditingController();
-    this._outputController = new TextEditingController();
   }
 
   @override

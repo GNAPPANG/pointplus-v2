@@ -15,7 +15,6 @@ class MainStorePage extends StatefulWidget {
 
 class _MainStorePageState extends State<MainStorePage> {
   String userID = '';
-  ScrollController _controller = new ScrollController();
 
   inputData() async {
     FirebaseAuth auth = FirebaseAuth.instance;

@@ -11,9 +11,29 @@ class MyPoint extends StatefulWidget {
 }
 
 class _MyPointState extends State<MyPoint> {
+  profile(){
+    Navigator.of(context).push(_createRoute(screen: ProfileUser()));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: <Widget>[
+            Expanded(child: Text('แต้มของฉัน', style: TextStyle(fontFamily: mali), textAlign: TextAlign.center,)),
+            GestureDetector(
+              onTap: profile,
+              child: Icon(
+                Icons.account_circle,
+                size: 45,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
+      ),
       body: Stack(
         children: <Widget>[
           Container(
@@ -21,10 +41,6 @@ class _MyPointState extends State<MyPoint> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  appBars(
-                    h: MediaQuery.of(context).size.height / 7,
-                    c: context,
-                  ),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -138,5 +154,23 @@ Widget appBars({h, c}) {
         ],
       ),
     ),
+  );
+}
+
+Route _createRoute({screen}) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => screen,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
   );
 }

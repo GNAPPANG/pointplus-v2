@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:point_plus_v2/join/login_page.dart';
-import 'package:point_plus_v2/user/main_page.dart';
 
 final mali = 'Mali';
 final kalam = 'Kalam';
