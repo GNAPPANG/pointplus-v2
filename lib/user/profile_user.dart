@@ -97,15 +97,15 @@ class _ProfileUserState extends State<ProfileUser> {
             stream:
                 Firestore.instance.collection('users').document(userID).snapshots(),
             builder: (context, sn){
-              var img = sn.data['proFile'].toString();
-              var fname = sn.data['firstname'].toString();
-              var lname = sn.data['lastname'].toString();
-              var email = sn.data['email'].toString();
+              if(!sn.hasData){
+                return Text('Loading...');
+              }
+
               return profile(
-                img: img,
-                firstname: fname,
-                lastname: lname,
-                email: email,
+                img: sn.data['proFile'],
+                lastname: sn.data['lastname'],
+                firstname: sn.data['firstname'],
+                email: sn.data['email']
               );
             }),
         ),
@@ -143,14 +143,7 @@ class _ProfileUserState extends State<ProfileUser> {
               ),
             ),
             SizedBox(height: 12),
-//            Row(
-//              mainAxisAlignment: MainAxisAlignment.center,
-//              children: <Widget>[
-//                Text(firstname,style: TextStyle(fontFamily: _kanit, fontSize: 22.0),),
-//                SizedBox(width: 20.0),
-//                Text(lastname,style: TextStyle(fontFamily: _kanit, fontSize: 22.0),),
-//              ],
-//            ),
+
             SizedBox(height: 12),
             _form(
               title: 'ชื่อ',
