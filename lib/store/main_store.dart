@@ -15,6 +15,7 @@ class MainStorePage extends StatefulWidget {
 
 class _MainStorePageState extends State<MainStorePage> {
   String userID = '';
+  ScrollController _controller = new ScrollController();
 
   inputData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -59,65 +60,74 @@ class _MainStorePageState extends State<MainStorePage> {
                     .document(userID)
                     .snapshots(),
                 builder: (context, sn) {
-                  var img = sn.data['proFile'];
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(height: 20.0),
-                        imgPro(img: img),
-                        SizedBox(height: 20),
-                        FlatButton(
-                          onPressed: manageStore,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.add_circle_outline),
-                              SizedBox(width: 20),
-                              Text(
-                                'จัดการเมนูร้านค้า',
-                                style:
-                                    TextStyle(fontSize: 20, fontFamily: mali),
+                  if (!sn.hasData) {
+                    return Visibility(
+                      visible: true,
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return Column(
+                    children: <Widget>[
+                      SizedBox(height: 20),
+                      imgPro(img: sn.data['proFile']),
+                      SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: manageStore,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.add_circle_outline,
+                              color: Colors.black54,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'จัดการเมนูร้าน',
+                              style: TextStyle(
+                                fontFamily: mali,
+                                fontSize: 20,
                               ),
-                            ],
-                          ),
+                            )
+                          ],
                         ),
-                        SizedBox(height: 20),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.all(20.0),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: Firestore.instance
+                              .collection("users")
+                              .document(userID)
+                              .collection('products')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError)
+                              return new Text('Error: ${snapshot.error}');
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Center(child: new Text('Loading...'));
+                              default:
+                                return new ListView(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  children: snapshot.data.documents
+                                      .map((DocumentSnapshot document) {
+                                    return store(
+                                      img: 'assets/images/01.jpg',
+                                      product: document['product'].toString(),
+                                      price: document['price'].toString(),
+                                    );
+                                  }).toList(),
+                                );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   );
                 },
-              ),
-              Container(
-                padding: const EdgeInsets.all(20.0),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance
-                      .collection("users")
-                      .document(userID)
-                      .collection('products')
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasError)
-                      return new Text('Error: ${snapshot.error}');
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return Center(child: new Text('Loading...'));
-                      default:
-                        return new ListView(
-                          shrinkWrap: true,
-                          children: snapshot.data.documents
-                              .map((DocumentSnapshot document) {
-                            return store(
-                              img: 'assets/images/01.jpg',
-                              product: document['product'].toString(),
-                              price: document['price'].toString(),
-                            );
-                          }).toList(),
-                        );
-                    }
-                  },
-                ),
               ),
             ],
           ),
@@ -156,9 +166,9 @@ class _MainStorePageState extends State<MainStorePage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-              image: AssetImage(img),
-              fit: BoxFit.cover,
-            )),
+                  image: AssetImage(img),
+                  fit: BoxFit.cover,
+                )),
           ),
           SizedBox(width: 20),
           Column(
