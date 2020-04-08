@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -10,138 +13,144 @@ class HistoryStorePage extends StatefulWidget {
 }
 
 class _HistoryStorePageState extends State<HistoryStorePage> {
+  String userID = '';
 
+
+  inputData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid.toString();
+    print(uid);
+    setState(() {
+      userID = uid.toString();
+    });
+  }
+
+
+
+  @override
+  void initState() {
+    inputData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topCenter,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  appBars(
-                    h: MediaQuery.of(context).size.height / 7,
-                    c: context,
+      appBar: AppBar(
+        title: Text(
+          'ประวัติการทำรายการ',
+          style: TextStyle(fontFamily: mali),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
+      ),
+      body:
+          Stack(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Colors.grey.withOpacity(0.1),
+              ),
+              StreamBuilder<QuerySnapshot>(
+                stream: Firestore.instance
+                    .collection("users")
+                    .document('G0NKY0FnEbN9gjhxihn6YptmTDj2')
+                    .collection('point')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return Center(
+                          child: new Visibility(
+                              visible: true,
+                              child: CircularProgressIndicator()));
+                    default:
+                      return
+                          new ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: snapshot.data.documents
+                                .map((DocumentSnapshot document) {
+                              return listPoint(
+                                img: document['userimg'].toString(),
+                                date: document['create_at'].toString(),
+                                point: document['point'].toString(),
+                                id: userID.substring(0, 5),
+                              );
+                            }).toList(),
+                            padding: EdgeInsets.only(bottom: 30),
+                          );
+
+                  }
+                },
+              ),
+            ],
+
+      ),
+    );
+  }
+
+  Widget listPoint({String img, id, point, date}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 6, bottom: 12),
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(img),
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(
-                    height: 50.0,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'ID: $id',
+                    style: TextStyle(
+                      fontFamily: mali,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  Text(
+                    'ให้แต้ม: $point แต้ม',
+                    style: TextStyle(
+                      fontFamily: mali,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                  Text(
+                    date,
+                    style: TextStyle(
+                        fontFamily: mali,
+                        fontSize: 14.0,
+                        color: Colors.black54),
                   ),
                 ],
               ),
             ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                appBars(
-                  h: MediaQuery.of(context).size.height / 7,
-                  c: context,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 80.0,
-                    child: RaisedButton(
-                      onPressed: () {
-                        print("kkkkk");
-//                  Navigator.push(context, MaterialPageRoute(
-//                    builder: (context) => RestorePage(),
-//                  ),);
-                      } ,
-                      color: Colors.grey[200],
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                              width: 60.0,
-                              height: 60.0,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage('assets/images/tay.jpg'),
-                                  )
-                              )),
-                          SizedBox(
-                            width: 16.0,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'ID : S12356 ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'mali' ,
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                              Text(
-                                'ให้แต้ม 1 แต้ม',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'mali' ,
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              Text(
-                                'วันนี้ 09.30 น.',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'mali' ,
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                            ],
-                          ),
-//                          Icon(
-//                            Icons.delete_outline,
-//                            color: Colors.black54,
-//                            size: 32,
-//                          ),
-                        ],
-                      ),
-
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
-          ),
-
-
-        ],
+          ],
+        ),
       ),
     );
   }
-}
-
-Widget appBars({h, c}) {
-  return Container(
-    height: h,
-    color: Colors.redAccent,
-    child: Padding(
-      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'ประวัติการทำรายการ',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22.0,
-              fontFamily: 'mali',
-            ),
-          ),
-          SizedBox(width: 20),
-        ],
-      ),
-    ),
-  );
 }

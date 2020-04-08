@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:qrscan/qrscan.dart' as scanner;
@@ -22,6 +23,8 @@ class _ScanStorePageState extends State<ScanStorePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   Firestore firestore = Firestore.instance;
   String url = '';
+  String dates = '';
+  String times = '';
 
   getUrl() async {
     var s = await firestore.collection('users').document(userID);
@@ -34,10 +37,27 @@ class _ScanStorePageState extends State<ScanStorePage> {
     });
   }
 
+  showDate() async {
+    var d = DateFormat.d().format(DateTime.now());
+    var M = DateFormat.M().format(DateTime.now());
+    var Y = DateFormat.y().format(DateTime.now());
+
+    var h = DateFormat.Hms().format(DateTime.now());
+    var date = '$d/$M/$Y';
+    var time = '$h';
+    setState(() {
+      dates = date;
+      times = time;
+    });
+    print(dates);
+    print(times);
+
+  }
+
   submitPoint() async {
     String p = pointCtrl.text.trim().toString();
     if (_formKey.currentState.validate()) {
-
+      showDate();
       Firestore.instance
           .collection("users")
           .document(userID)
@@ -46,7 +66,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
         "point": p,
         "uid": userID,
         "userimg": url,
-        "create_at": DateTime.now(),
+        "create_at": '$dates, $times',
       }).then((result) {
         print('success');
         Alert(
@@ -96,6 +116,10 @@ class _ScanStorePageState extends State<ScanStorePage> {
       ),
       body: Column(
         children: <Widget>[
+          RaisedButton(
+            onPressed: showDate,
+            child: Text('showdt'),
+          ),
           Text(userID),
           Form(
             key: _formKey,
@@ -117,7 +141,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
             onPressed: submitPoint,
             child: Text('ตกลง'),
           ),
-          
+
         ],
       ),
     );
