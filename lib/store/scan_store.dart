@@ -20,47 +20,58 @@ class _ScanStorePageState extends State<ScanStorePage> {
   String userID = '';
   final _formKey = GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
+  Firestore firestore = Firestore.instance;
+  String url = '';
 
-  submitPoint()async{
+  getUrl() async {
+    var s = await firestore.collection('users').document(userID);
+    s.get().then((doc) {
+      print('url: ' + doc['proFile']);
+      setState(() {
+        url = doc['proFile'].toString();
+        debugPrint('url2: $url');
+      });
+    });
+  }
+
+  submitPoint() async {
     String p = pointCtrl.text.trim().toString();
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
+
       Firestore.instance
-            .collection("users")
-            .document(userID)
-            .collection('point')
-            .add({
+          .collection("users")
+          .document(userID)
+          .collection('point')
+          .add({
         "point": p,
         "uid": userID,
+        "userimg": url,
         "create_at": DateTime.now(),
-      })
-          .then((result){
-            print('success');
-            Alert(
-              context: context,
-              type: AlertType.success,
-              title: "ทำรายการสำเร็จ",
-              buttons: [
-
-                DialogButton(
-                  child: Text(
-                    "ตกลง",
-                    style: TextStyle(fontFamily: mali, color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(116, 116, 191, 1.0),
-                    Color.fromRGBO(52, 138, 199, 1.0)
-                  ]),
-                )
-              ],
-            ).show();
-      })
-          .catchError((err){
-         print('error: $err');
+      }).then((result) {
+        print('success');
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: "ทำรายการสำเร็จ",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(
+                    fontFamily: mali, color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              gradient: LinearGradient(colors: [
+                Color.fromRGBO(116, 116, 191, 1.0),
+                Color.fromRGBO(52, 138, 199, 1.0)
+              ]),
+            )
+          ],
+        ).show();
+      }).catchError((err) {
+        print('error: $err');
       });
     }
-
-
   }
 
   @override
@@ -92,8 +103,8 @@ class _ScanStorePageState extends State<ScanStorePage> {
               decoration: InputDecoration(
                 errorStyle: TextStyle(fontFamily: mali),
               ),
-              validator: (value){
-                if(value.isEmpty){
+              validator: (value) {
+                if (value.isEmpty) {
                   return 'จำนวนแต้มห้ามว่าง';
                 }
                 return null;
@@ -106,16 +117,18 @@ class _ScanStorePageState extends State<ScanStorePage> {
             onPressed: submitPoint,
             child: Text('ตกลง'),
           ),
+          
         ],
       ),
     );
   }
+
   Future _scan() async {
     String barcode = await scanner.scan();
 //    this._outputController.text = barcode;
-  setState(() {
-    userID = barcode.toString();
-  });
+    setState(() {
+      userID = barcode.toString();
+    });
+    getUrl();
   }
 }
-
