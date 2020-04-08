@@ -47,26 +47,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   initState() {
-//    FirebaseAuth.instance
-//        .currentUser()
-//        .then((currentUser) => {
-//              if (currentUser == null)
-//                {}
-//              else
-//                {
-//                  Firestore.instance
-//                      .collection("users")
-//                      .document(currentUser.uid)
-//                      .get()
-//                      .then((DocumentSnapshot result) =>
-//                          Navigator.pushReplacement(
-//                              context,
-//                              MaterialPageRoute(
-//                                  builder: (context) => HomePage())))
-//                      .catchError((err) => print(err))
-//                }
-//            })
-//        .catchError((err) => print(err));
 
     _auth.currentUser().then((user) {
       Firestore.instance
