@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
@@ -11,6 +12,8 @@ class TransferPoint extends StatefulWidget {
 
 class _TransferPointState extends State<TransferPoint> {
   String url = '';
+  String userID = '';
+  Firestore firestore = Firestore.instance;
   getUrl() async {
     var s = await firestore.collection('users').document(userID);
     s.get().then((doc) {
@@ -165,7 +168,15 @@ class _TransferPointState extends State<TransferPoint> {
       ),
     );
   }
+  Future _scan() async {
+    String barcode = await scanner.scan();
+    setState(() {
+      userID = barcode.toString();
+    });
+    getUrl();
+  }
 }
+
 
 Route _createRoute({screen}) {
   return PageRouteBuilder(
@@ -185,12 +196,5 @@ Route _createRoute({screen}) {
   );
 }
 
-Future _scan() async {
-  String barcode = await scanner.scan();
-//    this._outputController.text = barcode;
-  setState(() {
-    userID = barcode.toString();
-  });
-  getUrl();
-}
-}
+
+

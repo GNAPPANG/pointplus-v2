@@ -149,7 +149,6 @@ class _ScanStorePageState extends State<ScanStorePage> {
 
   Future _scan() async {
     String barcode = await scanner.scan();
-//    this._outputController.text = barcode;
     setState(() {
       userID = barcode.toString();
     });
