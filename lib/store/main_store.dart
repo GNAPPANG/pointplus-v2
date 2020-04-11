@@ -53,6 +53,7 @@ class _MainStorePageState extends State<MainStorePage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+
               StreamBuilder(
                 stream: Firestore.instance
                     .collection('users')
@@ -114,7 +115,7 @@ class _MainStorePageState extends State<MainStorePage> {
                                   children: snapshot.data.documents
                                       .map((DocumentSnapshot document) {
                                     return store(
-                                      img: 'assets/images/01.jpg',
+                                      img: document['productImgUrl'].toString(),
                                       product: document['product'].toString(),
                                       price: document['price'].toString(),
                                     );
@@ -165,7 +166,7 @@ class _MainStorePageState extends State<MainStorePage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage(img),
+                  image: NetworkImage(img),
                   fit: BoxFit.cover,
                 )),
           ),

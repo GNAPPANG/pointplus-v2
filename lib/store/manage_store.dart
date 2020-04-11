@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:point_plus_v2/services/new_update_info.dart';
 import 'dart:io';
 import 'main_store.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as Path;
 
 final mali = 'Mali';
 final kalam = 'Kalam';
@@ -18,25 +19,27 @@ class ManageStorePage extends StatefulWidget {
 
 class _ManageStorePageState extends State<ManageStorePage> {
   File _image;
+  String filename;
   TextEditingController namemenu = TextEditingController();
   TextEditingController pricectrl = TextEditingController();
   String userID = '';
+  String imgUrl;
   final GlobalKey<FormState> _valForm = GlobalKey<FormState>();
   NewUpdateInfo updateInfo = new NewUpdateInfo();
-  String productImageUrl ='';
+  String productImageUrl = '';
+  bool circular = false;
 
- Future<void> captureImage(ImageSource imageSource) async {
+  Future<void> captureImage(ImageSource imageSource) async {
     try {
       final imageFile = await ImagePicker.pickImage(source: imageSource);
       setState(() {
         _image = imageFile;
+        filename = Path.basename(_image.path);
       });
     } catch (e) {
       print(e);
     }
   }
-
- 
 
   void _showActionSheet(BuildContext context) {
     showModalBottomSheet(
@@ -68,66 +71,70 @@ class _ManageStorePageState extends State<ManageStorePage> {
         });
   }
 
-  Future uploadImage(BuildContext context) async {
-    String fileName = basename(_image.path);
-    final StorageReference firebaseStorageRef = FirebaseStorage.instance
-        .ref()
-        .child('ProductImage/${fileName.toString()}');
-    StorageUploadTask task = firebaseStorageRef.putFile(_image);
-    print('task: $task');
-    StorageTaskSnapshot snapshotTask = await task.onComplete;
-    print('snapshotTask: $snapshotTask');
-    String downloadUrl = await snapshotTask.ref.getDownloadURL();
-
-    print('downloadUrl: $downloadUrl');
-    setState(() async {
-      productImageUrl = await snapshotTask.ref.getDownloadURL();
-    });
-    if (downloadUrl != null) {
-      updateInfo.updateProduct(downloadUrl.toString(), context).then((val) {
-        print('ok');
-      }).catchError((e) {
-        print('upload error $e');
+  // ignore: missing_return
+  Future<String> _uploadImage() async {
+    try {
+      StorageReference ref =
+          FirebaseStorage.instance.ref().child('stores/$userID/$filename');
+      StorageUploadTask uploadTask = ref.putFile(_image);
+      var downloadUrl =
+          await (await uploadTask.onComplete).ref.getDownloadURL();
+      var url = downloadUrl.toString();
+      setState(() {
+        imgUrl = url.toString();
       });
+      print('upload success');
+      print('url: $url');
+      return url;
+
+    } on Exception catch (err) {
+      print('upload error: $err');
+      return err.toString();
     }
   }
 
-  addMenu(BuildContext context) async{
-    uploadImage(context);
+  addMenu() async {
+    setState(() {
+      circular = true;
+    });
+    _uploadImage();
     String product = namemenu.text.toString();
     String price = pricectrl.text.trim().toString();
-   if(_valForm.currentState.validate()){
+    if (_valForm.currentState.validate()) {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      final FirebaseUser user = await auth.currentUser();
+      final uid = user.uid.toString();
+      print(uid);
 
-     FirebaseAuth auth = FirebaseAuth.instance;
-     final FirebaseUser user = await auth.currentUser();
-     final uid = user.uid.toString();
-     print(uid);
+      setState(() {
+        userID = uid;
+      });
 
-     setState(() {
-       userID = uid;
-     });
-   }
+      print('getimgurl: $imgUrl');
+      Firestore.instance
+          .collection('users')
+          .document(userID)
+          .collection('products')
+          .add({
+        "product": product,
+        "price": price,
+        "productImgUrl": imgUrl,
+      })
+          .then((resule){
+        print('success');
+        print('$product, $price, $imgUrl');
+        setState(() {
+          circular = false;
+        });
+      })
+          .catchError((err) {
+        print(err);
+        setState(() {
+          circular = false;
+        });
+      });
+    }
 
-
-
-   Firestore.instance
-      .collection('users')
-      .document(userID)
-      .collection('products')
-      .add({
-     "product": product,
-     "price": price,
-     "productImgUrl": productImageUrl,
-   })
-        .then((result)=>{
-
-          print('add success')
-   })
-        .catchError((err){
-          print(err);
-
-
-   });
 
 
 
@@ -174,7 +181,7 @@ class _ManageStorePageState extends State<ManageStorePage> {
                         height: 36.0,
                       ),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           _showActionSheet(context);
                         },
                         child: Container(
@@ -186,9 +193,9 @@ class _ManageStorePageState extends State<ManageStorePage> {
                             height: 200,
                             child: (_image != null)
                                 ? Image.file(
-                              _image,
-                              fit: BoxFit.fill,
-                            )
+                                    _image,
+                                    fit: BoxFit.fill,
+                                  )
                                 : Image.asset('assets/images/iconim.png'),
                           ),
                         ),
@@ -251,7 +258,7 @@ class _ManageStorePageState extends State<ManageStorePage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 50),
                                 child: RaisedButton(
-                                  onPressed: ()=> addMenu(context),
+                                  onPressed: addMenu,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
@@ -282,6 +289,12 @@ class _ManageStorePageState extends State<ManageStorePage> {
                   ),
                 ),
               ),
+            ),
+          ),
+          Center(
+            child: Visibility(
+              visible: circular,
+              child: CircularProgressIndicator(),
             ),
           ),
         ],
