@@ -25,6 +25,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
   String url = '';
   String dates = '';
   String times = '';
+  String allpoint = '';
 
   getUrl() async {
     var s = await firestore.collection('users').document(userID);
@@ -67,6 +68,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
         "uid": userID,
         "userimg": url,
         "create_at": '$dates, $times',
+        "allpoint": allpoint,
       }).then((result) {
         print('success');
         Alert(
