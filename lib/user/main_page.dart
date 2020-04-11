@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
@@ -179,27 +180,15 @@ class _MainPageState extends State<MainPage> {
                         horizontal: 16.0,
                       ),
                       height: MediaQuery.of(context).size.height ,
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        children: <Widget>[
-                          store(
-                            img: 'assets/images/41.jpg',
-                            nameStore: 'Fire tiger',
-                          ),
-                          store(
-                            img: 'assets/images/42.jpg',
-                            nameStore: 'ชานม',
-                          ),
-                          store(
-                            img: 'assets/images/43.jpg',
-                            nameStore: 'ซูชิ',
-                          ),
-                          store(
-                            img: 'assets/images/44.jpg',
-                            nameStore: 'Odtomato',
-                          ),
-                        ],
-                      ),
+                      child: StreamBuilder(
+                        stream: Firestore.instance
+                          .collection('users').snapshots(),
+                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                            return Listview(
+
+                            )
+                        },
+                      )
                     ),
                     SizedBox(
                       height: 100.0,
@@ -323,5 +312,30 @@ Route _createRoute({screen}) {
         child: child,
       );
     },
+  );
+}
+
+
+Widget storelist (){
+  return  ListView(
+    scrollDirection: Axis.vertical,
+    children: <Widget>[
+      store(
+        img: 'assets/images/41.jpg',
+        nameStore: 'Fire tiger',
+      ),
+      store(
+        img: 'assets/images/42.jpg',
+        nameStore: 'ชานม',
+      ),
+      store(
+        img: 'assets/images/43.jpg',
+        nameStore: 'ซูชิ',
+      ),
+      store(
+        img: 'assets/images/44.jpg',
+        nameStore: 'Odtomato',
+      ),
+    ],
   );
 }
