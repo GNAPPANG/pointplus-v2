@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 final mali = 'Mali';
 
@@ -9,6 +10,17 @@ class TransferPoint extends StatefulWidget {
 }
 
 class _TransferPointState extends State<TransferPoint> {
+  String url = '';
+  getUrl() async {
+    var s = await firestore.collection('users').document(userID);
+    s.get().then((doc) {
+      print('url: ' + doc['proFile']);
+      setState(() {
+        url = doc['proFile'].toString();
+        debugPrint('url2: $url');
+      });
+    });
+  }
   profile(){
     Navigator.of(context).push(_createRoute(screen: ProfileUser()));
   }
@@ -22,8 +34,8 @@ class _TransferPointState extends State<TransferPoint> {
             GestureDetector(
               onTap: profile,
               child: Icon(
-                Icons.account_circle,
-                size: 45,
+                Icons.center_focus_weak,
+                size: 38,
                 color: Colors.white,
               ),
             ),
@@ -57,19 +69,12 @@ class _TransferPointState extends State<TransferPoint> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.fill,
-                                    image: AssetImage('assets/images/pup.jpg'),
+                                    image: AssetImage('assets/images/upload.png'),
                                   ))),
                           SizedBox(
                             height: 8.0,
                           ),
-                          Text(
-                            'ID : U45386',
-                            style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: 18.0,
-                              fontFamily: 'mali',
-                            ),
-                          ),
+
                           SizedBox(
                             height: 16.0,
                           ),
@@ -144,21 +149,7 @@ class _TransferPointState extends State<TransferPoint> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 16.0,
-                          ),
-                          Text(
-                            'แต้มคงเหลือของฉัน',
-                            style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: 22.0,
-                              fontFamily: 'mali',
-                            ),
-                          ),
-                          Image.asset(
-                            'assets/images/star.png',
-                            width: 160.0,
-                          ),
+
                         ],
                       ),
                     ),
@@ -192,4 +183,14 @@ Route _createRoute({screen}) {
       );
     },
   );
+}
+
+Future _scan() async {
+  String barcode = await scanner.scan();
+//    this._outputController.text = barcode;
+  setState(() {
+    userID = barcode.toString();
+  });
+  getUrl();
+}
 }

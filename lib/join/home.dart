@@ -7,6 +7,7 @@ import '../user/qr_code.dart';
 import '../user/main_page.dart';
 import '../user/my_point.dart';
 import '../user/notification_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 final mali = 'Mali';
 
@@ -78,7 +79,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                  Icons.center_focus_weak,
+                  FontAwesomeIcons.qrcode,
                   size: 35,
                   color: Colors.black54
               ),
