@@ -86,6 +86,35 @@ class _RestorePageState extends State<RestorePage> {
       uploadImage(context);
       if (password == conpassword) {
         print('ok');
+
+
+
+
+        _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((currentUser) => Firestore.instance
+            .collection('store')
+            .document(currentUser.user.uid)
+            .setData({
+          'email': email,
+          'namestore': namestore,
+          'phone': phone,
+          'address': address,
+          'open': storeOpen,
+          'close': storeClose,
+          'role': 'store',
+          'uid': currentUser.user.uid,
+        }).then((user) {
+          print('user ok $currentUser');
+          uploadImage(context);
+
+        }).catchError((e) {
+          print('profile $e');
+        }));
+
+        //----------------------------------------------------------------------
+
+
         _auth
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((currentUser) => Firestore.instance
@@ -110,6 +139,8 @@ class _RestorePageState extends State<RestorePage> {
                 }).catchError((e) {
                   print('profile $e');
                 }));
+
+
       } else {
         print('password not match');
       }
@@ -129,79 +160,6 @@ class _RestorePageState extends State<RestorePage> {
       },
     );
   }
-
-//  _province() {
-//    showModalBottomSheet(
-//        context: context,
-//        builder: (BuildContext builder) {
-//          return Container(
-//            color: Colors.white,
-//              height: MediaQuery.of(context).copyWith().size.height / 3,
-//              child: Column(
-//                children: <Widget>[
-//                  Row(
-//                    mainAxisAlignment: MainAxisAlignment.end,
-//                    children: <Widget>[
-//                      Padding(
-//                        padding: const EdgeInsets.only(
-//                          right: 20,
-//                          top: 20,
-//                        ),
-//                        child: InkWell(
-//                          onTap: () {
-//                            print('done');
-//                            // ดึงวันที่ใส่ใน textformfield
-//
-//                            Navigator.pop(context);
-//                          },
-//                          child: Text(
-//                            'เสร็จสิ้น',
-//                            style: TextStyle(
-//                              fontFamily: mali,
-//                              color: Colors.blue,
-//                            ),
-//                          ),
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                  Expanded(
-//                    child: CupertinoPicker(
-//
-//                      backgroundColor: Colors.white,
-//                      onSelectedItemChanged: (val) {
-//                        //Navigator.of(context).pop();
-//                      },
-//                      itemExtent: 35,
-//
-//                      children: <Widget>[
-//                        Text("กรุงเทพ"),
-//                        Text("กาญจนบุรี"),
-//                        Text("สมุทรสาคร"),
-//                        Text("กรุงเทพ"),
-//                        Text("กาญจนบุรี"),
-//                        Text("กรุงเทพ"),
-//                        Text("กาญจนบุรี"),
-//                        Text("สมุทรสาคร"),
-//                        Text("กรุงเทพ"),
-//                        Text("กาญจนบุรี"),
-//                        Text("กรุงเทพ"),
-//                        Text("กาญจนบุรี"),
-//                        Text("สมุทรสาคร"),
-//                        Text("กรุงเทพ"),
-//                        Text("กาญจนบุรี"),
-//                      ],
-//                    ),
-//                  ),
-//                ],
-//              ));
-//        });
-//  }
-
-//  Future _register() {
-//    print('register');
-//    if (_formKey.currentState.validate()) {}
-//  }
 
   @override
   Widget build(BuildContext context) {

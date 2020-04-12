@@ -13,10 +13,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Firestore firestore  = Firestore.instance;
 
   profile(){
     Navigator.of(context).push(_createRoute(screen: ProfileUser()));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +178,12 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
                     ),
+                    RaisedButton(
+                      onPressed: (){
+                        // todo
+                      },
+                      child: Text('aaa'),
+                    ),
                     Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16.0,
@@ -182,11 +191,15 @@ class _MainPageState extends State<MainPage> {
                       height: MediaQuery.of(context).size.height ,
                       child: StreamBuilder(
                         stream: Firestore.instance
-                          .collection('users').snapshots(),
-                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                            return Listview(
+                          .collection('users').document('8lZ7DSADnWV78SUetdpWs3Doxp93').snapshots(),
+                        builder: (context, snappshot){
+                           if(!snappshot.hasData){
+                              return Text('loading data...');
+                           }
 
-                            )
+                           return Text(
+                             snappshot.data['namestore'].toString()
+                           );
                         },
                       )
                     ),
