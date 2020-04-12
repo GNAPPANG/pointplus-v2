@@ -72,17 +72,6 @@ class _ProfileUserState extends State<ProfileUser> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainPage(),
-              ),
-            );
-          },
-        ),
         title: Text(
           'โปรไฟล์ผู้ใช้',
           style: TextStyle(
@@ -90,6 +79,7 @@ class _ProfileUserState extends State<ProfileUser> {
             color: Colors.white,
           ),
         ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Center(

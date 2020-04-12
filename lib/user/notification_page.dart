@@ -18,23 +18,9 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            Expanded(
-                child: Text(
-              'หน้าแรก',
-              style: TextStyle(fontFamily: mali),
-              textAlign: TextAlign.center,
-            )),
-            GestureDetector(
-              onTap: profile,
-              child: Icon(
-                Icons.account_circle,
-                size: 45,
-                color: Colors.white,
-              ),
-            ),
-          ],
+        title:
+        Text('แจ้งเตือน',
+          style: TextStyle(fontFamily: mali),
         ),
         centerTitle: true,
         backgroundColor: Colors.redAccent,

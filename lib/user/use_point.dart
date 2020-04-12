@@ -14,17 +14,6 @@ class _UsePointState extends State<UsePoint> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Point(),
-              ),
-            );
-          },
-        ),
         title: Text(
           'ชื่อร้านค้า',
           style: TextStyle(

@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:point_plus_v2/user/profile_user.dart';
 import 'package:point_plus_v2/user/transfer_point.dart';
 import '../user/qr_code.dart';
 import '../user/main_page.dart';
@@ -24,8 +25,8 @@ class _HomePageState extends State<HomePage> {
     MainPage(),
     MyPoint(),
     QrCode(),
-    TransferPoint(),
     NotificationPage(),
+    ProfileUser(),
   ];
 
   @override
@@ -98,12 +99,12 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                  Icons.forward,
+                  Icons.textsms,
                   size: 35,
                   color: Colors.black54
               ),
               Text(
-                  'โอนแต้ม',
+                'แจ้งเตือน',
                 style: TextStyle(
                   fontFamily: mali,
                   fontSize: 10.0,
@@ -117,21 +118,22 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                  Icons.textsms,
+                  Icons.account_circle,
                   size: 35,
                   color: Colors.black54
               ),
               Text(
-                  'แจ้งเตือน',
+                  'โปรไฟล์',
                 style: TextStyle(
-                fontFamily: mali,
-                fontSize: 10.0,
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
-              ),
+                  fontFamily: mali,
+                  fontSize: 10.0,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
+
         ],
         onTap: (int index) {
           debugPrint("CurrentIndex is $index");

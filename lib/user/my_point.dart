@@ -18,20 +18,12 @@ class _MyPointState extends State<MyPoint> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            Expanded(child: Text('แต้มของฉัน', style: TextStyle(fontFamily: mali), textAlign: TextAlign.center,)),
-            GestureDetector(
-              onTap: profile,
-              child: Icon(
-                Icons.account_circle,
-                size: 45,
-                color: Colors.white,
-              ),
-            ),
-          ],
+        title:
+        Text('แต้มของฉัน',
+          style: TextStyle(fontFamily: mali),
         ),
         centerTitle: true,
+
         backgroundColor: Colors.redAccent,
       ),
       body: Stack(
