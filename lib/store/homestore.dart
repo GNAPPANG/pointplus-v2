@@ -7,6 +7,7 @@ import 'package:point_plus_v2/store/scan_store.dart';
 import 'history_store.dart';
 import 'main_store.dart';
 import 'noti_store.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 final mali = 'Mali';
 
