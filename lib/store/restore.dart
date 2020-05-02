@@ -104,6 +104,7 @@ class _RestorePageState extends State<RestorePage> {
           'close': storeClose,
           'role': 'store',
           'uid': currentUser.user.uid,
+          'status': 'p',
         }).then((user) {
           print('user ok $currentUser');
           uploadImage(context);
@@ -129,6 +130,7 @@ class _RestorePageState extends State<RestorePage> {
                   'close': storeClose,
                   'role': 'store',
                   'uid': currentUser.user.uid,
+                   'status': 'p',
                 }).then((user) {
                   print('user ok $currentUser');
                   uploadImage(context);

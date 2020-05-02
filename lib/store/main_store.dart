@@ -49,91 +49,97 @@ class _MainStorePageState extends State<MainStorePage> {
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-
-              StreamBuilder(
-                stream: Firestore.instance
-                    .collection('users')
-                    .document(userID)
-                    .snapshots(),
-                builder: (context, sn) {
-                  if (!sn.hasData) {
-                    return Visibility(
-                      visible: true,
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  return Column(
-                    children: <Widget>[
-                      SizedBox(height: 20),
-                      imgPro(img: sn.data['proFile']),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: manageStore,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.add_circle_outline,
-                              color: Colors.black54,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'จัดการเมนูร้าน',
-                              style: TextStyle(
-                                fontFamily: mali,
-                                fontSize: 20,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        padding: const EdgeInsets.all(20.0),
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: Firestore.instance
-                              .collection("users")
-                              .document(userID)
-                              .collection('products')
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasError)
-                              return new Text('Error: ${snapshot.error}');
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.waiting:
-                                return Center(child: new Text('Loading...'));
-                              default:
-                                return new ListView(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  children: snapshot.data.documents
-                                      .map((DocumentSnapshot document) {
-                                    return store(
-                                      img: document['productImgUrl'].toString(),
-                                      product: document['product'].toString(),
-                                      price: document['price'].toString(),
-                                    );
-                                  }).toList(),
-                                );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+      body: Scaffold(
+        appBar: AppBar(
+          title: Text('asd'),
+        ),),
+      );
+//
+//      SafeArea(
+//        child: SingleChildScrollView(
+//          child: Column(
+//            children: <Widget>[
+//
+//              StreamBuilder(
+//                stream: Firestore.instance
+//                    .collection('users')
+//                    .document(userID)
+//                    .snapshots(),
+//                builder: (context, sn) {
+//                  if (!sn.hasData) {
+//                    return Visibility(
+//                      visible: true,
+//                      child: CircularProgressIndicator(),
+//                    );
+//                  }
+//
+//                  return Column(
+//                    children: <Widget>[
+//                      SizedBox(height: 20),
+//                      imgPro(img: sn.data['proFile']),
+//                      SizedBox(height: 20),
+//                      GestureDetector(
+//                        onTap: manageStore,
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.center,
+//                          children: <Widget>[
+//                            Icon(
+//                              Icons.add_circle_outline,
+//                              color: Colors.black54,
+//                            ),
+//                            SizedBox(width: 10),
+//                            Text(
+//                              'จัดการเมนูร้าน',
+//                              style: TextStyle(
+//                                fontFamily: mali,
+//                                fontSize: 20,
+//                              ),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                      SizedBox(height: 20),
+//                      Container(
+//                        padding: const EdgeInsets.all(20.0),
+//                        child: StreamBuilder<QuerySnapshot>(
+//                          stream: Firestore.instance
+//                              .collection("store")
+//                              .document(userID)
+//                              .collection('products')
+//                              .snapshots(),
+//                          builder: (BuildContext context,
+//                              AsyncSnapshot<QuerySnapshot> snapshot) {
+//                            if (snapshot.hasError)
+//                              return new Text('Error: ${snapshot.error}');
+//                            switch (snapshot.connectionState) {
+//                              case ConnectionState.waiting:
+//                                return Center(child: new Text('Loading...'));
+//                              default:
+//                                return new ListView(
+//                                  physics: const AlwaysScrollableScrollPhysics(),
+//                                  shrinkWrap: true,
+//                                  children: snapshot.data.documents
+//                                      .map((DocumentSnapshot document) {
+//                                    return store(
+//                                      img: document['productImgUrl'].toString(),
+//                                      product: document['product'].toString(),
+//                                      price: document['price'].toString(),
+//                                    );
+//                                  }).toList(),
+//                                );
+//                            }
+//                          },
+//                        ),
+//                      ),
+//                    ],
+//                  );
+//                },
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+ //   );
   }
 
   Widget imgPro({img}) {

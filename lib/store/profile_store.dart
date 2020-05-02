@@ -81,13 +81,15 @@ class _ProfileStorePageState extends State<ProfileStorePage> {
         child: SingleChildScrollView(
           child: StreamBuilder(
             stream: Firestore.instance
-                .collection('users').document(userID)
+                .collection('store').document(userID)
                 .snapshots(),
             builder: (context, sn) {
               if (!sn.hasData) {
                 return Visibility(
                   visible: true,
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.purple,
+                  ),
                 );
               }
 

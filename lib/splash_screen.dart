@@ -11,29 +11,86 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    FirebaseAuth.instance.currentUser().then((user) => {
-          if (user == null)
-            {Navigator.pushReplacementNamed(context, '/login')}
-          else
-            {
-              FirebaseAuth.instance.currentUser().then((user) {
-                Firestore.instance
+    FirebaseAuth.instance.currentUser().then((user)  {
+      print('user: $user');
+      if(user == null){
+        Navigator.pushReplacementNamed(context, '/login');
+      }else{
+        print('user: $user');
+        FirebaseAuth.instance.currentUser().then((user){
+          var role;
+          Firestore.instance
                     .collection('users')
                     .where('uid', isEqualTo: user.uid)
                     .getDocuments()
                     .then((doc) {
-                  if (doc.documents[0].exists) {
-                    if (doc.documents[0].data['role'] == 'user') {
-                      Navigator.pushReplacementNamed(context, '/user');
+                  if (doc.documents [0].exists) {
+                    if (doc.documents[0].data['role'] == 'store') {
+                      setState(()=> role = 'store' );
                     } else {
-                      Navigator.pushReplacementNamed(context, '/store');
+                      setState(()=> role = 'user' );
                     }
                   }
                 });
-              })
 
-            }
+          if(role == 'store'){
+            Firestore.instance
+                .collection('store')
+                .where('uid', isEqualTo: user.uid)
+                .getDocuments()
+                .then((doc) {
+              if (doc.documents [0].exists) {
+                if (doc.documents[0].data['role'] == 'store') {
+                  Navigator.pushReplacementNamed(context, '/store');
+                }
+              }
+            });
+          }else{
+            Firestore.instance
+                .collection('users')
+                .where('uid', isEqualTo: user.uid)
+                .getDocuments()
+                .then((doc) {
+              if (doc.documents [0].exists) {
+                if (doc.documents[0].data['role'] == 'user') {
+                  Navigator.pushReplacementNamed(context, '/user');
+                } else {
+                  setState(()=> role = 'user' );
+                }
+              }
+            });
+          }
+
+
+
+
         });
+      }
+    });
+//    FirebaseAuth.instance.currentUser().then((user) => {
+//      print('user: $user')
+////          if (user == null)
+////            {Navigator.pushReplacementNamed(context, '/login')}
+////          else
+////            {
+////              FirebaseAuth.instance.currentUser().then((user) {
+////                Firestore.instance
+////                    .collection('users')
+////                    .where('uid', isEqualTo: user.uid)
+////                    .getDocuments()
+////                    .then((doc) {
+////                  if (doc.documents [0].exists) {
+////                    if (doc.documents[0].data['role'] == 'user') {
+////                      Navigator.pushReplacementNamed(context, '/user');
+////                    } else {
+////                      Navigator.pushReplacementNamed(context, '/store');
+////                    }
+////                  }
+////                });
+////              })
+////
+////            }
+//        });
 
     super.initState();
   }
@@ -45,7 +102,10 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Center(
         child: Visibility(
           visible: true,
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.purple,
+            strokeWidth: 5.0,
+          ),
         ),
       ),
     );

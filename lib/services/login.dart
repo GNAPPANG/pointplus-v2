@@ -34,5 +34,23 @@ class Login {
         }
       });
     });
+
+    _auth.currentUser().then((user) {
+      Firestore.instance
+          .collection('store')
+          .where('uid', isEqualTo: user.uid)
+          .getDocuments()
+          .then((doc) {
+        if (doc.documents[0].exists) {
+          if (doc.documents[0].data['role'] == 'user') {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePage()));
+          } else {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomestorePage()));
+          }
+        }
+      });
+    });
   }
 }

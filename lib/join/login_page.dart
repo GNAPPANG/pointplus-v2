@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   Login login = new Login();
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool load = false;
+
   signIn(){
     setState(() {
       load = true;
