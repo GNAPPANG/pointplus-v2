@@ -6,6 +6,9 @@ import 'package:point_plus_v2/user/use_point.dart';
 final mali = 'Mali';
 
 class Point extends StatefulWidget {
+  Point({this.storeID});
+
+  final String storeID;
   @override
   _PointState createState() => _PointState();
 }
@@ -115,7 +118,7 @@ class _PointState extends State<Point> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => TransferPoint(),
+                                builder: (context) => TransferPoint(storeID: widget.storeID),
                               ),
                             );
                           },

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:point_plus_v2/user/point.dart';
 import 'package:point_plus_v2/user/profile_user.dart';
 import 'package:point_plus_v2/user/search_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final mali = 'Mali';
 
@@ -11,9 +13,29 @@ class MyPoint extends StatefulWidget {
 }
 
 class _MyPointState extends State<MyPoint> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  Firestore firestore = Firestore.instance;
+  String userID = '';
+
+  inputData() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid.toString();
+    print(uid);
+    setState(() {
+      userID = uid.toString();
+    });
+  }
+
   profile(){
     Navigator.of(context).push(_createRoute(screen: ProfileUser()));
   }
+
+  @override
+  initState() {
+    super.initState();
+    inputData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,70 +48,109 @@ class _MyPointState extends State<MyPoint> {
 
         backgroundColor: Colors.redAccent,
       ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topCenter,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 20.0,
-                      ),
-                      Image.asset(
-                        'assets/images/04.jpg',
-                        width: 100.0,
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                      ),
-                      Expanded(
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Point(),
-                              ),
-                            );
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+      body: ListPage(userID: userID),
+    );
+  }
+}
+
+class ListPage extends StatefulWidget {
+  ListPage({this.userID});
+
+  final String userID;
+  @override
+  _ListPageState createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
+
+  Future getPoints() async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore.collection('users').document(widget.userID).collection('stores').getDocuments();
+    return qn.documents;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: FutureBuilder(
+        future: getPoints(), 
+        builder: (_, snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Text('Loading...')
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (_, index){
+                return Card(
+                  child: InkWell(
+                    onTap: () {
+                      print('tapped');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 20.0,
                           ),
-                          child: Text(
-                            'Coffee Time',
-                            style: TextStyle(
-                              fontFamily: mali,
-                              fontSize: 12.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                          Image.network(
+                            snapshot.data[index].data['store_photo_url'],
+                            width: 100.0,
+                          ),
+                          SizedBox(
+                            width: 20.0,
+                          ),
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Point(storeID: snapshot.data[index].data['store_id']),
+                                  ),
+                                );
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                snapshot.data[index].data['store_name'],
+                                style: TextStyle(
+                                  fontFamily: mali,
+                                  fontSize: 12.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10.0,
+                              ),
+                              color: Colors.redAccent,
+                              elevation: 3.0,
                             ),
                           ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 10.0,
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              snapshot.data[index].data['store_points'].toString() + ' คะแนน',
+                              style: TextStyle(
+                                fontFamily: mali,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                          color: Colors.redAccent,
-                          elevation: 3.0,
-                        ),
+                        ],
                       ),
-                      Image.asset(
-                        'assets/images/star.png',
-                        width: 100.0,
-                      ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+                );
+              });
+          }
+      }),
+    ); 
   }
 }
 

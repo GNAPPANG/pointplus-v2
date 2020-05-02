@@ -26,6 +26,23 @@ class _ScanStorePageState extends State<ScanStorePage> {
   String dates = '';
   String times = '';
   String allpoint = '';
+  String storeID = '';
+  String storeName = '';
+  String storePhotoUrl = '';
+  int currentStorePoints = 0;
+
+  storeData() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid.toString();
+    var s = await firestore.collection('users').document(uid);
+    s.get().then((doc) {
+      setState(() {
+        storeID = doc['uid'];
+        storeName = doc['namestore'];
+        storePhotoUrl = doc['proFile'];
+      });
+    });
+  }
 
   getUrl() async {
     var s = await firestore.collection('users').document(userID);
@@ -34,6 +51,15 @@ class _ScanStorePageState extends State<ScanStorePage> {
       setState(() {
         url = doc['proFile'].toString();
         debugPrint('url2: $url');
+      });
+    });
+  }
+
+  getCurrentPoint() async {
+    var s = await firestore.collection('users').document(userID).collection('stores').document(storeID);
+    s.get().then((doc) {
+      setState(() {
+        currentStorePoints = doc['store_points'];
       });
     });
   }
@@ -62,13 +88,13 @@ class _ScanStorePageState extends State<ScanStorePage> {
       Firestore.instance
           .collection("users")
           .document(userID)
-          .collection('point')
-          .add({
-        "point": p,
-        "uid": userID,
-        "userimg": url,
-        "create_at": '$dates, $times',
-        "allpoint": allpoint,
+          .collection('stores')
+          .document(storeID)
+          .setData({
+        "store_id": storeID,
+        "store_name": storeName,
+        "store_photo_url": storePhotoUrl,
+        "store_points": currentStorePoints + 1,
       }).then((result) {
         print('success');
         Alert(
@@ -98,6 +124,7 @@ class _ScanStorePageState extends State<ScanStorePage> {
 
   @override
   initState() {
+    storeData();
     super.initState();
     _scan();
   }
@@ -155,5 +182,6 @@ class _ScanStorePageState extends State<ScanStorePage> {
       userID = barcode.toString();
     });
     getUrl();
+    getCurrentPoint();
   }
 }
