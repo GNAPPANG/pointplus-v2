@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "597802565774",
+    "firebase_url": "https://point-plus-65a13.firebaseio.com",
+    "project_id": "point-plus-65a13",
+    "storage_bucket": "point-plus-65a13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597802565774:android:550bffbb5050796a23c9df",
+        "android_client_info": {
+          "package_name": "th.ac.sau.peepangdream.point_plus_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597802565774-43m08afh5f8use0norabqnfpfmo5d7v8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8uPCo4DemEaoSUTBxjFGTS19BqUPE6kU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597802565774-43m08afh5f8use0norabqnfpfmo5d7v8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
