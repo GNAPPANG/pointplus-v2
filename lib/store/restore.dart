@@ -113,6 +113,7 @@ class _RestorePageState extends State<RestorePage> {
             'close': storeClose,
             'role': 'store',
             'uid': currentUser.user.uid,
+            'status' : 'p',
           }).then((value) {
             Firestore.instance
                 .collection('accounts')
