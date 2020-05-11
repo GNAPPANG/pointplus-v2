@@ -648,28 +648,28 @@ class _RestorePageState extends State<RestorePage> {
                               ),
                             ),
                             SizedBox(width: 16.0),
-                            Expanded(
-                              child: RaisedButton(
-                                onPressed: () {},
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Text(
-                                  'ยกเลิก',
-                                  style: TextStyle(
-                                    fontFamily: mali,
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 10.0,
-                                ),
-                                color: Colors.redAccent,
-                                elevation: 3.0,
-                              ),
-                            ),
+//                            Expanded(
+//                              child: RaisedButton(
+//                                onPressed: () {},
+//                                shape: RoundedRectangleBorder(
+//                                  borderRadius: BorderRadius.circular(10.0),
+//                                ),
+//                                child: Text(
+//                                  'ยกเลิก',
+//                                  style: TextStyle(
+//                                    fontFamily: mali,
+//                                    fontSize: 14.0,
+//                                    color: Colors.white,
+//                                    fontWeight: FontWeight.bold,
+//                                  ),
+//                                ),
+//                                padding: EdgeInsets.symmetric(
+//                                  vertical: 10.0,
+//                                ),
+//                                color: Colors.redAccent,
+//                                elevation: 3.0,
+//                              ),
+//                            ),
                           ],
                         ),
                       ),
