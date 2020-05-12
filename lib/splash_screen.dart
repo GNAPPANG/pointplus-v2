@@ -9,6 +9,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  get data => null;
   @override
   void initState() {
     FirebaseAuth.instance.currentUser().then((user) => {
@@ -25,8 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   if (doc.documents[0].exists) {
                     if (doc.documents[0].data['role'] == 'user') {
                       Navigator.pushReplacementNamed(context, '/user');
+                    }else if (doc.documents[0].data['status'] == 'a' && data['role'] == 'store'){
+                      Navigator.pushReplacementNamed(context,'/store');
                     } else {
-                      Navigator.pushReplacementNamed(context, '/store');
+                      final snackBar = SnackBar(
+                        content: Text('ไม่สามารถเข้าสู้ระบบได้'),
+                      );
+                      _scaffoldKey.currentState.showSnackBar(snackBar);
                     }
                   }
                 });

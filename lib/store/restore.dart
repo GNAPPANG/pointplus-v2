@@ -67,7 +67,7 @@ class _RestorePageState extends State<RestorePage> {
           .child('/stores/$uid/imageProfile/${fileName.toString()}');
       StorageUploadTask uploadTask = ref.putFile(_image);
       var downloadUrl =
-          await (await uploadTask.onComplete).ref.getDownloadURL();
+      await (await uploadTask.onComplete).ref.getDownloadURL();
       var url = downloadUrl.toString();
       imgUrl = url.toString();
       print('upload image success');
@@ -139,7 +139,7 @@ class _RestorePageState extends State<RestorePage> {
         });
         print('profile $e');
       });
-      
+
 
     }
   }
@@ -212,9 +212,9 @@ class _RestorePageState extends State<RestorePage> {
                                   height: 180.0,
                                   child: (_image != null)
                                       ? Image.file(
-                                          _image,
-                                          fit: BoxFit.fill,
-                                        )
+                                    _image,
+                                    fit: BoxFit.fill,
+                                  )
                                       : Image.asset('assets/images/upload.png'),
                                 ),
                               ),
@@ -452,19 +452,19 @@ class _RestorePageState extends State<RestorePage> {
                                     builder: (BuildContext builder) {
                                       return Container(
                                           height: MediaQuery.of(context)
-                                                  .copyWith()
-                                                  .size
-                                                  .height /
+                                              .copyWith()
+                                              .size
+                                              .height /
                                               3,
                                           child: Column(
                                             children: <Widget>[
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                                 children: <Widget>[
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
+                                                    const EdgeInsets.only(
                                                       right: 20,
                                                       top: 20,
                                                     ),
@@ -472,8 +472,8 @@ class _RestorePageState extends State<RestorePage> {
                                                       onTap: () {
                                                         setState(() {
                                                           storeOpen = (initialtimer
-                                                                      .inHours)
-                                                                  .toString() +
+                                                              .inHours)
+                                                              .toString() +
                                                               ':' +
                                                               initialtimer
                                                                   .inMinutes
@@ -531,19 +531,19 @@ class _RestorePageState extends State<RestorePage> {
                                     builder: (BuildContext builder) {
                                       return Container(
                                           height: MediaQuery.of(context)
-                                                  .copyWith()
-                                                  .size
-                                                  .height /
+                                              .copyWith()
+                                              .size
+                                              .height /
                                               3,
                                           child: Column(
                                             children: <Widget>[
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                MainAxisAlignment.end,
                                                 children: <Widget>[
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
+                                                    const EdgeInsets.only(
                                                       right: 20,
                                                       top: 20,
                                                     ),
@@ -553,8 +553,8 @@ class _RestorePageState extends State<RestorePage> {
 
                                                         setState(() {
                                                           storeClose = (initialtimer
-                                                                      .inHours)
-                                                                  .toString() +
+                                                              .inHours)
+                                                              .toString() +
                                                               ':' +
                                                               initialtimer
                                                                   .inMinutes
@@ -629,20 +629,20 @@ class _RestorePageState extends State<RestorePage> {
                                 ),
                                 child: !isLoading
                                     ? Text(
-                                        'สมัครสมาชิก',
-                                        style: TextStyle(
-                                          fontFamily: mali,
-                                          fontSize: 14.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
+                                  'สมัครสมาชิก',
+                                  style: TextStyle(
+                                    fontFamily: mali,
+                                    fontSize: 14.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
                                     : Padding(
-                                        padding: const EdgeInsets.all(5),
-                                        child: CircularProgressIndicator(
-                                          backgroundColor: Colors.white,
-                                        ),
-                                      ),
+                                  padding: const EdgeInsets.all(5),
+                                  child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ),
                                 padding: EdgeInsets.symmetric(
                                   vertical: 10.0,
                                 ),
