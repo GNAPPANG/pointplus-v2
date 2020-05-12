@@ -121,10 +121,11 @@ class _RestorePageState extends State<RestorePage> {
                 .setData({
               'role': 'store',
               'uid': currentUser.user.uid,
+              'status' : 'p',
             }).then((value) {
-              // setState(() {
-              //   isLoading = false;
-              // });
+//               setState(() {
+//                 isLoading = false;
+//               });
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => HomestorePage()),
@@ -138,6 +139,8 @@ class _RestorePageState extends State<RestorePage> {
         });
         print('profile $e');
       });
+      
+
     }
   }
 
