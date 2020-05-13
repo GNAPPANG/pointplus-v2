@@ -6,8 +6,8 @@ import 'package:point_plus_v2/join/category_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:point_plus_v2/services/new_update_info.dart';
-import 'package:point_plus_v2/store/homestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:path/path.dart';
 
@@ -80,9 +80,6 @@ class _RestorePageState extends State<RestorePage> {
   }
 
   signIn(BuildContext context) async {
-    if (!_formKey.currentState.validate()) {
-      return;
-    }
 
     String email = _emailCtrl.text;
     String password = _passwordCtrl.text;
@@ -91,11 +88,12 @@ class _RestorePageState extends State<RestorePage> {
     String phone = _phoneCtrl.text;
     String address = _addressCtrl.text;
 
-    if (password == conpassword) {
-      setState(() {
-        isLoading = true;
-      });
+    print('$email, $password, $conpassword, $namestore, $phone, $address');
 
+    if (password == conpassword) {
+        setState(() {
+          isLoading = true;
+        });
 
       _auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -111,63 +109,87 @@ class _RestorePageState extends State<RestorePage> {
         'close': storeClose,
         'role': 'store',
         'uid': currentUser.user.uid,
-        'status' : 'p',
-
+        'status' : 'p'
       }).then((value) {
-//               setState(() {
-//                 isLoading = false;
-//               });
+        Firestore.instance
+            .collection('accounts')
+            .document(currentUser.user.uid)
+            .setData({
+              'role': 'store',
+              'uid': currentUser.user.uid,
+              'status' : 'p'
+        });
 
       }).catchError((e) {
+        // alert register not success
         print('profile $e');
       }));
 
-      _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((currentUser) {
-        print('currentUser: ${currentUser.user}');
-        uploadImage(context, currentUser.user.uid).then((value) {
-          Firestore.instance
-              .collection('store')
-              .document(currentUser.user.uid)
-              .setData({
-            'proFile': imgUrl,
-            'email': email,
-            'namestore': namestore,
-            'phone': phone,
-            'address': address,
-            'open': storeOpen,
-            'close': storeClose,
-            'role': 'store',
-            'uid': currentUser.user.uid,
-            'status' : 'p',
-          }).then((value) {
-            Firestore.instance
-                .collection('accounts')
-                .document(currentUser.user.uid)
-                .setData({
-              'role': 'store',
-              'uid': currentUser.user.uid,
-              'status' : 'p',
-            }).then((value) {
-//               setState(() {
-//                 isLoading = false;
-//               });
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomestorePage()),
-                  ModalRoute.withName('/'));
-            });
-          });
-        });
-      }).catchError((e) {
-        setState(() {
-          isLoading = false;
-        });
-        print('profile $e');
-      });
-
-
+//      _auth
+//          .createUserWithEmailAndPassword(email: email, password: password)
+//          .then((currentUser) {
+//        print('currentUser: ${currentUser.user}');
+//        uploadImage(context, currentUser.user.uid).then((value) {
+//          Firestore.instance
+//              .collection('store')
+//              .document(currentUser.user.uid)
+//              .setData({
+//            'proFile': imgUrl,
+//            'email': email,
+//            'namestore': namestore,
+//            'phone': phone,
+//            'address': address,
+//            'open': storeOpen,
+//            'close': storeClose,
+//            'role': 'store',
+//            'uid': currentUser.user.uid,
+//            'status' : 'p',
+//          }).then((value) {
+//            Firestore.instance
+//                .collection('accounts')
+//                .document(currentUser.user.uid)
+//                .setData({
+//              'role': 'store',
+//              'uid': currentUser.user.uid,
+////              'status' : 'p',
+//            }).then((value) {
+////               setState(() {
+////                 isLoading = false;
+////               });
+//              Navigator.pushAndRemoveUntil(
+//                  context,
+//                  MaterialPageRoute(builder: (context) => HomestorePage()),
+//                  ModalRoute.withName('/'));
+//            });
+//          });
+//        });
+//      }).catchError((e) {
+//        setState(() {
+//          isLoading = false;
+//        });
+//        print('profile $e');
+//      });
+//
+//
+    }
+    else{
+      Alert(
+        context: context,
+        type: AlertType.warning,
+        title: "รหัสผ่านไม่ตรงกัน",
+        desc: "กรุณาแก้รหัสผ่านให้ตรกัน",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            color: Color.fromRGBO(0, 179, 134, 1.0),
+            radius: BorderRadius.circular(0.0),
+          ),
+        ],
+      ).show();
     }
   }
 

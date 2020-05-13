@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,38 +14,74 @@ class _SplashScreenState extends State<SplashScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   get data => null;
-  @override
-  void initState() {
-    FirebaseAuth.instance.currentUser().then((user) => {
-          if (user == null)
-            {Navigator.pushReplacementNamed(context, '/login')}
-          else
-            {
-              FirebaseAuth.instance.currentUser().then((user) {
-                Firestore.instance
-                    .collection('accounts')
-                    .where('uid', isEqualTo: user.uid)
-                    .getDocuments()
-                    .then((doc) {
-                  if (doc.documents[0].exists) {
-                    if (doc.documents[0].data['role'] == 'user') {
-                      Navigator.pushReplacementNamed(context, '/user');
-                    }else if (doc.documents[0].data['status'] == 'a' && data['role'] == 'store'){
-                      Navigator.pushReplacementNamed(context,'/store');
-                    } else {
-                      final snackBar = SnackBar(
-                        content: Text('ไม่สามารถเข้าสู้ระบบได้'),
-                      );
-                      _scaffoldKey.currentState.showSnackBar(snackBar);
-                    }
-                  }
-                });
-              })
 
+  checklogin() async {
+    FirebaseAuth.instance.currentUser().then((user) {
+      print('user: $user');
+
+//      if (user != null) {
+//        var u = user.uid;
+
+//        Firestore.instance
+//            .collection('accounts')
+//            .where('uid', isEqualTo: user.uid)
+//            .where('role', isEqualTo: 'store')
+//            .where('status', isEqualTo: 'a')
+//            .getDocuments()
+//            .then((value) {
+//              print('storesssss');
+//          Navigator.pushReplacementNamed(context, '/store');
+//        }).catchError((e){
+//            print('not improve');
+//        });
+
+
+//        if(
+//          Firestore.instance
+//            .collection('accounts')
+//            .where('uid', isEqualTo: user.uid)
+//            .where('role', isEqualTo: 'store')
+//            .where('status', isEqualTo: 'a')
+//            .
+//        ){
+//
+//        }
+//      } else {
+//        Navigator.pushReplacementNamed(context, '/login');
+//      }
+
+      if (user == null) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+      else {
+        FirebaseAuth.instance.currentUser().then((user) {
+          Firestore.instance
+              .collection('accounts')
+              .where('uid', isEqualTo: user.uid)
+              .getDocuments()
+              .then((doc) {
+            if (doc.documents[0].exists) {
+              if (doc.documents[0].data['role'] == 'user') {
+                Navigator.pushReplacementNamed(context, '/user');
+              } else {
+                if(doc.documents[0].data['status'] == 'a'){
+                  Navigator.pushReplacementNamed(context, '/store');
+                }
+                print('no approve');
+                Navigator.pushReplacementNamed(context, '/login');
+              }
             }
+          });
         });
 
+      }
+    });
+  }
+
+  @override
+  void initState() {
     super.initState();
+    checklogin();
   }
 
   @override

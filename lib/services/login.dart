@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:point_plus_v2/join/home.dart';
 import 'package:point_plus_v2/join/login_page.dart';
-import 'package:point_plus_v2/store/homestore.dart';
 
 class Login {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  singOut(BuildContext context) {
+  signOut(BuildContext context) {
     _auth.signOut();
     Navigator.pushAndRemoveUntil(
         context,
@@ -16,20 +14,32 @@ class Login {
         ModalRoute.withName('/'));
   }
 
-  singInAuth(BuildContext context) {
+  singInAuth(String userid, BuildContext context) {
+
+    print('login: $userid');
+
     _auth.currentUser().then((user) {
       Firestore.instance
           .collection('accounts')
-          .where('uid', isEqualTo: user.uid)
+          .where('uid', isEqualTo: userid)
           .getDocuments()
           .then((doc) {
         if (doc.documents[0].exists) {
+          var dd = doc.documents[0];
           if (doc.documents[0].data['role'] == 'user') {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.pushReplacementNamed(context, '/user');
           } else {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomestorePage()));
+            var st = doc.documents[0].data['status'];
+            if(st == 'a'){
+              print('appr: $st');
+              Navigator.pushReplacementNamed(context, '/store');
+            }
+            print('noappr: $st');
+            print('no approve');
+//            signOut(context);
+            // alert
+
+
           }
         }
       });

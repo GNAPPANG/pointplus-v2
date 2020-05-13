@@ -7,7 +7,6 @@ import 'package:point_plus_v2/store/homestore.dart';
 import 'category_page.dart';
 import 'forgot_password.dart';
 
-
 final kalam = 'Kalam';
 final mali = 'Mali';
 
@@ -17,55 +16,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   TextEditingController _usernameCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
   Login login = new Login();
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool load = false;
+
   signIn(){
-    setState(() {
-      load = true;
-    });
+    setState(()=>load=true);
     _auth.signInWithEmailAndPassword(
       email: _usernameCtrl.text.trim().toString(),
       password: _passwordCtrl.text.toString(),
-    ).then((user){
-
-      login.singInAuth(context);
-      print('ok');
+    ).then((u){
+      print('loginpage: ${u.user.uid}');
+      login.singInAuth(u.user.uid, context);
+      setState(()=>load=false);
     }).catchError((e){
       setState(() {
         load = false;
       });
-      print('fuck');
+      // input alert
+      print('invalid password');
       print(e);
     });
   }
 
-
-
-
   @override
   initState() {
-
-    _auth.currentUser().then((user) {
-      Firestore.instance
-          .collection('users')
-          .where('uid', isEqualTo: user.uid)
-          .getDocuments()
-          .then((doc) {
-        if (doc.documents[0].exists) {
-          if (doc.documents[0].data['role'] == 'user') {
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-          } else {
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (context) => HomestorePage()));
-          }
-        }
-      });
-    });
-
     super.initState();
   }
 
