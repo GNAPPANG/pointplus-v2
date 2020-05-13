@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/join/login_page.dart';
 import 'package:point_plus_v2/store/homestore.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Login {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -36,9 +37,26 @@ class Login {
               Navigator.pushReplacementNamed(context, '/store');
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomestorePage()));
             }else{
-              print('noappr: $st');
-              print('no approve');
+
               // alert no approve
+              Alert(
+                context: context,
+                type: AlertType.warning,
+                title: "เข้าสู่ระบบไม่สำเร็จ",
+                desc: "กรุณารอการอนุมัติจากระบบ",
+
+                buttons: [
+                  DialogButton(
+                    child: Text(
+                      "ตกลง",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    color: Color.fromRGBO(0, 179, 134, 1.0),
+                    radius: BorderRadius.circular(0.0),
+                  ),
+                ],
+              ).show();
             }
 
 

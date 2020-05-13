@@ -65,12 +65,12 @@ class _MainStorePageState extends State<MainStorePage> {
 //                      child: Text('Loading...'),
 //                    );
                   }
-                  // if (!sn.hasData) {
-                  //   return Visibility(
-                  //     visible: true,
-                  //     child: CircularProgressIndicator(),
-                  //   );
-                  // }
+                   if (!sn.hasData) {
+                     return Visibility(
+                       visible: true,
+                       child: CircularProgressIndicator(),
+                     );
+                   }
                   return Column(
                     children: <Widget>[
                       imgPro(img: sn.data['proFile']),

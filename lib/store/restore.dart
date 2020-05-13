@@ -13,6 +13,12 @@ import 'package:path/path.dart';
 
 final mali = 'Mali';
 final kalam = 'Kalam';
+AlertStyle _alertStyle = AlertStyle(
+  titleStyle: TextStyle(
+
+  ),
+
+);
 
 class RestorePage extends StatefulWidget {
   @override
@@ -119,6 +125,24 @@ class _RestorePageState extends State<RestorePage> {
               'uid': currentUser.user.uid,
               'status' : 'p'
         });
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: "เสร็จสิ้น",
+          desc: "กรุณารอการอนุมัติจากระบบ",
+
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Color.fromRGBO(0, 179, 134, 1.0),
+              radius: BorderRadius.circular(0.0),
+            ),
+          ],
+        ).show();
         // alert wait approve
         setState(()=> isLoading= false);
       }).catchError((e) {
@@ -136,6 +160,8 @@ class _RestorePageState extends State<RestorePage> {
         type: AlertType.warning,
         title: "รหัสผ่านไม่ตรงกัน",
         desc: "กรุณาแก้รหัสผ่านให้ตรกัน",
+        style: _alertStyle,
+
         buttons: [
           DialogButton(
             child: Text(

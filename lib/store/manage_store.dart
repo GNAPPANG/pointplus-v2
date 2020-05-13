@@ -213,8 +213,8 @@ class _ManageStorePageState extends State<ManageStorePage> {
                             shape: BoxShape.circle,
                           ),
                           child: SizedBox(
-                            width: 250,
-                            height: 250,
+                            width: 200,
+                            height: 160,
                             child: (_image != null)
                                 ? Image.file(
                                     _image,

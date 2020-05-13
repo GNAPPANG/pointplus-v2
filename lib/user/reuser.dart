@@ -13,6 +13,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:async';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 final mali = 'Mali';
 
@@ -154,6 +155,25 @@ class _ReuserPageState extends State<ReuserPage> {
         setState(() {
           isLoading = false;
         });
+        Alert(
+          context: context,
+          type: AlertType.warning,
+          title: "รหัสผ่านไม่ตรงกัน",
+          desc: "กรุณาแก้รหัสผ่านให้ตรกัน",
+
+
+          buttons: [
+            DialogButton(
+              child: Text(
+                "ตกลง",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              color: Color.fromRGBO(0, 179, 134, 1.0),
+              radius: BorderRadius.circular(0.0),
+            ),
+          ],
+        ).show();
         print('password not match');
       }
     }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:point_plus_v2/join/home.dart';
 import 'package:point_plus_v2/services/login.dart';
-import 'package:point_plus_v2/store/homestore.dart';
 import 'category_page.dart';
 import 'forgot_password.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 final kalam = 'Kalam';
 final mali = 'Mali';
@@ -38,6 +37,23 @@ class _LoginPageState extends State<LoginPage> {
         load = false;
       });
       // input alert pass error
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "รหัสผ่านไม่ถูกต้อง",
+        desc: "กรุณาแก้ไจรหัสผ่านให้ถุกต้อง",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "ตกลง",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            color: Color.fromRGBO(0, 179, 134, 1.0),
+            radius: BorderRadius.circular(0.0),
+          ),
+        ],
+      ).show();
       print('invalid password');
       print(e);
     });
