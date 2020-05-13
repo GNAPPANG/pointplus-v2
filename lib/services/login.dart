@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:point_plus_v2/join/login_page.dart';
+import 'package:point_plus_v2/store/homestore.dart';
 
 class Login {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,6 +16,7 @@ class Login {
   }
 
   singInAuth(String userid, BuildContext context) {
+
     print('login: $userid');
 
     _auth.currentUser().then((user) {
@@ -32,10 +34,11 @@ class Login {
             if (st == 'a') {
               print('appr: $st');
               Navigator.pushReplacementNamed(context, '/store');
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomestorePage()));
             }else{
               print('noappr: $st');
               print('no approve');
-              // alert
+              // alert no approve
             }
 
 

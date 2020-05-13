@@ -57,13 +57,13 @@ class _MainStorePageState extends State<MainStorePage> {
                     .snapshots(),
                 builder: (context, sn) {
                   if (sn.connectionState == ConnectionState.waiting) {
-                    // return Visibility(
-                    //   visible: true,
-                    //   child: CircularProgressIndicator(),
-                    // );
-                    return Center(
-                      child: Text('Loading...'),
-                    );
+//                     return Visibility(
+//                       visible: true,
+//                       child: CircularProgressIndicator(),
+//                     );
+//                    return Center(
+//                      child: Text('Loading...'),
+//                    );
                   }
                   // if (!sn.hasData) {
                   //   return Visibility(

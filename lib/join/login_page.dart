@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         load = false;
       });
-      // input alert
+      // input alert pass error
       print('invalid password');
       print(e);
     });

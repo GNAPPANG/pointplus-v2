@@ -119,60 +119,18 @@ class _RestorePageState extends State<RestorePage> {
               'uid': currentUser.user.uid,
               'status' : 'p'
         });
-
+        // alert wait approve
+        setState(()=> isLoading= false);
       }).catchError((e) {
         // alert register not success
+        setState(()=> isLoading= false);
         print('profile $e');
       }));
 
-//      _auth
-//          .createUserWithEmailAndPassword(email: email, password: password)
-//          .then((currentUser) {
-//        print('currentUser: ${currentUser.user}');
-//        uploadImage(context, currentUser.user.uid).then((value) {
-//          Firestore.instance
-//              .collection('store')
-//              .document(currentUser.user.uid)
-//              .setData({
-//            'proFile': imgUrl,
-//            'email': email,
-//            'namestore': namestore,
-//            'phone': phone,
-//            'address': address,
-//            'open': storeOpen,
-//            'close': storeClose,
-//            'role': 'store',
-//            'uid': currentUser.user.uid,
-//            'status' : 'p',
-//          }).then((value) {
-//            Firestore.instance
-//                .collection('accounts')
-//                .document(currentUser.user.uid)
-//                .setData({
-//              'role': 'store',
-//              'uid': currentUser.user.uid,
-////              'status' : 'p',
-//            }).then((value) {
-////               setState(() {
-////                 isLoading = false;
-////               });
-//              Navigator.pushAndRemoveUntil(
-//                  context,
-//                  MaterialPageRoute(builder: (context) => HomestorePage()),
-//                  ModalRoute.withName('/'));
-//            });
-//          });
-//        });
-//      }).catchError((e) {
-//        setState(() {
-//          isLoading = false;
-//        });
-//        print('profile $e');
-//      });
-//
-//
+
     }
     else{
+      setState(()=> isLoading= false);
       Alert(
         context: context,
         type: AlertType.warning,
