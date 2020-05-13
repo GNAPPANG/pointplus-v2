@@ -20,21 +20,18 @@ class _MainStorePageState extends State<MainStorePage> {
     FirebaseAuth auth = FirebaseAuth.instance;
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid.toString();
-    print(uid);
     setState(() {
       userID = uid.toString();
     });
   }
 
   manageStore() {
-    print('managestore');
     Navigator.of(context).push(_createRoute(screen: ManageStorePage()));
   }
 
   @override
   void initState() {
     inputData();
-    print(userID);
     super.initState();
   }
 
@@ -108,8 +105,7 @@ class _MainStorePageState extends State<MainStorePage> {
                         builder: (BuildContext context,
                             AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasData) {
-                            print(
-                                'snapshot.hasData : ${snapshot.data.documents.length}');
+
                           }
                           if (snapshot.hasError)
                             return Text('Error: ${snapshot.error}');

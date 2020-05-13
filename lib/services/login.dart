@@ -15,7 +15,6 @@ class Login {
   }
 
   singInAuth(String userid, BuildContext context) {
-
     print('login: $userid');
 
     _auth.currentUser().then((user) {
@@ -30,14 +29,14 @@ class Login {
             Navigator.pushReplacementNamed(context, '/user');
           } else {
             var st = doc.documents[0].data['status'];
-            if(st == 'a'){
+            if (st == 'a') {
               print('appr: $st');
               Navigator.pushReplacementNamed(context, '/store');
+            }else{
+              print('noappr: $st');
+              print('no approve');
+              // alert
             }
-            print('noappr: $st');
-            print('no approve');
-//            signOut(context);
-            // alert
 
 
           }

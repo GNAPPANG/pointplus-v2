@@ -116,7 +116,6 @@ class _HomestorePageState extends State<HomestorePage> {
           ),
         ],
         onTap: (int index) {
-          debugPrint("CurrentIndex is $index");
           setState(() {
             _selectedItem = index;
           });

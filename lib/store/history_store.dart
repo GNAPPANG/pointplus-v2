@@ -14,15 +14,6 @@ class HistoryStorePage extends StatefulWidget {
 class _HistoryStorePageState extends State<HistoryStorePage> {
   String userID;
 
-  // inputData() async {
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-  //   final FirebaseUser user = await auth.currentUser();
-  //   final uid = user.uid.toString();
-  //   print(uid);
-  //   setState(() {
-  //     userID = uid.toString();
-  //   });
-  // }
 
   @override
   void initState() {
@@ -36,7 +27,6 @@ class _HistoryStorePageState extends State<HistoryStorePage> {
     setState(() {
       userID = user.uid.toString();
     });
-    print('userID: $userID');
   }
 
   @override

@@ -16,23 +16,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   TextEditingController _usernameCtrl = new TextEditingController();
   TextEditingController _passwordCtrl = new TextEditingController();
   Login login = new Login();
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool load = false;
 
-  signIn(){
-    setState(()=>load=true);
-    _auth.signInWithEmailAndPassword(
+  signIn() {
+    setState(() => load = true);
+    _auth
+        .signInWithEmailAndPassword(
       email: _usernameCtrl.text.trim().toString(),
       password: _passwordCtrl.text.toString(),
-    ).then((u){
+    )
+        .then((u) {
       print('loginpage: ${u.user.uid}');
       login.singInAuth(u.user.uid, context);
-      setState(()=>load=false);
-    }).catchError((e){
+      setState(() => load = false);
+    }).catchError((e) {
       setState(() {
         load = false;
       });
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
-alignment: Alignment.center,
+          alignment: Alignment.center,
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,

@@ -13,47 +13,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  get data => null;
-
   checklogin() async {
     FirebaseAuth.instance.currentUser().then((user) {
-      print('user: $user');
-
-//      if (user != null) {
-//        var u = user.uid;
-
-//        Firestore.instance
-//            .collection('accounts')
-//            .where('uid', isEqualTo: user.uid)
-//            .where('role', isEqualTo: 'store')
-//            .where('status', isEqualTo: 'a')
-//            .getDocuments()
-//            .then((value) {
-//              print('storesssss');
-//          Navigator.pushReplacementNamed(context, '/store');
-//        }).catchError((e){
-//            print('not improve');
-//        });
-
-
-//        if(
-//          Firestore.instance
-//            .collection('accounts')
-//            .where('uid', isEqualTo: user.uid)
-//            .where('role', isEqualTo: 'store')
-//            .where('status', isEqualTo: 'a')
-//            .
-//        ){
-//
-//        }
-//      } else {
-//        Navigator.pushReplacementNamed(context, '/login');
-//      }
-
       if (user == null) {
         Navigator.pushReplacementNamed(context, '/login');
-      }
-      else {
+      } else {
         FirebaseAuth.instance.currentUser().then((user) {
           Firestore.instance
               .collection('accounts')
@@ -64,16 +28,17 @@ class _SplashScreenState extends State<SplashScreen> {
               if (doc.documents[0].data['role'] == 'user') {
                 Navigator.pushReplacementNamed(context, '/user');
               } else {
-                if(doc.documents[0].data['status'] == 'a'){
+                if (doc.documents[0].data['status'] == 'a') {
                   Navigator.pushReplacementNamed(context, '/store');
+                }else{
+                  print('no approve');
+                  Navigator.pushReplacementNamed(context, '/login');
                 }
-                print('no approve');
-                Navigator.pushReplacementNamed(context, '/login');
+
               }
             }
           });
         });
-
       }
     });
   }
