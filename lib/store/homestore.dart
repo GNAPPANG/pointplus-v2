@@ -84,21 +84,21 @@ class _HomestorePageState extends State<HomestorePage> {
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(Icons.textsms, size: 35, color: Colors.black54),
-              Text(
-                'แจ้งเตือน',
-                style: TextStyle(
-                  fontFamily: mali,
-                  fontSize: 10.0,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+//          Column(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            children: <Widget>[
+//              Icon(Icons.textsms, size: 35, color: Colors.black54),
+//              Text(
+//                'แจ้งเตือน',
+//                style: TextStyle(
+//                  fontFamily: mali,
+//                  fontSize: 10.0,
+//                  color: Colors.black54,
+//                  fontWeight: FontWeight.bold,
+//                ),
+//              ),
+//            ],
+//          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
