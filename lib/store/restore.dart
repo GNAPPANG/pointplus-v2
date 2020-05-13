@@ -95,6 +95,33 @@ class _RestorePageState extends State<RestorePage> {
       setState(() {
         isLoading = true;
       });
+
+
+      _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((currentUser) => Firestore.instance
+          .collection('store')
+          .document(currentUser.user.uid)
+          .setData({
+        'email': email,
+        'namestore': namestore,
+        'phone': phone,
+        'address': address,
+        'open': storeOpen,
+        'close': storeClose,
+        'role': 'store',
+        'uid': currentUser.user.uid,
+        'status' : 'p',
+
+      }).then((value) {
+//               setState(() {
+//                 isLoading = false;
+//               });
+
+      }).catchError((e) {
+        print('profile $e');
+      }));
+
       _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((currentUser) {
