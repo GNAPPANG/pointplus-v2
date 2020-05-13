@@ -22,7 +22,7 @@ class _HomestorePageState extends State<HomestorePage> {
     MainStorePage(),
     HistoryStorePage(),
     ScanStorePage(),
-    NotiStorePage(),
+    //NotiStorePage(),
     ProfileStorePage(),
   ];
 
