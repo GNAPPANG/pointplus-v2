@@ -42,33 +42,6 @@ class _ReuserPageState extends State<ReuserPage> {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-//  void _showActionSheet() {
-//    showModalBottomSheet(builder: (BuildContext context) {
-//      return SafeArea(
-//        child: Column(
-//          mainAxisSize: MainAxisSize.min,
-//          children: <Widget>[
-//            new ListTile(
-//              leading: new Icon(Icons.photo_camera),
-//              title: new Text("Camera"),
-//              onTap: () async {
-//                captureImage(ImageSource.camera);
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//            new ListTile(
-//              leading: new Icon(Icons.photo_library),
-//              title: new Text("Gallery"),
-//              onTap: () async {
-//                captureImage(ImageSource.gallery);
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        ),
-//      );
-//    });
-//  }
 
   TextEditingController _firstnameCtrl = new TextEditingController();
   TextEditingController _lastnameCtrl = new TextEditingController();

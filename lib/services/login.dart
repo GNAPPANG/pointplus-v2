@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:point_plus_v2/join/home.dart';
 import 'package:point_plus_v2/join/login_page.dart';
 import 'package:point_plus_v2/store/homestore.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -29,12 +30,13 @@ class Login {
         if (doc.documents[0].exists) {
           var dd = doc.documents[0];
           if (doc.documents[0].data['role'] == 'user') {
-            Navigator.pushReplacementNamed(context, '/user');
+//            Navigator.pushReplacementNamed(context, '/user');
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
           } else {
             var st = doc.documents[0].data['status'];
             if (st == 'a') {
               print('appr: $st');
-              Navigator.pushReplacementNamed(context, '/store');
+//              Navigator.pushReplacementNamed(context, '/store');
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomestorePage()));
             }else{
 
