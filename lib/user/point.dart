@@ -38,51 +38,9 @@ class Point extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  // Text(
-                  //   'สถานะ: เปิด',
-                  //   style: TextStyle(
-                  //     color: Colors.black45,
-                  //     fontSize: 16.0,
-                  //     fontFamily: 'mali',
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 8.0,
-                  // ),
-                  // Text(
-                  //   'สถานที่: บางบอน3 กรุงเทพมหานคร',
-                  //   style: TextStyle(
-                  //     color: Colors.black45,
-                  //     fontSize: 16.0,
-                  //     fontFamily: 'mali',
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 8.0,
-                  // ),
-                  // Text(
-                  //   'Tel: 0897653495',
-                  //   style: TextStyle(
-                  //     color: Colors.black45,
-                  //     fontSize: 16.0,
-                  //     fontFamily: 'mali',
-                  //   ),
-                  // ),
-                  // Image.asset(
-                  //   'assets/images/star.png',
-                  //   width: 160.0,
-                  // ),
+
                   SizedBox(height: 20),
-                  // Text(
-                  //   'คะแนนทั้งหมด ' +
-                  //       data.data['store_points'].toString() +
-                  //       ' คะแนน',
-                  //   style: TextStyle(
-                  //     fontFamily: mali,
-                  //     fontSize: 14,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
+
                   SizedBox(height: 20),
                   Row(
                     children: <Widget>[
@@ -94,12 +52,7 @@ class Point extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed(UsePoint.routeName, arguments: data);
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => UsePoint(),
-                            //   ),
-                            // );
+
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6.0),
