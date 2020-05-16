@@ -74,7 +74,7 @@ class _UsePointState extends State<UsePoint> {
     Firestore.instance
         .collection("users")
         .document(userID)
-        .collection('stores')
+        .collection('store')
         .document(storeID)
         .setData({
       "store_id": storeID,
