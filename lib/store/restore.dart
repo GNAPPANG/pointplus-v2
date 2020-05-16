@@ -97,9 +97,9 @@ class _RestorePageState extends State<RestorePage> {
     print('$email, $password, $conpassword, $namestore, $phone, $address');
 
     if (password == conpassword) {
-        setState(() {
-          isLoading = true;
-        });
+      setState(() {
+        isLoading = true;
+      });
 
       _auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -117,13 +117,14 @@ class _RestorePageState extends State<RestorePage> {
         'uid': currentUser.user.uid,
         'status' : 'p'
       }).then((value) {
+        print('re store');
         Firestore.instance
             .collection('accounts')
             .document(currentUser.user.uid)
             .setData({
-              'role': 'store',
-              'uid': currentUser.user.uid,
-              'status' : 'p'
+          'role': 'store',
+          'uid': currentUser.user.uid,
+          'status' : 'p'
         });
         Alert(
           context: context,
