@@ -40,8 +40,8 @@ class _LoginPageState extends State<LoginPage> {
       Alert(
         context: context,
         type: AlertType.error,
-        title: "ข้อมูลไม่ถูกต้อง",
-        desc: "กรุณาแก้ไขข้อมูลให้ถูกต้อง",
+        title: "รหัสผ่านไม่ถูกต้อง",
+        desc: "กรุณาแก้ไจรหัสผ่านให้ถุกต้อง",
         buttons: [
           DialogButton(
             child: Text(
