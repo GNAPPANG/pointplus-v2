@@ -62,11 +62,13 @@ class _RestorePageState extends State<RestorePage> {
   bool isLoading = false;
 
   Future uploadImage(BuildContext context, String uid) async {
+
     if (_image == null) {
+      print('image null');
       return;
     }
     String fileName = basename(_image.path);
-
+    print('image not null');
     try {
       StorageReference ref = FirebaseStorage.instance
           .ref()
@@ -76,6 +78,12 @@ class _RestorePageState extends State<RestorePage> {
       await (await uploadTask.onComplete).ref.getDownloadURL();
       var url = downloadUrl.toString();
       imgUrl = url.toString();
+      if(imgUrl != null){
+        print(imgUrl);
+        updateInfo.shopUpdatePic(imgUrl, context).then((result){
+          print(result);
+        });
+      }
       print('upload image success');
       print('imgUrl: $imgUrl');
       return 'success';
@@ -125,6 +133,10 @@ class _RestorePageState extends State<RestorePage> {
           'role': 'store',
           'uid': currentUser.user.uid,
           'status' : 'p'
+        }).then((value){
+          print('update store pic');
+          uploadImage(context, currentUser.user.uid);
+          print('update store pic success');
         });
         Alert(
           context: context,

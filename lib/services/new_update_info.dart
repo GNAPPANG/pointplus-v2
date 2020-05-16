@@ -42,11 +42,11 @@ class NewUpdateInfo {
       user.updateProfile(userInfo);
       FirebaseAuth.instance.currentUser().then((user) {
         user.updateProfile(userInfo);
-        Firestore.instance.collection('stores')
+        Firestore.instance.collection('store')
             .where('uid', isEqualTo: user.uid)
             .getDocuments()
             .then((docs) {
-          Firestore.instance.document('users/${docs.documents[0].documentID}')
+          Firestore.instance.document('store/${docs.documents[0].documentID}')
               .updateData({'proFile': picUrl}).then((val){
             print('ok');
           }).then((user){
@@ -66,6 +66,7 @@ class NewUpdateInfo {
   }
 
   Future updateProduct(picUrl, context) {
+    print('pic: $picUrl');
     var userInfo = UserUpdateInfo();
     userInfo.photoUrl = picUrl;
     FirebaseAuth.instance.currentUser().then((user){
