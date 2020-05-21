@@ -43,7 +43,7 @@ class _TransferPointState extends State<TransferPoint> {
     getUserCurrentStorePoints();
     getStoreDetail();
   }
-
+  //ดึงข้อมูลตัวเรา
   inputData() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid.toString();
@@ -77,6 +77,7 @@ class _TransferPointState extends State<TransferPoint> {
     Navigator.of(context).push(_createRoute(screen: ProfileUser()));
   }
 
+  //ดึงขอมูลของร้านค้า
   getStoreDetail() async {
     var s = await firestore.collection('store').document(widget.storeID);
     s.get().then((doc) {
